@@ -1,0 +1,269 @@
+#include <iostream>
+#include <stdio.h>   
+#include <stdlib.h>
+#include <GL\glew.h>
+#include <GL\freeglut.h>
+#include "Plataforma.h"
+#include "Bloque.h"
+#include "Pelota.h"
+
+using namespace std;
+
+#define DEF_floorGridScale	1.0f
+#define DEF_floorGridXSteps	10.0f
+#define DEF_floorGridZSteps	10.0f
+
+// Arreglos RGB para colores.
+static GLfloat naranja[]={1.0,0.4,0.0};
+static GLfloat amarillo[]={1.0,1.0,0.0};
+static GLfloat rojo[]={1.0,0.0,0.0};
+static GLfloat azul[]={0.0,0.0,1.0};
+static GLfloat blanco[]={1.0,1.0,1.0};
+static GLfloat verde[]={0.0,1.0,0.0};
+
+Plataforma plat;
+
+Pelota pelota;
+
+Bloque bloques[7][5];
+
+// Funcion para verificar si un bloque es especial.
+int esEspecial(int id,int especiales[5]){
+	for (int i = 0 ;i < 5;i++){
+		if (especiales[i] == id) {
+			return 2;
+		}
+	}
+	return 1;
+}
+
+// Funcion para verificar si un bloque es bonus.
+bool esBonus(int id,int bonuses[6]){
+	for (int i = 0 ;i < 6;i++){
+		if (bonuses[i] == id) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// Funcion de inicializacion
+void inicializar() {
+	plat = Plataforma(-2.0,-8.0,4.0);
+
+	pelota = Pelota(0.0,-7.7,0.3,0.0,0.0);
+
+	int id = 0;
+	int especiales[5];
+	int bonuses[6];
+
+	for (int i = 0; i < 5;i++){
+		especiales[i] = rand() % 35; 
+		bonuses[i] = rand() % 35; 
+	}
+	bonuses[5] = rand() % 35;
+
+	float x = -10.0;
+	float y = 8.0;
+	// Inicializar bloques
+	for (int i = 0;i < 7;i++){
+
+		for (int j = 0;j < 5;j++) {
+			bloques[i][j] = Bloque(x+2.0,y+bloques[i][j].alto,2.0,esEspecial(id,especiales),esBonus(id,bonuses),
+								   (esEspecial(id,especiales) == 2 ? amarillo : rojo));
+			x = x+2+1.5;
+			id++;
+		}
+		x = -10.0;
+		y = y-bloques[i][0].alto-0.75;
+		id++;
+	}
+}
+
+void ejesCoordenada(float w) {
+	
+	glLineWidth(w);
+	glBegin(GL_LINES);
+		glColor3f(1.0,0.0,0.0);
+		glVertex2f(0,10);
+		glVertex2f(0,-10);
+		glColor3f(0.0,0.0,1.0);
+		glVertex2f(10,0);
+		glVertex2f(-10,0);
+	glEnd();
+
+	glLineWidth(w-1.0);
+	int i;
+	glColor3f(0.0,1.0,0.0);
+	glBegin(GL_LINES);
+		for(i = -10; i <=10; i++){
+			if (i!=0) {		
+				if ((i%2)==0){	
+					glVertex2f(i,0.4);
+					glVertex2f(i,-0.4);
+
+					glVertex2f(0.4,i);
+					glVertex2f(-0.4,i);
+				}else{
+					glVertex2f(i,0.2);
+					glVertex2f(i,-0.2);
+
+					glVertex2f(0.2,i);
+					glVertex2f(-0.2,i);
+
+				}
+			}
+		}
+		
+	glEnd();
+
+	glLineWidth(1.0);
+}
+
+void changeViewport(int w, int h) {
+	glViewport(0,0,w,h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	float aspectratio;
+	aspectratio = (float) w / (float) h;
+
+	if (w <= h) 
+		glOrtho(-10,10,-10/aspectratio,10/aspectratio, 1.0,-1.0);
+	else
+		glOrtho(-10*aspectratio,10*aspectratio,-10,10,1.0,-1.0);
+}
+
+// Funcion para dibujar el marco verde del juego.
+void dibujarMarco() {
+	glPointSize(5.0);
+	glBegin(GL_POINTS);
+		glVertex2f(0,0);
+	glEnd();
+	glPushMatrix();
+		glLineWidth(1.0);
+		glColor3f(0.0,1.0,0.0);
+		// Barra de arriba
+		glBegin(GL_LINE_LOOP);
+			glVertex2f(-9.0,9.5);
+			glVertex2f(9.0,9.5);
+			glVertex2f(9.0,9.0);
+			glVertex2f(-9.0,9.0);
+		glEnd();
+		// Barra de la derecha
+		glBegin(GL_LINE_LOOP);
+			glVertex2f(9.0,9.5);
+			glVertex2f(9.5,9.5);
+			glVertex2f(9.5,-9.0);
+			glVertex2f(9.0,-9.0);
+		glEnd();
+		// Barra de la izquierda
+		glBegin(GL_LINE_LOOP);
+			glVertex2f(-9.0,9.5);
+			glVertex2f(-9.5,9.5);
+			glVertex2f(-9.5,-9.0);
+			glVertex2f(-9.0,-9.0);
+		glEnd();
+
+	glPopMatrix();
+}
+
+void dibujarBloques() {
+	for (int i = 0; i < 7; i++){
+		for (int j = 0;j < 5;j++){
+			bloques[i][j].Dibujar();
+		}
+	}
+}
+
+void render(){
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+
+	GLfloat zExtent, xExtent, xLocal, zLocal;
+    int loopX, loopZ;
+
+	/* Render Grid */
+	glPushMatrix();
+    glColor3f( 0.0f, 0.7f, 0.7f );
+    glBegin( GL_LINES );
+    zExtent = DEF_floorGridScale * DEF_floorGridZSteps;
+    for(loopX = -DEF_floorGridXSteps; loopX <= DEF_floorGridXSteps; loopX++ )
+	{
+	xLocal = DEF_floorGridScale * loopX;
+	glVertex3f( xLocal, -zExtent, 0.0f );
+	glVertex3f( xLocal, zExtent,  0.0f );
+	}
+    xExtent = DEF_floorGridScale * DEF_floorGridXSteps;
+    for(loopZ = -DEF_floorGridZSteps; loopZ <= DEF_floorGridZSteps; loopZ++ )
+	{
+	zLocal = DEF_floorGridScale * loopZ;
+	glVertex3f( -xExtent, zLocal, 0.0f );
+	glVertex3f(  xExtent, zLocal, 0.0f );
+	}
+    glEnd();
+    glPopMatrix();
+
+	// Dibujar el marco verde.
+	dibujarMarco();
+
+	// Dibujar plataforma.
+	plat.Dibujar();
+
+	// Dibujar la pelota.
+	pelota.Dibujar();
+
+	// Dibujar los bloques.
+	dibujarBloques();
+
+	glutSwapBuffers();
+
+}
+
+void teclado(unsigned char key, int x, int y) {
+
+	if (key == 'a' || key == 'A') {
+		if (plat.x != -9.0)
+			plat.x = plat.x-plat.step;
+	}
+	if (key == 'd' || key == 'D') {
+		if (plat.x+plat.ancho != 9.0)
+			plat.x = plat.x+plat.step;
+	}
+}
+
+void actualizar() {
+	glutPostRedisplay();
+}
+
+int main (int argc, char** argv) {
+
+	glutInit(&argc, argv);
+
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+
+	glutInitWindowSize(800,600);
+
+	glutCreateWindow("Opengl");
+
+	glutReshapeFunc(changeViewport);
+	glutDisplayFunc(render);
+	glutKeyboardFunc(teclado);
+	glutIdleFunc(actualizar);
+
+	// Inicializa los datos.
+	inicializar();
+	
+	GLenum err = glewInit();
+	if (GLEW_OK != err) {
+		fprintf(stderr, "GLEW error");
+		return 1;
+	}
+	
+
+	glutMainLoop();
+	return 0;
+
+}
