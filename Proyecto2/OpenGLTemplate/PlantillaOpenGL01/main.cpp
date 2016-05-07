@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <GL\glew.h>
 #include <GL\freeglut.h>
+#include <ctime>
 #include "Plataforma.h"
 #include "Bloque.h"
 #include "Pelota.h"
@@ -26,6 +27,19 @@ Pelota pelota;
 Bloque bloques[7][5];
 int estadoJuego = 1;
 int stepAngulo = 5;
+float dirAngulo = 0.0; // Angulo de la flecha para el estado 1.
+
+// Funcion de chequeo para evitar repeticiones en los arreglos
+// de bonus y de especiales.
+bool checkArr(int arr[],int l,int num) {
+	for (int i = 0; i < l; i++) {
+		if (num == arr[i]) {
+			return false;
+		}
+	}
+	return true;
+
+}
 
 // Función para verificar si un bloque es especial.
 int esEspecial(int id,int especiales[5]){
@@ -56,12 +70,30 @@ void inicializar() {
 	int id = 0;
 	int especiales[5];
 	int bonuses[6];
-
-	for (int i = 0; i < 5;i++){
-		especiales[i] = rand() % 35; 
-		bonuses[i] = rand() % 35; 
+	int especial = -1;
+	int bonus = -1;
+	int i;
+	// Seed para el RNG.
+	srand(time(NULL));
+	i = 0;
+	// Asignar bloques especiales.
+	while (i < 5) {
+		especial = rand() % 35;
+		if (checkArr(especiales,5,especial)) {
+			especiales[i] = especial; 
+			i++;
+		}
 	}
-	bonuses[5] = rand() % 35;
+	i = 0;
+	printf("\n");
+	// Asignar bloques con bono.
+	while (i < 6) {
+		bonus = rand() % 35;
+		if (checkArr(bonuses,6,bonus)) {
+			bonuses[i] = bonus;
+			i++;
+		}
+	}
 
 	float x = -10.0;
 	float y = 8.0;
@@ -76,7 +108,6 @@ void inicializar() {
 		}
 		x = -10.0;
 		y = y-bloques[i][0].alto-0.75;
-		id++;
 	}
 }
 
@@ -140,7 +171,7 @@ void dibujarDireccion(){
 	glPushMatrix();
 		//Roto respecto al centro de la pelota
 		glTranslatef(pelota.x,pelota.y,0);
-		glRotatef(pelota.angulo,0.0,0.0,1);
+		glRotatef(dirAngulo,0.0,0.0,1);
 		glTranslatef(-pelota.x,-pelota.y,0);
 
 		glBegin(GL_LINES);
@@ -209,8 +240,9 @@ void render(){
 void teclado(unsigned char key, int x, int y) {
 	if (key == 'a' || key == 'A') {
 		if (estadoJuego == 1){
-			if (pelota.angulo + stepAngulo <= 45)
-				pelota.angulo = pelota.angulo + stepAngulo;
+			if (dirAngulo + stepAngulo <= 45) {
+				dirAngulo = dirAngulo + stepAngulo;
+			}
 		} else {
 			if (plat.x != -9.0)
 				plat.x = plat.x-plat.step;
@@ -218,8 +250,9 @@ void teclado(unsigned char key, int x, int y) {
 	}
 	if (key == 'd' || key == 'D') {
 		if (estadoJuego == 1){
-			if (pelota.angulo - stepAngulo >= -45)
-				pelota.angulo = pelota.angulo - stepAngulo;
+			if (dirAngulo - stepAngulo >= -45) {
+				dirAngulo = dirAngulo - stepAngulo;
+			}	
 		} else {
 			if (plat.x+plat.ancho != 9.0)
 				plat.x = plat.x+plat.step;
@@ -228,8 +261,9 @@ void teclado(unsigned char key, int x, int y) {
 	}
 	if ((key == ' ') && (estadoJuego == 1)){ //Caso de barra espaciadora
 		//Aquí va lo de lanzar la pelota
+		/*pelota.velocidad = 0.008;
+		pelota.angulo = dirAngulo;*/
 		estadoJuego = 2;
-
 	}
 }
 
@@ -237,8 +271,8 @@ void flechas(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_LEFT:
 		if (estadoJuego == 1){
-			if (pelota.angulo + stepAngulo <= 45)
-				pelota.angulo = pelota.angulo + stepAngulo;
+			if (dirAngulo + stepAngulo <= 45)
+				dirAngulo = dirAngulo + stepAngulo;
 		} else {
 			if (plat.x != -9.0)
 				plat.x = plat.x-plat.step;
@@ -246,8 +280,8 @@ void flechas(int key, int x, int y){
 		break;
 	case GLUT_KEY_RIGHT:
 		if (estadoJuego == 1){
-			if(pelota.angulo - stepAngulo >= -45)
-				pelota.angulo = pelota.angulo - stepAngulo;
+			if(dirAngulo - stepAngulo >= -45)
+				dirAngulo = dirAngulo - stepAngulo;
 		} else{
 			if (plat.x+plat.ancho != 9.0)
 				plat.x = plat.x+plat.step;

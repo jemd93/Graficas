@@ -35,13 +35,22 @@ void Bloque::Dibujar() {
 				glVertex2f(x+ancho/2+0.25,y-0.4);
 				glVertex2f(x+ancho/2-0.1,y-0.15);
 			glEnd();
-		} else {
+		} 
+		else {
 			glColor3f(rgb[0],rgb[1],rgb[2]);
 			glBegin(GL_LINE_LOOP);
 				glVertex2f(x,y);
 				glVertex2f(x+ancho,y);
 				glVertex2f(x+ancho,y-alto);
 				glVertex2f(x,y-alto);
+			glEnd();
+		}
+		// SOLO COMO PRUEBA. BORRAR DESPUES.
+		if (bonus) {
+			glColor3f(0.0,0.0,1.0);
+			glPointSize(5.0);
+			glBegin(GL_POINTS);
+				glVertex2f(x,y);
 			glEnd();
 		}
 	glPopMatrix();

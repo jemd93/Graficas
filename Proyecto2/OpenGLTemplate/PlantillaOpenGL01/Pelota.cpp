@@ -14,9 +14,11 @@ void Pelota::Dibujar() {
 	glColor3f(1.0,1.0,1.0);
 	glPushMatrix();
 		float delta_theta = 0.01;
+		glTranslatef(x,y,0.0);
+		glTranslatef(velocidad,velocidad,0.0);
 		glBegin(GL_LINE_LOOP);
 			for (float a = 0; a < 2*PI; a+= delta_theta){
-				glVertex3f(radio*cos(a)+x,radio*sin(a)+y,0);
+				glVertex3f(radio*cos(a),radio*sin(a),0);
 			}
 		glEnd();
 	glPopMatrix();
