@@ -22,12 +22,11 @@ static GLfloat blanco[]={1.0,1.0,1.0};
 static GLfloat verde[]={0.0,1.0,0.0};
 
 Plataforma plat;
-
 Pelota pelota;
-
 Bloque bloques[7][5];
+int estadoJuego = 1;
 
-// Funcion para verificar si un bloque es especial.
+// Función para verificar si un bloque es especial.
 int esEspecial(int id,int especiales[5]){
 	for (int i = 0 ;i < 5;i++){
 		if (especiales[i] == id) {
@@ -37,7 +36,7 @@ int esEspecial(int id,int especiales[5]){
 	return 1;
 }
 
-// Funcion para verificar si un bloque es bonus.
+// Función para verificar si un bloque es bonus.
 bool esBonus(int id,int bonuses[6]){
 	for (int i = 0 ;i < 6;i++){
 		if (bonuses[i] == id) {
@@ -47,7 +46,7 @@ bool esBonus(int id,int bonuses[6]){
 	return false;
 }
 
-// Funcion de inicializacion
+// Función de inicialización
 void inicializar() {
 	plat = Plataforma(-2.0,-8.0,4.0);
 
@@ -80,46 +79,6 @@ void inicializar() {
 	}
 }
 
-void ejesCoordenada(float w) {
-	
-	glLineWidth(w);
-	glBegin(GL_LINES);
-		glColor3f(1.0,0.0,0.0);
-		glVertex2f(0,10);
-		glVertex2f(0,-10);
-		glColor3f(0.0,0.0,1.0);
-		glVertex2f(10,0);
-		glVertex2f(-10,0);
-	glEnd();
-
-	glLineWidth(w-1.0);
-	int i;
-	glColor3f(0.0,1.0,0.0);
-	glBegin(GL_LINES);
-		for(i = -10; i <=10; i++){
-			if (i!=0) {		
-				if ((i%2)==0){	
-					glVertex2f(i,0.4);
-					glVertex2f(i,-0.4);
-
-					glVertex2f(0.4,i);
-					glVertex2f(-0.4,i);
-				}else{
-					glVertex2f(i,0.2);
-					glVertex2f(i,-0.2);
-
-					glVertex2f(0.2,i);
-					glVertex2f(-0.2,i);
-
-				}
-			}
-		}
-		
-	glEnd();
-
-	glLineWidth(1.0);
-}
-
 void changeViewport(int w, int h) {
 	glViewport(0,0,w,h);
 	glMatrixMode(GL_PROJECTION);
@@ -134,7 +93,7 @@ void changeViewport(int w, int h) {
 		glOrtho(-10*aspectratio,10*aspectratio,-10,10,1.0,-1.0);
 }
 
-// Funcion para dibujar el marco verde del juego.
+// Función para dibujar el marco verde del juego.
 void dibujarMarco() {
 	glPointSize(5.0);
 	glBegin(GL_POINTS);
@@ -168,10 +127,12 @@ void dibujarMarco() {
 	glPopMatrix();
 }
 
+//Función para dibujar los bloques activos del juego
 void dibujarBloques() {
 	for (int i = 0; i < 7; i++){
 		for (int j = 0;j < 5;j++){
-			bloques[i][j].Dibujar();
+			if (bloques[i][j].hp != 0) //Solo dibuja los bloques activos
+				bloques[i][j].Dibujar();
 		}
 	}
 }
@@ -184,7 +145,7 @@ void render(){
 
 	GLfloat zExtent, xExtent, xLocal, zLocal;
     int loopX, loopZ;
-
+	
 	/* Render Grid */
 	glPushMatrix();
     glColor3f( 0.0f, 0.7f, 0.7f );
@@ -205,7 +166,7 @@ void render(){
 	}
     glEnd();
     glPopMatrix();
-
+	
 	// Dibujar el marco verde.
 	dibujarMarco();
 
@@ -223,7 +184,6 @@ void render(){
 }
 
 void teclado(unsigned char key, int x, int y) {
-
 	if (key == 'a' || key == 'A') {
 		if (plat.x != -9.0)
 			plat.x = plat.x-plat.step;
@@ -231,6 +191,21 @@ void teclado(unsigned char key, int x, int y) {
 	if (key == 'd' || key == 'D') {
 		if (plat.x+plat.ancho != 9.0)
 			plat.x = plat.x+plat.step;
+	}
+}
+
+void flechas(int key, int x, int y){
+	switch (key){
+	case GLUT_KEY_LEFT:
+		if (plat.x != -9.0)
+			plat.x = plat.x-plat.step;
+		break;
+	case GLUT_KEY_RIGHT:
+		if (plat.x+plat.ancho != 9.0)
+			plat.x = plat.x+plat.step;
+		break;
+	default:
+		break;
 	}
 }
 
@@ -251,6 +226,7 @@ int main (int argc, char** argv) {
 	glutReshapeFunc(changeViewport);
 	glutDisplayFunc(render);
 	glutKeyboardFunc(teclado);
+	glutSpecialFunc(flechas);
 	glutIdleFunc(actualizar);
 
 	// Inicializa los datos.
