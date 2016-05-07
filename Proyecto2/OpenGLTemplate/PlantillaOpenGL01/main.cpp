@@ -25,6 +25,7 @@ Plataforma plat;
 Pelota pelota;
 Bloque bloques[7][5];
 int estadoJuego = 1;
+int stepAngulo = 5;
 
 // Función para verificar si un bloque es especial.
 int esEspecial(int id,int especiales[5]){
@@ -95,10 +96,6 @@ void changeViewport(int w, int h) {
 
 // Función para dibujar el marco verde del juego.
 void dibujarMarco() {
-	glPointSize(5.0);
-	glBegin(GL_POINTS);
-		glVertex2f(0,0);
-	glEnd();
 	glPushMatrix();
 		glLineWidth(1.0);
 		glColor3f(0.0,1.0,0.0);
@@ -137,6 +134,27 @@ void dibujarBloques() {
 	}
 }
 
+void dibujarDireccion(){
+	glLineWidth(2.0);
+	glColor3f(0.5,0.0,1.0);
+	glPushMatrix();
+		//Roto respecto al centro de la pelota
+		glTranslatef(pelota.x,pelota.y,0);
+		glRotatef(pelota.angulo,0.0,0.0,1);
+		glTranslatef(-pelota.x,-pelota.y,0);
+
+		glBegin(GL_LINES);
+			glVertex2f(pelota.x,pelota.y+pelota.radio);
+			glVertex2f(pelota.x,pelota.y+pelota.radio+2);
+		glEnd();
+		glBegin(GL_LINE_STRIP);
+			glVertex2f(pelota.x-0.3,pelota.y+pelota.radio+1.5);
+			glVertex2f(pelota.x,pelota.y+pelota.radio+2);
+			glVertex2f(pelota.x+0.3,pelota.y+pelota.radio+1.5);
+		glEnd();
+	glPopMatrix();
+}
+
 void render(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -147,7 +165,7 @@ void render(){
     int loopX, loopZ;
 	
 	/* Render Grid */
-	glPushMatrix();
+	/*glPushMatrix();
     glColor3f( 0.0f, 0.7f, 0.7f );
     glBegin( GL_LINES );
     zExtent = DEF_floorGridScale * DEF_floorGridZSteps;
@@ -165,7 +183,7 @@ void render(){
 	glVertex3f(  xExtent, zLocal, 0.0f );
 	}
     glEnd();
-    glPopMatrix();
+    glPopMatrix();*/
 	
 	// Dibujar el marco verde.
 	dibujarMarco();
@@ -179,30 +197,61 @@ void render(){
 	// Dibujar los bloques.
 	dibujarBloques();
 
+	//Dibuja la barra inicial para el ángulo de lanzamiento
+	if (estadoJuego == 1){
+		dibujarDireccion();
+	}
+
 	glutSwapBuffers();
 
 }
 
 void teclado(unsigned char key, int x, int y) {
 	if (key == 'a' || key == 'A') {
-		if (plat.x != -9.0)
-			plat.x = plat.x-plat.step;
+		if (estadoJuego == 1){
+			if (pelota.angulo + stepAngulo <= 45)
+				pelota.angulo = pelota.angulo + stepAngulo;
+		} else {
+			if (plat.x != -9.0)
+				plat.x = plat.x-plat.step;
+		}
 	}
 	if (key == 'd' || key == 'D') {
-		if (plat.x+plat.ancho != 9.0)
-			plat.x = plat.x+plat.step;
+		if (estadoJuego == 1){
+			if (pelota.angulo - stepAngulo >= -45)
+				pelota.angulo = pelota.angulo - stepAngulo;
+		} else {
+			if (plat.x+plat.ancho != 9.0)
+				plat.x = plat.x+plat.step;
+		}
+		
+	}
+	if ((key == ' ') && (estadoJuego == 1)){ //Caso de barra espaciadora
+		//Aquí va lo de lanzar la pelota
+		printf("%s","HOLA");
 	}
 }
 
 void flechas(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_LEFT:
-		if (plat.x != -9.0)
-			plat.x = plat.x-plat.step;
+		if (estadoJuego == 1){
+			if (pelota.angulo + stepAngulo <= 45)
+				pelota.angulo = pelota.angulo + stepAngulo;
+		} else {
+			if (plat.x != -9.0)
+				plat.x = plat.x-plat.step;
+		}
 		break;
 	case GLUT_KEY_RIGHT:
-		if (plat.x+plat.ancho != 9.0)
-			plat.x = plat.x+plat.step;
+		if (estadoJuego == 1){
+			if(pelota.angulo - stepAngulo >= -45)
+				pelota.angulo = pelota.angulo - stepAngulo;
+		} else{
+			if (plat.x+plat.ancho != 9.0)
+				plat.x = plat.x+plat.step;
+		}
+		
 		break;
 	default:
 		break;
