@@ -228,7 +228,8 @@ void teclado(unsigned char key, int x, int y) {
 	}
 	if ((key == ' ') && (estadoJuego == 1)){ //Caso de barra espaciadora
 		//Aquí va lo de lanzar la pelota
-		printf("%s","HOLA");
+		estadoJuego = 2;
+
 	}
 }
 
