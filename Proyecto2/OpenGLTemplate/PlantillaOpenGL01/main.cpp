@@ -29,6 +29,60 @@ int estadoJuego = 1;
 int stepAngulo = 5;
 float dirAngulo = 0.0; // Angulo de la flecha para el estado 1.
 
+// Solo para el codigo de dibujar. Mover este codigo para otro lado luego.
+void dibujarBonos() {
+	// Bono de velocidad.
+	glColor3f(1.0,0.4,0.0);
+	glBegin(GL_TRIANGLES);
+		glVertex2f(0.0,0.0);
+		glVertex2f(0.25,-0.25);
+		glVertex2f(0.0,-0.5);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+		glVertex2f(0.3,0.0);
+		glVertex2f(0.55,-0.25);
+		glVertex2f(0.3,-0.5);
+	glEnd();
+	float PI = 3.14159265358979323846;
+	glColor3f(1.0,0.4,0.0);
+	glPushMatrix();
+		float delta_theta = 0.01;
+		glTranslatef(0.25,-0.25,0.0);
+		glBegin(GL_LINE_LOOP);
+			for (float a = 0; a < 2*PI; a+= delta_theta){
+				glVertex3f(0.4*cos(a),0.4*sin(a),0);
+			}
+		glEnd();
+	glPopMatrix();
+
+	// Bono de tamano de base.
+	glColor3f(1.0,0.4,0.0);
+	glPushMatrix();
+		glTranslatef(0.25,-2.0,0.0);
+		glBegin(GL_LINE_LOOP);
+			for (float a = 0; a < 2*PI; a+= delta_theta){
+				glVertex3f(0.4*cos(a),0.4*sin(a),0);
+			}
+		glEnd();
+	glPopMatrix();
+
+	glBegin(GL_TRIANGLES);
+		glVertex2f(0.0,-1.85);
+		glVertex2f(0.15,-2.0);
+		glVertex2f(0.0,-2.15);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+		glVertex2f(0.5,-1.85);
+		glVertex2f(0.35,-2.0);
+		glVertex2f(0.5,-2.15);
+	glEnd();
+	/*glColor3f(0.0,0.0,1.0);*/
+	glBegin(GL_LINES);
+		glVertex2f(0.17,-2.0);
+		glVertex2f(0.33,-2.0);
+	glEnd();
+}
+
 // Funcion de chequeo para evitar repeticiones en los arreglos
 // de bonus y de especiales.
 bool checkArr(int arr[],int l,int num) {
@@ -232,6 +286,9 @@ void render(){
 	if (estadoJuego == 1){
 		dibujarDireccion();
 	}
+
+	// Quitar luego
+	dibujarBonos();
 
 	glutSwapBuffers();
 
