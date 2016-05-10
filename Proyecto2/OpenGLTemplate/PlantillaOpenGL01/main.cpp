@@ -121,7 +121,7 @@ void inicializar() {
 	plat = Plataforma(-2.0,-8.0,4.0);
 
 	pelota = Pelota(0.0,-7.7,0.3,0.0,0.0);
-
+	dirAngulo = 90.0;
 	int id = 0;
 	int especiales[5];
 	int bonuses[6];
@@ -270,6 +270,18 @@ void render(){
 	}
     glEnd();
     glPopMatrix();*/
+
+	// Chequear si la pelota sale de la pantalla para reiniciar el juego.
+	if (pelota.y + pelota.radio <= plat.y-plat.alto) {
+		estadoJuego = 1;
+		inicializar();
+	}
+
+	if (estadoJuego != 1) {
+		pelota.cheqColPared(-9.0,9.0,9.0);
+		pelota.cheqColPlat(plat);
+		pelota.cheqColBloques(bloques);
+	}
 	
 	// Dibujar el marco verde.
 	dibujarMarco();
@@ -278,8 +290,7 @@ void render(){
 	plat.Dibujar();
 
 	// Dibujar la pelota.
-	tiempo = clock()-tiempo;
-	pelota.Dibujar(tiempo);
+	pelota.Dibujar();
 
 	// Dibujar los bloques.
 	dibujarBloques();
@@ -320,7 +331,7 @@ void teclado(unsigned char key, int x, int y) {
 	}
 	if ((key == ' ') && (estadoJuego == 1)){ //Caso de barra espaciadora
 		//Aquí va lo de lanzar la pelota
-		pelota.velocidad = 0.01;
+		pelota.velocidad = 0.003;
 		printf("%f",dirAngulo);
 		float PI = 3.14159265358979323846;
 		pelota.angulo = dirAngulo*(PI/180);
