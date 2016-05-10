@@ -27,7 +27,8 @@ Pelota pelota;
 Bloque bloques[7][5];
 int estadoJuego = 1;
 int stepAngulo = 5;
-float dirAngulo = 0.0; // Angulo de la flecha para el estado 1.
+float dirAngulo = 90.0; // Angulo de la flecha para el estado 1.
+clock_t tiempo = clock();
 
 // Solo para el codigo de dibujar. Mover este codigo para otro lado luego.
 void dibujarBonos() {
@@ -225,7 +226,7 @@ void dibujarDireccion(){
 	glPushMatrix();
 		//Roto respecto al centro de la pelota
 		glTranslatef(pelota.x,pelota.y,0);
-		glRotatef(dirAngulo,0.0,0.0,1);
+		glRotatef(dirAngulo-90,0.0,0.0,1);
 		glTranslatef(-pelota.x,-pelota.y,0);
 
 		glBegin(GL_LINES);
@@ -277,7 +278,8 @@ void render(){
 	plat.Dibujar();
 
 	// Dibujar la pelota.
-	pelota.Dibujar();
+	tiempo = clock()-tiempo;
+	pelota.Dibujar(tiempo);
 
 	// Dibujar los bloques.
 	dibujarBloques();
@@ -288,7 +290,7 @@ void render(){
 	}
 
 	// Quitar luego
-	dibujarBonos();
+	/*dibujarBonos();*/
 
 	glutSwapBuffers();
 
@@ -297,7 +299,7 @@ void render(){
 void teclado(unsigned char key, int x, int y) {
 	if (key == 'a' || key == 'A') {
 		if (estadoJuego == 1){
-			if (dirAngulo + stepAngulo <= 45) {
+			if (dirAngulo + stepAngulo <= 135) {
 				dirAngulo = dirAngulo + stepAngulo;
 			}
 		} else {
@@ -307,7 +309,7 @@ void teclado(unsigned char key, int x, int y) {
 	}
 	if (key == 'd' || key == 'D') {
 		if (estadoJuego == 1){
-			if (dirAngulo - stepAngulo >= -45) {
+			if (dirAngulo - stepAngulo >= 45) {
 				dirAngulo = dirAngulo - stepAngulo;
 			}	
 		} else {
@@ -318,8 +320,10 @@ void teclado(unsigned char key, int x, int y) {
 	}
 	if ((key == ' ') && (estadoJuego == 1)){ //Caso de barra espaciadora
 		//Aquí va lo de lanzar la pelota
-		/*pelota.velocidad = 0.008;
-		pelota.angulo = dirAngulo;*/
+		pelota.velocidad = 0.01;
+		printf("%f",dirAngulo);
+		float PI = 3.14159265358979323846;
+		pelota.angulo = dirAngulo*(PI/180);
 		estadoJuego = 2;
 	}
 }
@@ -328,7 +332,7 @@ void flechas(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_LEFT:
 		if (estadoJuego == 1){
-			if (dirAngulo + stepAngulo <= 45)
+			if (dirAngulo + stepAngulo <= 135)
 				dirAngulo = dirAngulo + stepAngulo;
 		} else {
 			if (plat.x != -9.0)
@@ -337,7 +341,7 @@ void flechas(int key, int x, int y){
 		break;
 	case GLUT_KEY_RIGHT:
 		if (estadoJuego == 1){
-			if(dirAngulo - stepAngulo >= -45)
+			if(dirAngulo - stepAngulo >= 45)
 				dirAngulo = dirAngulo - stepAngulo;
 		} else{
 			if (plat.x+plat.ancho != 9.0)
