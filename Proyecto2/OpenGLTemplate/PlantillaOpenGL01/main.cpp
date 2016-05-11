@@ -31,6 +31,7 @@ int estadoJuego = 1;
 int stepAngulo = 5;
 float dirAngulo = 90.0; // Angulo de la flecha para el estado 1.
 clock_t tiempo = clock();
+float r = 0.01;
 
 // Funcion de chequeo para evitar repeticiones en los arreglos
 // de bonus y de especiales.
@@ -169,8 +170,25 @@ void dibujarMarco() {
 void dibujarBloques() {
 	for (int i = 0; i < 7; i++){
 		for (int j = 0;j < 5;j++){
-			if (bloques[i][j].hp != 0) //Solo dibuja los bloques activos
+			if (bloques[i][j].hp != 0){ //Solo dibuja los bloques activos
 				bloques[i][j].Dibujar();
+			} // Dibujar la explosion cuando destruye un bloque amarillo.
+			if (bloques[i][j].hp <= 0 && bloques[i][j].tipo == 2) {
+				if (r <= 2){
+					glColor3f(0.55,0.09,0.09); 
+					float PI = 3.14159265358979323846;
+					r = r + 0.003;
+					glPushMatrix();
+						float delta_theta = 0.5;
+						glTranslatef(bloques[i][j].x+(bloques[i][j].ancho/2),bloques[i][j].y-(bloques[i][j].alto/2),0.0);
+						glBegin(GL_POINTS);
+							for (float a = 0; a < 2*PI; a+= delta_theta){
+								glVertex3f(r*cos(a),r*sin(a),0);
+							}
+						glEnd();
+					glPopMatrix();
+				}
+			}
 		}
 	}
 }
@@ -232,10 +250,24 @@ void render(){
 		inicializar();
 	}
 
+	// Chequear colisiones de la pelota.
 	if (estadoJuego != 1) {
 		pelota.cheqColPared(-9.0,9.0,9.0);
 		pelota.cheqColPlat(plat);
 		pelota.cheqColBloques(bloques);
+	}
+
+	// Chequear colisiones de la plataforma con los bonos.
+	if (estadoJuego != 1) { 
+		int tBono = plat.cheqColBonos(bonos);
+		if (tBono == 1) {
+			pelota.velocidad = pelota.velocidad + 0.40*pelota.velocidad;
+		}
+		else if (tBono == 2) {
+			// Puede ser reducir 7.5% a cada lado, o 15% en ancho.
+			// Con 7.5% de cada lado se ve medio raro pq cambia el x.
+			plat.ancho = plat.ancho - 0.15*plat.ancho;
+		}
 	}
 	
 	// Dibujar el marco verde.
@@ -289,7 +321,6 @@ void teclado(unsigned char key, int x, int y) {
 	if ((key == ' ') && (estadoJuego == 1)){ //Caso de barra espaciadora
 		//Aquí va lo de lanzar la pelota
 		pelota.velocidad = 0.003;
-		printf("%f",dirAngulo);
 		float PI = 3.14159265358979323846;
 		pelota.angulo = dirAngulo*(PI/180);
 		estadoJuego = 2;

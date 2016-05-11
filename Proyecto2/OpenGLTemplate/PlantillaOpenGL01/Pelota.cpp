@@ -101,7 +101,7 @@ void Pelota::cheqColBloques(Bloque bloques [7][5]) {
 	for (int i = 0 ; i < 7; i++) {
 		for (int j = 0 ; j < 5; j++){
 			bloqueAct = bloques[i][j];
-			if (bloqueAct.hp != 0) {
+			if (bloqueAct.hp > 0) {
 				// Abajo
 				if ((x >= bloqueAct.x) && (x <= bloqueAct.x + bloqueAct.ancho) && 
 					(y + radio >= bloqueAct.y - bloqueAct.alto) &&  (y + radio <= bloqueAct.y)) {
@@ -132,28 +132,28 @@ void Pelota::cheqColBloques(Bloque bloques [7][5]) {
 					x = bloqueAct.x + bloqueAct.ancho + radio;
 				}
 				/* Colision con la esquina superior izquierda */
-				else if (pow((bloqueAct.x-x),2) + pow(bloqueAct.y-y,2) <= pow(radio,2)){
+				else if (pow((bloqueAct.x-x),2) + pow(bloqueAct.y-y,2) == pow(radio,2)){
 					flagy = -flagy;
 					bloques[i][j].hp--;
-					y = y + radio;
+					/*y = y + radio;*/
 				} 
 				/* Colision con la esquina superior derecha */
-				else if (pow((bloqueAct.x+bloqueAct.ancho-x),2) + pow(bloqueAct.y-y,2) <= pow(radio,2)){ 
+				else if (pow((bloqueAct.x+bloqueAct.ancho-x),2) + pow(bloqueAct.y-y,2) == pow(radio,2)){ 
 					flagy = -flagy;
 					bloques[i][j].hp--;
-					y = y + radio;
+					/*y = y + radio;*/
 				}
 				// Esquina inferior derecha
-				else if (pow((bloqueAct.x+bloqueAct.ancho-x),2) + pow(bloqueAct.y-bloqueAct.alto-y,2) <= pow(radio,2)){ 
+				else if (pow((bloqueAct.x+bloqueAct.ancho-x),2) + pow(bloqueAct.y-bloqueAct.alto-y,2) == pow(radio,2)){ 
 					flagx = -flagx;
 					bloques[i][j].hp--;
-					x = x+radio;
+					/*x = x+radio;*/
 				}
 				/* Colision con la esquina inferior izquierda */
-				else if (pow((bloqueAct.x-x),2) + pow(bloqueAct.y-bloqueAct.alto-y,2) <= pow(radio,2)){ 
+				else if (pow((bloqueAct.x-x),2) + pow(bloqueAct.y-bloqueAct.alto-y,2) == pow(radio,2)){ 
 					flagx = -flagx;
 					bloques[i][j].hp--;
-					x = x+radio;
+					/*x = x+radio;*/
 				}
 			}
 		}

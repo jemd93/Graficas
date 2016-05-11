@@ -1,5 +1,6 @@
 #include <GL\glew.h>
 #include <GL\freeglut.h>
+#include "Bono.h"
 
 
 #pragma once
@@ -12,5 +13,6 @@ public:
 	float step;
 	Plataforma(float cx = 0.0,float cy = 0.0,float a = 5.0);
 	void Dibujar(void);
+	int cheqColBonos(Bono bonos[6]);
 };
 

@@ -1,6 +1,5 @@
 #include "Bloque.h"
 
-
 Bloque::Bloque(float cx,float cy,float a,int t, bool b, GLfloat colors[3]){
 	x = cx;
 	y = cy;
@@ -36,7 +35,7 @@ void Bloque::Dibujar() {
 				glVertex2f(x+ancho/2-0.1,y-0.15);
 			glEnd();
 		} 
-		else {
+		else if (hp >= 1){
 			glColor3f(rgb[0],rgb[1],rgb[2]);
 			glBegin(GL_LINE_LOOP);
 				glVertex2f(x,y);
@@ -46,7 +45,7 @@ void Bloque::Dibujar() {
 			glEnd();
 		}
 		// SOLO COMO PRUEBA. BORRAR DESPUES.
-		if (bonus) {
+		if (bonus && hp >= 1) {
 			glColor3f(0.0,0.0,1.0);
 			glPointSize(5.0);
 			glBegin(GL_POINTS);

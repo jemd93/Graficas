@@ -14,6 +14,7 @@ Bono::Bono(int t,bool d,float cx,float cy,int bi, int bj,float r,float v){
 
 void Bono::Dibujar(Bloque bloques[7][5]) {
 	if (bloques[i][j].hp == 0)  {
+		bloques[i][j].hp = -1;
 		dibujar = true;
 	}
 	if (dibujar) {
@@ -43,6 +44,7 @@ void Bono::Dibujar(Bloque bloques[7][5]) {
 				glVertex2f(x+0.05,y-0.25);
 			glEnd();
 		}
+		// Tamano de la plataforma
 		else if (tipo == 2) {
 			glBegin(GL_TRIANGLES);
 				glVertex2f(x-0.30,y+0.15);

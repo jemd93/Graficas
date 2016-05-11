@@ -20,3 +20,14 @@ void Plataforma::Dibujar(void) {
 		glEnd();
 	glPopMatrix();
 }
+
+int Plataforma::cheqColBonos(Bono bonos[6]){
+	for (int i = 0; i < 6;i++){
+		if (bonos[i].dibujar) {
+			if ((bonos[i].x >= x) && (bonos[i].x <= x+ancho) && (bonos[i].y-bonos[i].radio <= y)) {
+				bonos[i].dibujar = false;
+				return bonos[i].tipo;
+			}
+		}
+	}
+}

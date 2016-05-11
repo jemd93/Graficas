@@ -1,5 +1,6 @@
 #include <GL\glew.h>
 #include <GL\freeglut.h>
+#include <math.h> 
 
 #pragma once
 static GLfloat defaultColor[]={1.0,0.0,0.0};
