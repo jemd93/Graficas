@@ -83,12 +83,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bloque.cpp" />
+    <ClCompile Include="Bono.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pelota.cpp" />
     <ClCompile Include="Plataforma.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bloque.h" />
+    <ClInclude Include="Bono.h" />
     <ClInclude Include="Pelota.h" />
     <ClInclude Include="Plataforma.h" />
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "Plataforma.h"
 #include "Bloque.h"
 #include "Pelota.h"
+#include "Bono.h"
 
 using namespace std;
 
@@ -25,64 +26,11 @@ static GLfloat verde[]={0.0,1.0,0.0};
 Plataforma plat;
 Pelota pelota;
 Bloque bloques[7][5];
+Bono bonos[6];
 int estadoJuego = 1;
 int stepAngulo = 5;
 float dirAngulo = 90.0; // Angulo de la flecha para el estado 1.
 clock_t tiempo = clock();
-
-// Solo para el codigo de dibujar. Mover este codigo para otro lado luego.
-void dibujarBonos() {
-	// Bono de velocidad.
-	glColor3f(1.0,0.4,0.0);
-	glBegin(GL_TRIANGLES);
-		glVertex2f(0.0,0.0);
-		glVertex2f(0.25,-0.25);
-		glVertex2f(0.0,-0.5);
-	glEnd();
-	glBegin(GL_TRIANGLES);
-		glVertex2f(0.3,0.0);
-		glVertex2f(0.55,-0.25);
-		glVertex2f(0.3,-0.5);
-	glEnd();
-	float PI = 3.14159265358979323846;
-	glColor3f(1.0,0.4,0.0);
-	glPushMatrix();
-		float delta_theta = 0.01;
-		glTranslatef(0.25,-0.25,0.0);
-		glBegin(GL_LINE_LOOP);
-			for (float a = 0; a < 2*PI; a+= delta_theta){
-				glVertex3f(0.4*cos(a),0.4*sin(a),0);
-			}
-		glEnd();
-	glPopMatrix();
-
-	// Bono de tamano de base.
-	glColor3f(1.0,0.4,0.0);
-	glPushMatrix();
-		glTranslatef(0.25,-2.0,0.0);
-		glBegin(GL_LINE_LOOP);
-			for (float a = 0; a < 2*PI; a+= delta_theta){
-				glVertex3f(0.4*cos(a),0.4*sin(a),0);
-			}
-		glEnd();
-	glPopMatrix();
-
-	glBegin(GL_TRIANGLES);
-		glVertex2f(0.0,-1.85);
-		glVertex2f(0.15,-2.0);
-		glVertex2f(0.0,-2.15);
-	glEnd();
-	glBegin(GL_TRIANGLES);
-		glVertex2f(0.5,-1.85);
-		glVertex2f(0.35,-2.0);
-		glVertex2f(0.5,-2.15);
-	glEnd();
-	/*glColor3f(0.0,0.0,1.0);*/
-	glBegin(GL_LINES);
-		glVertex2f(0.17,-2.0);
-		glVertex2f(0.33,-2.0);
-	glEnd();
-}
 
 // Funcion de chequeo para evitar repeticiones en los arreglos
 // de bonus y de especiales.
@@ -152,18 +100,25 @@ void inicializar() {
 
 	float x = -10.0;
 	float y = 8.0;
+	int bonoAct = 0;
 	// Inicializar bloques
 	for (int i = 0;i < 7;i++){
 
 		for (int j = 0;j < 5;j++) {
 			bloques[i][j] = Bloque(x+2.0,y+bloques[i][j].alto,2.0,esEspecial(id,especiales),esBonus(id,bonuses),
 								   (esEspecial(id,especiales) == 2 ? amarillo : rojo));
+			// Chequea si es necesario agregar un bono asociado a ese bloque.
+			if (esBonus(id,bonuses)) {
+				bonos[bonoAct] = Bono(rand() % 2 + 1,false,bloques[i][j].x+(bloques[i][j].ancho/2),bloques[i][j].y-(bloques[i][j].alto/2),i,j);
+				bonoAct++;
+			}
 			x = x+2+1.5;
 			id++;
 		}
 		x = -10.0;
 		y = y-bloques[i][0].alto-0.75;
 	}
+
 }
 
 void changeViewport(int w, int h) {
@@ -272,7 +227,7 @@ void render(){
     glPopMatrix();*/
 
 	// Chequear si la pelota sale de la pantalla para reiniciar el juego.
-	if (pelota.y + pelota.radio <= plat.y-plat.alto) {
+	if (pelota.y + pelota.radio <= -12.0) {
 		estadoJuego = 1;
 		inicializar();
 	}
@@ -300,8 +255,10 @@ void render(){
 		dibujarDireccion();
 	}
 
-	// Quitar luego
-	/*dibujarBonos();*/
+	// Dibujar los bonos que se deben dibujar.
+	for (int i = 0;i < 6;i++){
+		bonos[i].Dibujar(bloques);
+	}
 
 	glutSwapBuffers();
 

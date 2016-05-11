@@ -27,6 +27,9 @@
     <ClCompile Include="Bloque.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Bono.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Plataforma.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Bloque.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bono.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
