@@ -230,10 +230,10 @@ void render(){
 	
 	
 	// Chequear si la pelota sale de la pantalla para reiniciar el juego.
-	if (pelota.y + pelota.radio <= -12.0) {
+	/*if (pelota.y + pelota.radio <= -12.0) {
 		estadoJuego = 1;
 		inicializar();
-	}
+	}*/
 
 	// Chequear colisiones de la pelota.
 	if (estadoJuego != 1) {
@@ -288,8 +288,10 @@ void teclado(unsigned char key, int x, int y) {
 				dirAngulo = dirAngulo + stepAngulo;
 			}
 		} else {
-			if (plat.x != -9.0)
+			if (plat.x-plat.step >= -9.0)
 				plat.x = plat.x-plat.step;
+			else
+				plat.x = -9.0;
 		}
 	}
 	if (key == 'd' || key == 'D') {
@@ -298,8 +300,10 @@ void teclado(unsigned char key, int x, int y) {
 				dirAngulo = dirAngulo - stepAngulo;
 			}	
 		} else {
-			if (plat.x+plat.ancho != 9.0)
+			if (plat.x+plat.ancho+plat.step <= 9)
 				plat.x = plat.x+plat.step;
+			else
+				plat.x = 9 - plat.ancho;
 		}
 		
 	}
@@ -318,8 +322,10 @@ void flechas(int key, int x, int y){
 			if (dirAngulo + stepAngulo <= 135)
 				dirAngulo = dirAngulo + stepAngulo;
 		} else {
-			if (plat.x != -9.0)
+			if (plat.x-plat.step >= -9.0)
 				plat.x = plat.x-plat.step;
+			else
+				plat.x = -9.0;
 		}
 		break;
 	case GLUT_KEY_RIGHT:
@@ -327,8 +333,10 @@ void flechas(int key, int x, int y){
 			if(dirAngulo - stepAngulo >= 45)
 				dirAngulo = dirAngulo - stepAngulo;
 		} else{
-			if (plat.x+plat.ancho != 9.0)
+			if (plat.x+plat.ancho+plat.step <= 9)
 				plat.x = plat.x+plat.step;
+			else
+				plat.x = 9 - plat.ancho;
 		}
 		
 		break;

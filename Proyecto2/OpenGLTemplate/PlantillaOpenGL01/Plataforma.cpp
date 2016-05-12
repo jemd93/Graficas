@@ -6,7 +6,7 @@ Plataforma::Plataforma(float cx,float cy,float a){
 	y = cy;
 	ancho = a;
 	alto = 0.5;
-	step = 1.0;
+	step = 1;
 }
 
 void Plataforma::Dibujar(void) {
