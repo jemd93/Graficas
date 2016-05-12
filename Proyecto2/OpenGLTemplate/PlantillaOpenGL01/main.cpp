@@ -230,10 +230,10 @@ void render(){
 	
 	
 	// Chequear si la pelota sale de la pantalla para reiniciar el juego.
-	/*if (pelota.y + pelota.radio <= -12.0) {
+	if (pelota.y + pelota.radio <= -12.0) {
 		estadoJuego = 1;
 		inicializar();
-	}*/
+	}
 
 	// Chequear colisiones de la pelota.
 	if (estadoJuego != 1) {
