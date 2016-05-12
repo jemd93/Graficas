@@ -262,6 +262,7 @@ void render(){
 	plat.Dibujar();
 
 	// Dibujar la pelota.
+	printf("Velocidad %f\n",pelota.velocidad);
 	pelota.Dibujar();
 
 	// Dibujar los bloques.
