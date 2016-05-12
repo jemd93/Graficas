@@ -1,6 +1,6 @@
 #include "Bloque.h"
 
-Bloque::Bloque(float cx,float cy,float a,int t, bool b, GLfloat colors[3]){
+Bloque::Bloque(float cx,float cy,float a,int t, bool b,GLfloat colors[3]){
 	x = cx;
 	y = cy;
 	ancho = a;
@@ -8,6 +8,7 @@ Bloque::Bloque(float cx,float cy,float a,int t, bool b, GLfloat colors[3]){
 	tipo = t;
 	hp = t;
 	bonus = b;
+	exploto = false;
 	for (int i = 0; i < 3; i++) {
 		rgb[i] = colors[i];
 	}

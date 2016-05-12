@@ -89,7 +89,6 @@ void inicializar() {
 		}
 	}
 	i = 0;
-	printf("\n");
 	// Asignar bloques con bono.
 	while (i < 6) {
 		bonus = rand() % 35;
@@ -170,23 +169,29 @@ void dibujarMarco() {
 void dibujarBloques() {
 	for (int i = 0; i < 7; i++){
 		for (int j = 0;j < 5;j++){
-			if (bloques[i][j].hp != 0){ //Solo dibuja los bloques activos
+			if (bloques[i][j].hp > 0){ //Solo dibuja los bloques activos
 				bloques[i][j].Dibujar();
 			} // Dibujar la explosion cuando destruye un bloque amarillo.
-			if (bloques[i][j].hp <= 0 && bloques[i][j].tipo == 2) {
+			if (bloques[i][j].hp <= 0 && bloques[i][j].tipo == 2 && !bloques[i][j].exploto) {
 				if (r <= 2){
 					glColor3f(0.55,0.09,0.09); 
 					float PI = 3.14159265358979323846;
 					r = r + 0.003;
 					glPushMatrix();
 						float delta_theta = 0.5;
+						float randX,randY;
 						glTranslatef(bloques[i][j].x+(bloques[i][j].ancho/2),bloques[i][j].y-(bloques[i][j].alto/2),0.0);
 						glBegin(GL_POINTS);
 							for (float a = 0; a < 2*PI; a+= delta_theta){
-								glVertex3f(r*cos(a),r*sin(a),0);
+								randX = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/0.5);
+								randY = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/0.5);
+								glVertex3f(r*cos(a)+randX,r*sin(a)+randY,0);
 							}
 						glEnd();
 					glPopMatrix();
+				} else {
+					r = 0.01;
+					bloques[i][j].exploto = true;
 				}
 			}
 		}
@@ -223,27 +228,7 @@ void render(){
 	GLfloat zExtent, xExtent, xLocal, zLocal;
     int loopX, loopZ;
 	
-	/* Render Grid */
-	/*glPushMatrix();
-    glColor3f( 0.0f, 0.7f, 0.7f );
-    glBegin( GL_LINES );
-    zExtent = DEF_floorGridScale * DEF_floorGridZSteps;
-    for(loopX = -DEF_floorGridXSteps; loopX <= DEF_floorGridXSteps; loopX++ )
-	{
-	xLocal = DEF_floorGridScale * loopX;
-	glVertex3f( xLocal, -zExtent, 0.0f );
-	glVertex3f( xLocal, zExtent,  0.0f );
-	}
-    xExtent = DEF_floorGridScale * DEF_floorGridXSteps;
-    for(loopZ = -DEF_floorGridZSteps; loopZ <= DEF_floorGridZSteps; loopZ++ )
-	{
-	zLocal = DEF_floorGridScale * loopZ;
-	glVertex3f( -xExtent, zLocal, 0.0f );
-	glVertex3f(  xExtent, zLocal, 0.0f );
-	}
-    glEnd();
-    glPopMatrix();*/
-
+	
 	// Chequear si la pelota sale de la pantalla para reiniciar el juego.
 	if (pelota.y + pelota.radio <= -12.0) {
 		estadoJuego = 1;
@@ -319,8 +304,7 @@ void teclado(unsigned char key, int x, int y) {
 		
 	}
 	if ((key == ' ') && (estadoJuego == 1)){ //Caso de barra espaciadora
-		//Aquí va lo de lanzar la pelota
-		pelota.velocidad = 0.003;
+		pelota.velocidad = 0.0025;
 		float PI = 3.14159265358979323846;
 		pelota.angulo = dirAngulo*(PI/180);
 		estadoJuego = 2;

@@ -50,31 +50,26 @@ void Pelota::cheqColPlat(Plataforma plat) {
 	/* Colision con la parte de arriba de la plataforma */
 
 	if ((x >= plat.x) && (x <= plat.x + plat.ancho) && (y - radio <= plat.y) &&  (y - radio >= plat.y - plat.alto)) {
-		printf("Estoy arriba");
 		flagy = -flagy;
 		y = plat.y + radio;
 	}
 	/* Colision con la parte izquierda de la plataforma */
 	else if ((x + radio >= plat.x) && (x+radio < plat.x + plat.ancho) && (y <= plat.y) && (y >= plat.y-plat.alto)) {
-		printf("Estoy del lado izquierdo");
 		flagx = -flagx;
 		x = plat.x - radio;
 	}
 	/* Colision con la parte derecha de la plataforma */
 	else if ((x - radio <= plat.x + plat.ancho) && (x - radio > plat.x)&& (y <= plat.y) && (y >= plat.y-plat.alto)) {
-		printf("Estoy del lado derecho");
 		flagx = -flagx;
 		x = plat.x + plat.ancho + radio;
 	}
 	/* Colision con la esquina superior izquierda */
 	else if (pow((plat.x-x),2) + pow(plat.y-y,2) <= pow(radio,2)){
-		printf("Estoy en la esquina izquierda");
 		flagy = -flagy;
 		y = y + radio;
 	} 
 	/* Colision con la esquina superior derecha */
 	else if (pow((plat.x+plat.ancho-x),2) + pow(plat.y-y,2) <= pow(radio,2)){ 
-		printf("Estoy en la esquina derecha");
 		flagy = -flagy;
 		y = y + radio;
 	}
