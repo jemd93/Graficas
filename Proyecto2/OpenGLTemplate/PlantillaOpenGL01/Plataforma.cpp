@@ -24,10 +24,12 @@ void Plataforma::Dibujar(void) {
 int Plataforma::cheqColBonos(Bono bonos[6]){
 	for (int i = 0; i < 6;i++){
 		if (bonos[i].dibujar) {
-			if ((bonos[i].x >= x) && (bonos[i].x <= x+ancho) && (bonos[i].y-bonos[i].radio <= y)) {
+			if ((bonos[i].x >= x) && (bonos[i].x <= x+ancho) 
+				&& (bonos[i].y-bonos[i].radio <= y) && (bonos[i].y+bonos[i].radio >= y - alto) ) {
 				bonos[i].dibujar = false;
 				return bonos[i].tipo;
 			}
 		}
 	}
+	return 0;
 }

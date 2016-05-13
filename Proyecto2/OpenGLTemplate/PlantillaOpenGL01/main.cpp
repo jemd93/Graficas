@@ -32,6 +32,12 @@ int stepAngulo = 5;
 float dirAngulo = 90.0; // Angulo de la flecha para el estado 1.
 clock_t tiempo = clock();
 float r = 0.01;
+float PI = 3.14159265358979323846;
+
+bool exploto = false;
+float xrand = 0.0;
+float yrand = 0.0;
+
 
 // Funcion de chequeo para evitar repeticiones en los arreglos
 // de bonus y de especiales.
@@ -175,7 +181,6 @@ void dibujarBloques() {
 			if (bloques[i][j].hp <= 0 && bloques[i][j].tipo == 2 && !bloques[i][j].exploto) {
 				if (r <= 2){
 					glColor3f(0.55,0.09,0.09); 
-					float PI = 3.14159265358979323846;
 					r = r + 0.003;
 					glPushMatrix();
 						float delta_theta = 0.5;
@@ -219,6 +224,44 @@ void dibujarDireccion(){
 	glPopMatrix();
 }
 
+void dibujarVictoria() {
+	glPushMatrix();
+		glColor3f(1.0,1.0,0); 
+		glTranslatef(-2.0,0.0,0.0);
+		glLineWidth(2.0);
+		glScalef(0.01,0.01,0.0);
+		glutStrokeString(GLUT_STROKE_ROMAN,(unsigned char*)"Ganaste!");
+	glPopMatrix();
+	if (exploto) {
+		exploto = false;
+		r = 0.01;
+		xrand = (rand() % 19) - 9;
+		yrand = (rand() % 19) - 9;
+	}
+	if (r <= 3){
+		glColor3f(static_cast <float> (rand()) / static_cast <float> (RAND_MAX),
+			static_cast <float> (rand()) / static_cast <float> (RAND_MAX),
+			static_cast <float> (rand()) / static_cast <float> (RAND_MAX)); 
+		r = r + 0.005;
+		glPushMatrix();
+			float delta_theta = 0.5;
+			float randX,randY;
+			glTranslatef(xrand, yrand,0.0);
+			glPointSize(10.0);
+			glBegin(GL_POINTS);
+				for (float a = 0; a < 2*PI; a+= delta_theta){
+					randX = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/0.5);
+					randY = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/0.5);
+					glVertex3f(r*cos(a)+randX,r*sin(a)+randY,0);
+				}
+			glEnd();
+		glPopMatrix();
+	}
+	else {
+		exploto = true;
+	}
+}
+
 void render(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -236,7 +279,7 @@ void render(){
 	}
 
 	// Chequear colisiones de la pelota.
-	if (estadoJuego != 1) {
+	if (estadoJuego == 2) {
 		pelota.cheqColPared(-9.0,9.0,9.0);
 		pelota.cheqColPlat(plat);
 		pelota.cheqColBloques(bloques);
@@ -255,28 +298,49 @@ void render(){
 		}
 	}
 	
-	// Dibujar el marco verde.
-	dibujarMarco();
+	if (estadoJuego <= 2) {
+		// Dibujar el marco verde.
+		dibujarMarco();
 
-	// Dibujar plataforma.
-	plat.Dibujar();
+		// Dibujar plataforma.
+		plat.Dibujar();
 
-	// Dibujar la pelota.
-	printf("Velocidad %f\n",pelota.velocidad);
-	pelota.Dibujar();
+		// Dibujar la pelota.
+		pelota.Dibujar();
 
-	// Dibujar los bloques.
-	dibujarBloques();
+		// Dibujar los bloques.
+		dibujarBloques();
+
+		// Dibujar los bonos que se deben dibujar.
+		for (int i = 0;i < 6;i++){
+			bonos[i].Dibujar(bloques);
+		}
+
+		// Chequear si el usuario gano.
+		bool ganar = true;
+
+		for (int i = 0; i < 7; i++){
+			for (int j = 0;j < 5; j++) {
+				if (bloques[i][j].hp > 0) {
+					ganar = false;
+				}
+			}
+		}
+
+		if (ganar) {
+			estadoJuego = 3;
+		}
+	}
 
 	//Dibuja la barra inicial para el ángulo de lanzamiento
 	if (estadoJuego == 1){
 		dibujarDireccion();
 	}
 
-	// Dibujar los bonos que se deben dibujar.
-	for (int i = 0;i < 6;i++){
-		bonos[i].Dibujar(bloques);
-	}
+	// Solo por ahora.
+	if (estadoJuego == 3) {
+		dibujarVictoria();
+	} 
 
 	glutSwapBuffers();
 
