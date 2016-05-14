@@ -50,46 +50,41 @@ void Pelota::cheqColPared(float xmin,float xmax,float ymax) {
 // Chequea colisiones de la pelota con la plataforma.
 void Pelota::cheqColPlat(Plataforma plat) {
 
-	/* Colision con la parte de arriba de la plataforma */
-
+	/* Colisión con la parte de arriba de la plataforma. Punto pelota (x,y-radio) */
 	if ((x >= plat.x) && (x <= plat.x + plat.ancho) && (y - radio <= plat.y) &&  (y - radio >= plat.y - plat.alto)) {
 		flagy = -flagy;
 		y = plat.y + radio;
 	}
-	/* Colision con la parte izquierda de la plataforma */
-	else if ((x + radio >= plat.x) && (x+radio < plat.x + plat.ancho) && (y <= plat.y) && (y >= plat.y-plat.alto)) {
+	/* Colisión con la parte izquierda de la plataforma. Punto pelota (x+radio,y) */
+	else if ((x + radio >= plat.x) && (x + radio <= plat.x + plat.ancho) && (y <= plat.y) && (y >= plat.y-plat.alto)) {
 		flagx = -flagx;
 		x = plat.x - radio;
 	}
-	/* Colision con la parte derecha de la plataforma */
-	else if ((x - radio <= plat.x + plat.ancho) && (x - radio > plat.x)&& (y <= plat.y) && (y >= plat.y-plat.alto)) {
+	/* Colisión con la parte derecha de la plataforma. Punto pelota (x-radio,y) */
+	else if ((x - radio <= plat.x + plat.ancho) && (x - radio >= plat.x)&& (y <= plat.y) && (y >= plat.y-plat.alto)) {
 		flagx = -flagx;
 		x = plat.x + plat.ancho + radio;
 	}
-	/* Colision con la esquina superior izquierda */
+	/* Colisión con la esquina superior izquierda. Punto plataforma (x,y) */
 	else if (pow((plat.x-x),2) + pow(plat.y-y,2) <= pow(radio,2)){
 		flagy = -flagy;
 		y = y + radio;
 	} 
-	/* Colision con la esquina superior derecha */
+	/* Colisión con la esquina superior derecha. Punto plataforma (x+ancho,y) */
 	else if (pow((plat.x+plat.ancho-x),2) + pow(plat.y-y,2) <= pow(radio,2)){ 
 		flagy = -flagy;
 		y = y + radio;
 	}
-	/* Colision con la esquina inferior derecha */
+	/* Colisión con la esquina inferior derecha. Punto plataforma (x+ancho,y-alto) */
 	else if (pow((plat.x+plat.ancho-x),2) + pow(plat.y-plat.alto-y,2) <= pow(radio,2)){ 
 		flagx = -flagx;
 		x = x+radio;
 	}
-	/* Colision con la esquina inferior izquierda */
+	/* Colisión con la esquina inferior izquierda. Punto plataforma (x,y-alto) */
 	else if (pow((plat.x-x),2) + pow(plat.y-plat.alto-y,2) <= pow(radio,2)){ 
 		flagx = -flagx;
 		x = x+radio;
 	}
-	/*if((pow((plat.x-x),2) + pow(plat.y-plat.alto-y,2) <= pow(radio,2)) &&
-		(pow((plat.x-x),2) + pow(plat.y-y,2) <= pow(radio,2))){
-			printf("Estoy dentro del circulo");
-	}*/
 	x = x + flagx*velocidad*cos(angulo);
 	y = y + flagy*velocidad*sin(angulo);
 }
@@ -101,28 +96,28 @@ void Pelota::cheqColBloques(Bloque bloques [7][5]) {
 		for (int j = 0 ; j < 5; j++){
 			bloqueAct = bloques[i][j];
 			if (bloqueAct.hp > 0) {
-				// Abajo
+				/* Colisión con la parte de abajo del bloque */
 				if ((x >= bloqueAct.x) && (x <= bloqueAct.x + bloqueAct.ancho) && 
 					(y + radio >= bloqueAct.y - bloqueAct.alto) &&  (y + radio <= bloqueAct.y)) {
 					flagy = -flagy;
 					bloques[i][j].hp--;
 					y = bloqueAct.y - bloqueAct.alto - radio;
 				} 
-				// Arriba
+				/* Colisión con la parte de arriba del bloque */
 				else if ((x >= bloqueAct.x) && (x <= bloqueAct.x + bloqueAct.ancho) && 
 					(y - radio <= bloqueAct.y) &&  (y - radio >= bloqueAct.y - bloqueAct.alto)) {
 					flagy = -flagy;
 					bloques[i][j].hp--;
 					y = bloqueAct.y + radio;
 				}
-				// Izquierdo
+				/* Colisión con la parte izquierda del bloque */
 				else if ((x + radio >= bloqueAct.x) && (x+radio < bloqueAct.x + bloqueAct.ancho) 
 					&& (y <= bloqueAct.y) && (y >= bloqueAct.y-bloqueAct.alto)) {
 					flagx = -flagx;
 					bloques[i][j].hp--;
 					x = bloqueAct.x - radio;
 				}
-				// Derecho
+				/* Colisión con la parte derecha del bloque */
 				else if ((x - radio <= bloqueAct.x + bloqueAct.ancho) 
 					&& (x - radio > bloqueAct.x)&& (y <= bloqueAct.y) 
 					&& (y >= bloqueAct.y-bloqueAct.alto)) {
@@ -130,22 +125,22 @@ void Pelota::cheqColBloques(Bloque bloques [7][5]) {
 					bloques[i][j].hp--;
 					x = bloqueAct.x + bloqueAct.ancho + radio;
 				}
-				/* Colision con la esquina superior izquierda */
+				/* Colisión con la esquina superior izquierda */
 				else if (pow((bloqueAct.x-x),2) + pow(bloqueAct.y-y,2) == pow(radio,2)){
 					flagy = -flagy;
 					bloques[i][j].hp--;
 				} 
-				/* Colision con la esquina superior derecha */
+				/* Colisión con la esquina superior derecha */
 				else if (pow((bloqueAct.x+bloqueAct.ancho-x),2) + pow(bloqueAct.y-y,2) == pow(radio,2)){ 
 					flagy = -flagy;
 					bloques[i][j].hp--;
 				}
-				/* Colision con la esquina inferior derecha */
+				/* Colisión con la esquina inferior derecha */
 				else if (pow((bloqueAct.x+bloqueAct.ancho-x),2) + pow(bloqueAct.y-bloqueAct.alto-y,2) == pow(radio,2)){ 
 					flagy = -flagy;
 					bloques[i][j].hp--;
 				}
-				/* Colision con la esquina inferior izquierda */
+				/* Colisión con la esquina inferior izquierda */
 				else if (pow((bloqueAct.x-x),2) + pow(bloqueAct.y-bloqueAct.alto-y,2) == pow(radio,2)){ 
 					flagy = -flagy;
 					bloques[i][j].hp--;

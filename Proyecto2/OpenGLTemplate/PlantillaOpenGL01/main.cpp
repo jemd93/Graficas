@@ -29,8 +29,7 @@ Bloque bloques[7][5];
 Bono bonos[6];
 int estadoJuego = 1;
 int stepAngulo = 5;
-float dirAngulo = 90.0; // Angulo de la flecha para el estado 1.
-clock_t tiempo = clock();
+float dirAngulo; // Ángulo de la flecha para el estado 1.
 float r = 0.01;
 float PI = 3.14159265358979323846;
 
@@ -40,7 +39,7 @@ float xrand = 0.0;
 float yrand = 0.0;
 
 
-// Funcion de chequeo para evitar repeticiones en los arreglos
+// Función de chequeo para evitar repeticiones en los arreglos
 // de bonus y de especiales.
 bool checkArr(int arr[],int l,int num) {
 	for (int i = 0; i < l; i++) {
@@ -72,12 +71,12 @@ bool esBonus(int id,int bonuses[6]){
 	return false;
 }
 
-// Función de inicialización
+// Función de inicialización del juego
 void inicializar() {
 	plat = Plataforma(-2.0,-8.0,4.0);
 
 	pelota = Pelota(0.0,-7.7,0.3,0.0,0.0);
-	dirAngulo = 90.0;
+	dirAngulo = 92;
 	int id = 0;
 	int especiales[5];
 	int bonuses[6];
@@ -178,7 +177,7 @@ void dibujarBloques() {
 		for (int j = 0;j < 5;j++){
 			if (bloques[i][j].hp > 0){ //Solo dibuja los bloques activos
 				bloques[i][j].Dibujar();
-			} // Dibujar la explosion cuando destruye un bloque amarillo.
+			} // Dibujar la explosión cuando destruye un bloque amarillo.
 			if (bloques[i][j].hp <= 0 && bloques[i][j].tipo == 2 && !bloques[i][j].exploto) {
 				if (r <= 2){
 					glPointSize(5.0);
@@ -205,7 +204,7 @@ void dibujarBloques() {
 	}
 }
 
-// Funcion para dibujar la flecha para lanzar la pelota al principio.
+// Función para dibujar la flecha para lanzar la pelota al principio.
 void dibujarDireccion(){
 	glLineWidth(2.0);
 	glColor3f(0.5,0.0,1.0);
@@ -227,7 +226,7 @@ void dibujarDireccion(){
 	glPopMatrix();
 }
 
-// Funcion para dibujar "Ganaste" y las explosiones al ganar.
+// Función para dibujar "Ganaste" y las explosiones al ganar.
 void dibujarVictoria() {
 	glPushMatrix();
 		glColor3f(1.0,1.0,0); 
@@ -388,6 +387,7 @@ void flechas(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_LEFT:
 		if (estadoJuego == 1){
+			printf("%f",dirAngulo);
 			if (dirAngulo + stepAngulo <= 135)
 				dirAngulo = dirAngulo + stepAngulo;
 		} else {
@@ -399,6 +399,7 @@ void flechas(int key, int x, int y){
 		break;
 	case GLUT_KEY_RIGHT:
 		if (estadoJuego == 1){
+			printf("%f",dirAngulo);
 			if(dirAngulo - stepAngulo >= 45)
 				dirAngulo = dirAngulo - stepAngulo;
 		} else{
@@ -426,7 +427,7 @@ int main (int argc, char** argv) {
 
 	glutInitWindowSize(800,600);
 
-	glutCreateWindow("Opengl");
+	glutCreateWindow("Bricks - María V. Jorge - Jorge Marcano");
 
 	glutReshapeFunc(changeViewport);
 	glutDisplayFunc(render);
