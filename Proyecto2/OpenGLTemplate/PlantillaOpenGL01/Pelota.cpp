@@ -10,6 +10,7 @@ Pelota::Pelota(float cx,float cy,float r,float v,float a){
 	flagy = 1;
 }
 
+// Dibuja la pelota.
 void Pelota::Dibujar() {
 	float PI = 3.14159265358979323846;
 	glColor3f(1.0,1.0,1.0);
@@ -28,6 +29,7 @@ void Pelota::Dibujar() {
 	glPopMatrix();
 }
 
+// Chequea colisiones de la pelota con la pared.
 void Pelota::cheqColPared(float xmin,float xmax,float ymax) {
 	if (x + radio >= xmax) {
 		flagx = -flagx;
@@ -45,6 +47,7 @@ void Pelota::cheqColPared(float xmin,float xmax,float ymax) {
 	y = y + flagy*velocidad*sin(angulo);
 }
 
+// Chequea colisiones de la pelota con la plataforma.
 void Pelota::cheqColPlat(Plataforma plat) {
 
 	/* Colision con la parte de arriba de la plataforma */
@@ -91,6 +94,7 @@ void Pelota::cheqColPlat(Plataforma plat) {
 	y = y + flagy*velocidad*sin(angulo);
 }
 
+// Chequea colisiones de la pelota con los bloques.
 void Pelota::cheqColBloques(Bloque bloques [7][5]) {
 	Bloque bloqueAct;
 	for (int i = 0 ; i < 7; i++) {
@@ -130,25 +134,21 @@ void Pelota::cheqColBloques(Bloque bloques [7][5]) {
 				else if (pow((bloqueAct.x-x),2) + pow(bloqueAct.y-y,2) == pow(radio,2)){
 					flagy = -flagy;
 					bloques[i][j].hp--;
-					/*y = y + radio;*/
 				} 
 				/* Colision con la esquina superior derecha */
 				else if (pow((bloqueAct.x+bloqueAct.ancho-x),2) + pow(bloqueAct.y-y,2) == pow(radio,2)){ 
 					flagy = -flagy;
 					bloques[i][j].hp--;
-					/*y = y + radio;*/
 				}
-				// Esquina inferior derecha
+				/* Colision con la esquina inferior derecha */
 				else if (pow((bloqueAct.x+bloqueAct.ancho-x),2) + pow(bloqueAct.y-bloqueAct.alto-y,2) == pow(radio,2)){ 
-					flagx = -flagx;
+					flagy = -flagy;
 					bloques[i][j].hp--;
-					/*x = x+radio;*/
 				}
 				/* Colision con la esquina inferior izquierda */
 				else if (pow((bloqueAct.x-x),2) + pow(bloqueAct.y-bloqueAct.alto-y,2) == pow(radio,2)){ 
-					flagx = -flagx;
+					flagy = -flagy;
 					bloques[i][j].hp--;
-					/*x = x+radio;*/
 				}
 			}
 		}

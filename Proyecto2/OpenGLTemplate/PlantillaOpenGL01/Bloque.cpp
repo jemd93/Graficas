@@ -14,6 +14,7 @@ Bloque::Bloque(float cx,float cy,float a,int t, bool b,GLfloat colors[3]){
 	}
 }
 
+// Dibuja el bloque.
 void Bloque::Dibujar() {
 	glPushMatrix();
 		//Caso bloque especial ya golpeado
@@ -43,14 +44,6 @@ void Bloque::Dibujar() {
 				glVertex2f(x+ancho,y);
 				glVertex2f(x+ancho,y-alto);
 				glVertex2f(x,y-alto);
-			glEnd();
-		}
-		// SOLO COMO PRUEBA. BORRAR DESPUES.
-		if (bonus && hp >= 1) {
-			glColor3f(0.0,0.0,1.0);
-			glPointSize(5.0);
-			glBegin(GL_POINTS);
-				glVertex2f(x,y);
 			glEnd();
 		}
 	glPopMatrix();

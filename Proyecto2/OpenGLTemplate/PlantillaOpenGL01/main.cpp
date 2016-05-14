@@ -34,6 +34,7 @@ clock_t tiempo = clock();
 float r = 0.01;
 float PI = 3.14159265358979323846;
 
+// Explosiones de victoria.
 bool exploto = false;
 float xrand = 0.0;
 float yrand = 0.0;
@@ -171,7 +172,7 @@ void dibujarMarco() {
 	glPopMatrix();
 }
 
-//Función para dibujar los bloques activos del juego
+//Función para dibujar los bloques activos del juego.
 void dibujarBloques() {
 	for (int i = 0; i < 7; i++){
 		for (int j = 0;j < 5;j++){
@@ -180,6 +181,7 @@ void dibujarBloques() {
 			} // Dibujar la explosion cuando destruye un bloque amarillo.
 			if (bloques[i][j].hp <= 0 && bloques[i][j].tipo == 2 && !bloques[i][j].exploto) {
 				if (r <= 2){
+					glPointSize(5.0);
 					glColor3f(0.55,0.09,0.09); 
 					r = r + 0.003;
 					glPushMatrix();
@@ -203,6 +205,7 @@ void dibujarBloques() {
 	}
 }
 
+// Funcion para dibujar la flecha para lanzar la pelota al principio.
 void dibujarDireccion(){
 	glLineWidth(2.0);
 	glColor3f(0.5,0.0,1.0);
@@ -224,6 +227,7 @@ void dibujarDireccion(){
 	glPopMatrix();
 }
 
+// Funcion para dibujar "Ganaste" y las explosiones al ganar.
 void dibujarVictoria() {
 	glPushMatrix();
 		glColor3f(1.0,1.0,0); 

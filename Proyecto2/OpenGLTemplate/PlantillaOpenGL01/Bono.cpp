@@ -12,6 +12,7 @@ Bono::Bono(int t,bool d,float cx,float cy,int bi, int bj,float r,float v){
 	j = bj;
 }
 
+// Dibuja el bono.
 void Bono::Dibujar(Bloque bloques[7][5]) {
 	if (bloques[i][j].hp == 0)  {
 		bloques[i][j].hp = -1;

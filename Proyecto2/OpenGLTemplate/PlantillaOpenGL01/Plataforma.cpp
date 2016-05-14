@@ -9,6 +9,7 @@ Plataforma::Plataforma(float cx,float cy,float a){
 	step = 1;
 }
 
+// Dibuja la plataforma
 void Plataforma::Dibujar(void) {
 	glPushMatrix();
 		glColor3f(0.0,0.0,1.0);
@@ -21,6 +22,7 @@ void Plataforma::Dibujar(void) {
 	glPopMatrix();
 }
 
+// Chequea colision de la plataforma con los bonos.
 int Plataforma::cheqColBonos(Bono bonos[6]){
 	for (int i = 0; i < 6;i++){
 		if (bonos[i].dibujar) {
