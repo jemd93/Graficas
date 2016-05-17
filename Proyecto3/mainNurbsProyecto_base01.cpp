@@ -13,7 +13,8 @@ using namespace std;
 
 GLUnurbsObj *theNurb;
 
-float ctlpoints[21][21][3];
+GLfloat ctlpoints[21][21][3];
+
 
 void ejesCoordenada() {
 	
@@ -198,7 +199,7 @@ void render(){
 
 	//gluNurbsSurface(theNurb, 
  //                  25, variableKnots, 25, variableKnots,
- //                  21 * 3, 3, variablePuntosControl, 
+ //                  21 * 3, 3, ctlpoints, 
  //                  4, 4, GL_MAP2_VERTEX_3);
 	/*
 
