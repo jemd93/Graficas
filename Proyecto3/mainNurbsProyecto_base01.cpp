@@ -13,6 +13,8 @@ using namespace std;
 
 GLUnurbsObj *theNurb;
 
+float ctlpoints[21][21][3];
+
 void ejesCoordenada() {
 	
 	glLineWidth(2.5);
@@ -91,7 +93,19 @@ void init(){
    gluNurbsProperty(theNurb, GLU_SAMPLING_TOLERANCE, 15.0);
    gluNurbsProperty(theNurb, GLU_DISPLAY_MODE, GLU_FILL);
 
-	
+   int x = -10;
+   int y = -10;
+	for (int i = 0; i <21; i++) {
+		x = -10;
+		for (int j = 0; j < 21; j++) {
+			
+	        ctlpoints[i][j][0] = x;
+			ctlpoints[i][j][1] = 0;
+			ctlpoints[i][j][2] = y;
+			x++;
+		}
+		y++;
+	}
 
 }
 
@@ -197,9 +211,12 @@ void render(){
 	
 	glPopMatrix();
 	
+	/* ctlpoints debe ser una matriz de 3 dimensiones con x,y y z de cada punto.
+	   los puntos deben estar desde el -10,-10 hasta el 10,10 y supongo que el z
+	   siempre es el mismo */
 	
 	/* Muestra los puntos de control */
-	/*
+	
 		int i,j;
 		glPointSize(5.0);
 		glDisable(GL_LIGHTING);
@@ -212,7 +229,7 @@ void render(){
 		}
 		glEnd();
 		glEnable(GL_LIGHTING);
-	*/
+	
 		
 
 	glDisable(GL_BLEND);
