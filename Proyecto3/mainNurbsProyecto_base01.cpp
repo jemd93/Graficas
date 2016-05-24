@@ -15,6 +15,8 @@ GLUnurbsObj *theNurb;
 
 GLfloat ctlpoints[21][21][3];
 
+float sknot[25];
+GLfloat tknot[25];
 
 void ejesCoordenada() {
 	
@@ -80,8 +82,6 @@ void init_surface() {
 
 void init(){
 
-
-
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
    glEnable(GL_DEPTH_TEST);
@@ -93,6 +93,11 @@ void init(){
    theNurb = gluNewNurbsRenderer();
    gluNurbsProperty(theNurb, GLU_SAMPLING_TOLERANCE, 15.0);
    gluNurbsProperty(theNurb, GLU_DISPLAY_MODE, GLU_FILL);
+
+   for (int i = 0; i < 25;i++) {
+	   tknot[i] =  i%25;
+	   sknot[i] =  i%25;
+   }
 
    int x = -10;
    int y = -10;
@@ -197,10 +202,10 @@ void render(){
 
 	gluBeginSurface(theNurb);
 
-	//gluNurbsSurface(theNurb, 
- //                  25, variableKnots, 25, variableKnots,
- //                  21 * 3, 3, ctlpoints, 
- //                  4, 4, GL_MAP2_VERTEX_3);
+	gluNurbsSurface(theNurb, 
+                   25,	sknot, 25, tknot,
+                   21 * 3, 3, &ctlpoints[0][0][0], 
+                   4, 4, GL_MAP2_VERTEX_3);
 	/*
 
 		No cambien los numeros de la funcion, solo deben de poner los nombres de las variables correspondiente.
