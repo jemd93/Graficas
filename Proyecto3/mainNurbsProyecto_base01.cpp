@@ -10,11 +10,12 @@ using namespace std;
 
 
 GLUnurbsObj *theNurb;
-
+float static PI = 3.141592653589;
 GLfloat ctlpoints[21][21][3];
 GLfloat knots[25];
 
 GLfloat L1, L2, A1, A2, S1, S2, D1[2], D2[2];
+int olaActual;
 
 void ejesCoordenada() {
 	
@@ -119,22 +120,108 @@ void init(){
    gluNurbsProperty(theNurb, GLU_SAMPLING_TOLERANCE, 15.0);
    gluNurbsProperty(theNurb, GLU_DISPLAY_MODE, GLU_FILL);
 
+   // Inicializacion de variabes de las olas
+   olaActual = 1;
+    L1 = 0;
+	L2 = 0;
+	A1 = 0;
+	A2 = 0;
+	S1 = 0;
+	S2 = 0;
+	D1[0] = 0;
+	D1[1] = 0;
+	D2[0] = 0;
+	D2[1] = 0;
 }
 
 
 
 void Keyboard(unsigned char key, int x, int y)
 {
+  if (key == '1') {
+	  olaActual = 1;
+  }
+  else if (key == '2') {
+	  olaActual = 2;
+  }
+  else if (key == 'a' || key == 'A') {
+	  if (olaActual == 1) 
+		  L1 = L1-0.1;
+	  else 
+		  L2 = L2-0.1;
+  }
+  else if (key == 'z' || key == 'Z') {
+	  if (olaActual == 1) 
+		  L1 = L1+0.1;
+	  else 
+		  L2 = L2+0.1;
+  }
+  else if (key == 's' || key == 'S') {
+	  if (olaActual == 1) 
+		  A1 = A1-0.1;
+	  else 
+		  A2 = A2-0.1;
+  }
+  else if (key == 'x' || key == 'X') {
+	  if (olaActual == 1) 
+		  A1 = A1+0.1;
+	  else 
+		  A2 = A2+0.1;
+  }
+  else if (key == 'd' || key == 'D') {
+	  if (olaActual == 1) 
+		  S1 = S1-0.1;
+	  else 
+		  S2 = S2-0.1;
+  }
+  else if (key == 'c' || key == 'C') {
+	  if (olaActual == 1) 
+		  S1 = S1+0.1;
+	  else 
+		  S2 = S2+0.1;
+  }
+  else if (key == 'f' || key == 'F') {
+	  if (olaActual == 1) 
+		  D1[0] = D1[0]-0.1;
+	  else 
+		  D2[0] = D2[0]-0.1;
+  }
+  else if (key == 'v' || key == 'V') {
+	  if (olaActual == 1) 
+		  D1[0] = D1[0]+0.1;
+	  else 
+		  D2[0] = D2[0]+0.1;
+  }
+  else if (key == 'g' || key == 'G') {
+	  if (olaActual == 1) 
+		  D1[1] = D1[1]-0.1;
+	  else 
+		  D2[1] = D2[1]-0.1;
+  }
+  else if (key == 'b' || key == 'B') {
+	  if (olaActual == 1) 
+		  D1[1] = D1[1]+0.1;
+	  else 
+		  D2[1] = D2[1]+0.1;
+  }
   switch (key)
   {
 	case 27:             
 		exit (0);
+
 		break;
 	
   }
 }
 
+float H(int x,int y,float t) {
+	float w1 = 2*PI/L1;
+	float ola1 = A1*sin((D1[0]*x+D1[1]*y) X w1 + t X (algo));
+	float w2 = 2*PI/L2;
+	float ola2 = A2*sin((D1[0]*x+D1[1]*y) X w2 + t X (algo));
 
+	return ola1+ola2;
+}
 
 void render(){
 	glClearColor(0.0, 0.0, 0.0, 0.0);
