@@ -15,7 +15,10 @@ GLfloat ctlpoints[21][21][3];
 GLfloat knots[25];
 
 GLfloat L1, L2, A1, A2, S1, S2, D1[2], D2[2];
+
 int olaActual;
+int val; // Para controlar la animación
+float tiempo;
 
 void ejesCoordenada() {
 	
@@ -73,6 +76,41 @@ void changeViewport(int w, int h) {
 
 }
 
+float H(int x,int z,float t) {
+	/* Normalización del vector D de la ola 1 */
+	float D1xNorm = D1[0]/sqrt(D1[0]*D1[0]+D1[1]*D1[1]);
+	float D1yNorm = D1[1]/sqrt(D1[0]*D1[0]+D1[1]*D1[1]);
+	/* Normalización del vector D de la ola 2 */
+	float D2xNorm = D2[0]/sqrt(D2[0]*D2[0]+D2[1]*D2[1]);
+	float D2yNorm = D2[1]/sqrt(D2[0]*D2[0]+D2[1]*D2[1]);
+
+	float w1 = 2*PI/L1;
+	float ola1 = A1*sin((D1xNorm*x + D1yNorm*z)*w1 + t*w1*S1);
+	float w2 = 2*PI/L2;
+	float ola2 = A2*sin((D1xNorm*x+D1yNorm*z)*w2 + t*w2*S2);
+
+	return ola1 + ola2;
+}
+
+void generarOleaje(){
+	for (int i=0; i < 21; i++){
+		for (int j=0; j < 21; j++){
+			ctlpoints[i][j][1] = H(ctlpoints[i][j][0], ctlpoints[i][j][2],tiempo);
+		}
+	}
+}
+
+void animacion(int value) {
+	
+	if (val == 1){
+		generarOleaje();
+		tiempo += 0.1;
+		glutTimerFunc(10,animacion,1);
+		glutPostRedisplay();
+	}
+	
+}
+
 void init_surface() {
 	/* Inicialización de los puntos de control */
 	int x = 10;
@@ -102,7 +140,6 @@ void init_surface() {
 			knots[i] =  p;
 			p += 1.0/21.0;
 		}
-		printf("Knot %d: %f\n",i,knots[i]);
 	}	
 }
 
@@ -121,20 +158,34 @@ void init(){
    gluNurbsProperty(theNurb, GLU_DISPLAY_MODE, GLU_FILL);
 
    // Inicializacion de variabes de las olas
-   olaActual = 1;
-    L1 = 0;
-	L2 = 0;
-	A1 = 0;
-	A2 = 0;
-	S1 = 0;
-	S2 = 0;
-	D1[0] = 0;
-	D1[1] = 0;
-	D2[0] = 0;
-	D2[1] = 0;
+	olaActual = 1;
+	printf("Ingrese los siguientes valores para la ola 1\n");
+	printf("L = distancia entre cada ola\n");
+	cin >> L1;
+	printf("A = altura de la ola\n");
+	cin >> A1;
+	printf("S = velocidad de la ola\n");
+	cin >> S1;
+	printf("D = coordenadas X,Y de la direccion de la ola\n");
+	cin >> D1[0];
+	cin >> D1[1];
+
+	printf("Ingrese los siguientes valores para la ola 2\n");
+	printf("L = distancia entre cada ola\n");
+	cin >> L2;
+	printf("A = altura de la ola\n");
+	cin >> A2;
+	printf("S = velocidad de la ola\n");
+	cin >> S2;
+	printf("D = coordenadas X,Y de la direccion de la ola\n");
+	cin >> D2[0];
+	cin >> D2[1];
+
+	printf("L1 %f, A1 %f, S1 %f, Dx1 %f, Dy1 %f\n",L1,A1,S1,D1[0],D1[1]);
+	printf("L2 %f, A2 %f, S2 %f, Dx2 %f, Dy2 %f\n",L2,A2,S2,D2[0],D2[1]);
+
+	tiempo = 0.0;
 }
-
-
 
 void Keyboard(unsigned char key, int x, int y)
 {
@@ -203,6 +254,13 @@ void Keyboard(unsigned char key, int x, int y)
 		  D1[1] = D1[1]+0.1;
 	  else 
 		  D2[1] = D2[1]+0.1;
+  } 
+  else if (key == 'p' || key == 'P'){
+	  val = 0;
+  }
+  else if (key == 'r' || key == 'R'){
+	  val = 1;
+	  animacion(1);
   }
   switch (key)
   {
@@ -212,15 +270,6 @@ void Keyboard(unsigned char key, int x, int y)
 		break;
 	
   }
-}
-
-float H(int x,int y,float t) {
-	float w1 = 2*PI/L1;
-	float ola1 = A1*sin((D1[0]*x+D1[1]*y) X w1 + t X (algo));
-	float w2 = 2*PI/L2;
-	float ola2 = A2*sin((D1[0]*x+D1[1]*y) X w2 + t X (algo));
-
-	return ola1+ola2;
 }
 
 void render(){
@@ -258,7 +307,7 @@ void render(){
 
 	
 	// Render Grid 
-	glDisable(GL_LIGHTING);
+	/*glDisable(GL_LIGHTING);
 	glLineWidth(1.0);
 	glPushMatrix();
 	glRotatef(90,1.0,0.0,0.0);
@@ -267,21 +316,21 @@ void render(){
     zExtent = DEF_floorGridScale * DEF_floorGridZSteps;
     for(loopX = -DEF_floorGridXSteps; loopX <= DEF_floorGridXSteps; loopX++ )
 	{
-	xLocal = DEF_floorGridScale * loopX;
-	glVertex3f( xLocal, -zExtent, 0.0 );
-	glVertex3f( xLocal, zExtent,  0.0 );
+		xLocal = DEF_floorGridScale * loopX;
+		glVertex3f( xLocal, -zExtent, 0.0 );
+		glVertex3f( xLocal, zExtent,  0.0 );
 	}
     xExtent = DEF_floorGridScale * DEF_floorGridXSteps;
     for(loopZ = -DEF_floorGridZSteps; loopZ <= DEF_floorGridZSteps; loopZ++ )
 	{
-	zLocal = DEF_floorGridScale * loopZ;
-	glVertex3f( -xExtent, zLocal, 0.0 );
-	glVertex3f(  xExtent, zLocal, 0.0 );
+		zLocal = DEF_floorGridScale * loopZ;
+		glVertex3f( -xExtent, zLocal, 0.0 );
+		glVertex3f(  xExtent, zLocal, 0.0 );
 	}
     glEnd();
 	ejesCoordenada();
     glPopMatrix();
-	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);*/
 	// Fin Grid
 	
 
@@ -315,7 +364,7 @@ void render(){
 	
 	/* Muestra los puntos de control */
 	
-		int i,j;
+		/*int i,j;
 		glPointSize(5.0);
 		glDisable(GL_LIGHTING);
 		glColor3f(1.0, 1.0, 0.0);
@@ -326,21 +375,13 @@ void render(){
 			}
 		}
 		glEnd();
-		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHTING);*/
 	
 		
 
 	glDisable(GL_BLEND);
 	glDisable(GL_LINE_SMOOTH);
-
 	glutSwapBuffers();
-}
-
-void animacion(int value) {
-	
-	glutTimerFunc(10,animacion,1);
-    glutPostRedisplay();
-	
 }
 
 int main (int argc, char** argv) {
@@ -351,7 +392,7 @@ int main (int argc, char** argv) {
 
 	glutInitWindowSize(960,540);
 
-	glutCreateWindow("Nurbs Proyecto - Ola");
+	glutCreateWindow("Nurbs Proyecto - Ola | María V. Jorge y Jorge Marcano");
 
 	init ();
 
