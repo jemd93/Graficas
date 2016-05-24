@@ -1,5 +1,3 @@
-// Cubica
-
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <iostream>
@@ -14,9 +12,9 @@ using namespace std;
 GLUnurbsObj *theNurb;
 
 GLfloat ctlpoints[21][21][3];
+GLfloat knots[25];
 
-float sknot[25];
-GLfloat tknot[25];
+GLfloat L1, L2, A1, A2, S1, S2, D1[2], D2[2];
 
 void ejesCoordenada() {
 	
@@ -75,9 +73,36 @@ void changeViewport(int w, int h) {
 }
 
 void init_surface() {
+	/* Inicialización de los puntos de control */
+	int x = 10;
+	int z = 10;
+	for (int i = 0; i <21; i++) {
+		x = 10;
+		for (int j = 0; j < 21; j++) {
+			
+			ctlpoints[i][j][0] = x;
+			ctlpoints[i][j][1] = 0;
+			ctlpoints[i][j][2] = z;
+			x--;
+		}
+		z--;
+	}
 	
-	
-	
+	/* Inicialización de los knots */
+	float p = 1.0/21.0;
+	for (int i = 0; i < 25;i++) {
+		if (i < 4){
+			knots[i] = 0.0;
+		} 
+		else if (i > 20){
+			knots[i] = 1.0;	
+		}
+		else {
+			knots[i] =  p;
+			p += 1.0/21.0;
+		}
+		printf("Knot %d: %f\n",i,knots[i]);
+	}	
 }
 
 void init(){
@@ -93,25 +118,6 @@ void init(){
    theNurb = gluNewNurbsRenderer();
    gluNurbsProperty(theNurb, GLU_SAMPLING_TOLERANCE, 15.0);
    gluNurbsProperty(theNurb, GLU_DISPLAY_MODE, GLU_FILL);
-
-   for (int i = 0; i < 25;i++) {
-	   tknot[i] =  i%25;
-	   sknot[i] =  i%25;
-   }
-
-   int x = -10;
-   int y = -10;
-	for (int i = 0; i <21; i++) {
-		x = -10;
-		for (int j = 0; j < 21; j++) {
-			
-	        ctlpoints[i][j][0] = x;
-			ctlpoints[i][j][1] = 0;
-			ctlpoints[i][j][2] = y;
-			x++;
-		}
-		y++;
-	}
 
 }
 
@@ -203,11 +209,10 @@ void render(){
 	gluBeginSurface(theNurb);
 
 	gluNurbsSurface(theNurb, 
-                   25,	sknot, 25, tknot,
+                   25, knots, 25, knots,
                    21 * 3, 3, &ctlpoints[0][0][0], 
                    4, 4, GL_MAP2_VERTEX_3);
 	/*
-
 		No cambien los numeros de la funcion, solo deben de poner los nombres de las variables correspondiente.
 		
 	*/
