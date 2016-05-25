@@ -87,7 +87,7 @@ float H(int x,int z,float t) {
 	float w1 = 2*PI/L1;
 	float ola1 = A1*sin((D1xNorm*x + D1yNorm*z)*w1 + t*w1*S1);
 	float w2 = 2*PI/L2;
-	float ola2 = A2*sin((D1xNorm*x+D1yNorm*z)*w2 + t*w2*S2);
+	float ola2 = A2*sin((D2xNorm*x+D2yNorm*z)*w2 + t*w2*S2);
 
 	return ola1 + ola2;
 }
@@ -196,64 +196,104 @@ void Keyboard(unsigned char key, int x, int y)
 	  olaActual = 2;
   }
   else if (key == 'a' || key == 'A') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  L1 = L1-0.1;
-	  else 
+		  printf("L1 %f \n",L1);
+	  }
+	  else { 
 		  L2 = L2-0.1;
+		  printf("L2 %f \n",L2);
+	  }
   }
   else if (key == 'z' || key == 'Z') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  L1 = L1+0.1;
-	  else 
+	      printf("L1 %f \n",L1);
+	  }
+	  else {
 		  L2 = L2+0.1;
+		  printf("L2 %f \n",L2);
+	  }
   }
   else if (key == 's' || key == 'S') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  A1 = A1-0.1;
-	  else 
+		  printf("A1 %f \n",A1);
+	  }
+	  else {
 		  A2 = A2-0.1;
+		  printf("A2 %f \n",A2);
+	  }
   }
   else if (key == 'x' || key == 'X') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  A1 = A1+0.1;
-	  else 
+	      printf("A1 %f \n",A1);
+	  }
+	  else {
 		  A2 = A2+0.1;
+	      printf("A2 %f \n",A2);
+	  }
   }
   else if (key == 'd' || key == 'D') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  S1 = S1-0.1;
-	  else 
+	      printf("S1 %f \n",S1);
+	  }
+	  else {
 		  S2 = S2-0.1;
+		  printf("S2 %f \n",S2);
+	  }
   }
   else if (key == 'c' || key == 'C') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  S1 = S1+0.1;
-	  else 
+	      printf("S1 %f \n",S1);
+	  }
+	  else {
 		  S2 = S2+0.1;
+	      printf("S2 %f \n",S2);
+	  }
   }
   else if (key == 'f' || key == 'F') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  D1[0] = D1[0]-0.1;
-	  else 
+		  printf("D1x %f \n",D1[0]);
+	  }
+	  else {
 		  D2[0] = D2[0]-0.1;
+		  printf("D2x %f \n",D2[0]);
+	  }
   }
   else if (key == 'v' || key == 'V') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  D1[0] = D1[0]+0.1;
-	  else 
+	      printf("D1x %f \n",D1[0]);
+	  }
+	  else {
 		  D2[0] = D2[0]+0.1;
+		  printf("D2x %f \n",D2[0]);
+	  }
   }
   else if (key == 'g' || key == 'G') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) {
 		  D1[1] = D1[1]-0.1;
-	  else 
+	      printf("D1y %f \n",D1[1]);
+	  }
+	  else {
 		  D2[1] = D2[1]-0.1;
+		  printf("D2y %f \n",D2[1]);
+	  }
   }
   else if (key == 'b' || key == 'B') {
-	  if (olaActual == 1) 
+	  if (olaActual == 1) { 
 		  D1[1] = D1[1]+0.1;
-	  else 
+	      printf("D1y %f \n",D1[1]);
+	  }
+	  else {
 		  D2[1] = D2[1]+0.1;
+	      printf("D2y %f \n",D2[1]);
+	  }
   } 
   else if (key == 'p' || key == 'P'){
 	  val = 0;
