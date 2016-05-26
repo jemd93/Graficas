@@ -1,0 +1,8 @@
+Los archivos .mesh deben ser colocados en: 
+	\OgreSDK_vc11_v1-9-0\media\models
+
+Los .material en:
+	\OgreSDK_vc11_v1-9-0\media\materials\scripts	
+
+Las texturas:
+	\OgreSDK_vc11_v1-9-0\media\materials\textures

@@ -1,0 +1,21 @@
+material matTorretas01
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0 0 0 1
+			
+			texture_unit
+			{
+				texture tex_mTorretas01.png
+				colour_op_ex add src_texture src_current
+				colour_op_multipass_fallback one one
+			}
+						
+		}
+
+	}
+
+}
