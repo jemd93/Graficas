@@ -1,6 +1,7 @@
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -159,32 +160,37 @@ void init(){
 
    // Inicializacion de variabes de las olas
 	olaActual = 1;
-	printf("Ingrese los siguientes valores para la ola 1\n");
-	printf("L = distancia entre cada ola\n");
-	cin >> L1;
-	printf("A = altura de la ola\n");
-	cin >> A1;
-	printf("S = velocidad de la ola\n");
-	cin >> S1;
-	printf("D = coordenadas X,Y de la direccion de la ola\n");
-	cin >> D1[0];
-	cin >> D1[1];
 
-	printf("Ingrese los siguientes valores para la ola 2\n");
-	printf("L = distancia entre cada ola\n");
-	cin >> L2;
-	printf("A = altura de la ola\n");
-	cin >> A2;
-	printf("S = velocidad de la ola\n");
-	cin >> S2;
-	printf("D = coordenadas X,Y de la direccion de la ola\n");
-	cin >> D2[0];
-	cin >> D2[1];
+	L1 = 8.0;
+	A1 = 0.4;
+	S1 = 2.0;
+	D1[0] = 0.0;
+	D1[1] = -1.0;
 
-	printf("L1 %f, A1 %f, S1 %f, Dx1 %f, Dy1 %f\n",L1,A1,S1,D1[0],D1[1]);
-	printf("L2 %f, A2 %f, S2 %f, Dx2 %f, Dy2 %f\n",L2,A2,S2,D2[0],D2[1]);
+	L2 = 4.0;
+	A2 = 0.0;
+	S2 = 0.0;
+	D2[0] = 1.0;
+	D2[1] = 1.0;
 
 	tiempo = 0.0;
+}
+
+void estadoVariables(){
+	system("cls");
+	printf("Ola 1\n");
+	printf("wL = %f\n",L1);
+	printf("aP = %f\n",A1);
+	printf("sP = %f\n",S1);
+	printf("dirX = %f\n",D1[0]);
+	printf("dirY = %f\n",D1[1]);
+	printf("==============\n");
+	printf("Ola 2\n");
+	printf("wL = %f\n",L2);
+	printf("aP = %f\n",A2);
+	printf("sP = %f\n",S2);
+	printf("dirX = %f\n",D2[0]);
+	printf("dirY = %f\n",D2[1]);
 }
 
 void Keyboard(unsigned char key, int x, int y)
@@ -198,101 +204,101 @@ void Keyboard(unsigned char key, int x, int y)
   else if (key == 'a' || key == 'A') {
 	  if (olaActual == 1) {
 		  L1 = L1-0.1;
-		  printf("L1 %f \n",L1);
+		  estadoVariables();
 	  }
 	  else { 
 		  L2 = L2-0.1;
-		  printf("L2 %f \n",L2);
+		  estadoVariables();
 	  }
   }
   else if (key == 'z' || key == 'Z') {
 	  if (olaActual == 1) {
 		  L1 = L1+0.1;
-	      printf("L1 %f \n",L1);
+	      estadoVariables();
 	  }
 	  else {
 		  L2 = L2+0.1;
-		  printf("L2 %f \n",L2);
+		  estadoVariables();
 	  }
   }
   else if (key == 's' || key == 'S') {
 	  if (olaActual == 1) {
 		  A1 = A1-0.1;
-		  printf("A1 %f \n",A1);
+		  estadoVariables();
 	  }
 	  else {
 		  A2 = A2-0.1;
-		  printf("A2 %f \n",A2);
+		  estadoVariables();
 	  }
   }
   else if (key == 'x' || key == 'X') {
 	  if (olaActual == 1) {
 		  A1 = A1+0.1;
-	      printf("A1 %f \n",A1);
+  		  estadoVariables();
 	  }
 	  else {
 		  A2 = A2+0.1;
-	      printf("A2 %f \n",A2);
+		  estadoVariables();
 	  }
   }
   else if (key == 'd' || key == 'D') {
 	  if (olaActual == 1) {
 		  S1 = S1-0.1;
-	      printf("S1 %f \n",S1);
+		  estadoVariables();
 	  }
 	  else {
 		  S2 = S2-0.1;
-		  printf("S2 %f \n",S2);
+		  estadoVariables();
 	  }
   }
   else if (key == 'c' || key == 'C') {
 	  if (olaActual == 1) {
 		  S1 = S1+0.1;
-	      printf("S1 %f \n",S1);
+	      estadoVariables();
 	  }
 	  else {
 		  S2 = S2+0.1;
-	      printf("S2 %f \n",S2);
+	      estadoVariables();
 	  }
   }
   else if (key == 'f' || key == 'F') {
 	  if (olaActual == 1) {
 		  D1[0] = D1[0]-0.1;
-		  printf("D1x %f \n",D1[0]);
+		  estadoVariables();
 	  }
 	  else {
 		  D2[0] = D2[0]-0.1;
-		  printf("D2x %f \n",D2[0]);
+		  estadoVariables();
 	  }
   }
   else if (key == 'v' || key == 'V') {
 	  if (olaActual == 1) {
 		  D1[0] = D1[0]+0.1;
-	      printf("D1x %f \n",D1[0]);
+	      estadoVariables();
 	  }
 	  else {
 		  D2[0] = D2[0]+0.1;
-		  printf("D2x %f \n",D2[0]);
+		  estadoVariables();
 	  }
   }
   else if (key == 'g' || key == 'G') {
 	  if (olaActual == 1) {
 		  D1[1] = D1[1]-0.1;
-	      printf("D1y %f \n",D1[1]);
+	      estadoVariables();
 	  }
 	  else {
 		  D2[1] = D2[1]-0.1;
-		  printf("D2y %f \n",D2[1]);
+		  estadoVariables();
 	  }
   }
   else if (key == 'b' || key == 'B') {
 	  if (olaActual == 1) { 
 		  D1[1] = D1[1]+0.1;
-	      printf("D1y %f \n",D1[1]);
+	      estadoVariables();
 	  }
 	  else {
 		  D2[1] = D2[1]+0.1;
-	      printf("D2y %f \n",D2[1]);
+		  estadoVariables();
 	  }
   } 
   else if (key == 'p' || key == 'P'){
