@@ -93,6 +93,146 @@ public:
 		modificarColor(entTorreta01,0.411,0.411,0.411);
 	}
 
+	void crearAlas(){
+		ManualObject* alas = mSceneMgr->createManualObject("alas");
+		//Ala derecha
+		alas->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			alas->position(4, 0, -2.5);
+			alas->position(4, 0, -17.5);
+			alas->position(32, 0, -17.5);
+			alas->position(32, 0, -3.5);
+			alas->position(8, 0, -2.5);
+			alas->position(7.5, 0, -4);
+			alas->position(5, 0, -4);
+			alas->position(4.5, 0, -2.5);
+			
+			alas->index(0);
+			alas->index(1);
+			alas->index(2);
+			alas->index(3);
+			alas->index(4);
+			alas->index(5);
+			alas->index(6);
+			alas->index(7);
+			alas->index(0);
+		alas->end();
+
+		//Ala izquierda
+		alas->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			alas->position(-4, 0, -2.5);
+			alas->position(-4, 0, -17.5);
+			alas->position(-32, 0, -17.5);
+			alas->position(-32, 0, -3.5);
+			alas->position(-8, 0, -2.5);
+			alas->position(-7.5, 0, -4);
+			alas->position(-5, 0, -4);
+			alas->position(-4.5, 0, -2.5);
+			
+			alas->index(0);
+			alas->index(1);
+			alas->index(2);
+			alas->index(3);
+			alas->index(4);
+			alas->index(5);
+			alas->index(6);
+			alas->index(7);
+			alas->index(0);
+		alas->end();
+
+		mSceneMgr->getRootSceneNode()->attachObject(alas);
+	}
+
+	void crearCentroNave(){
+		ManualObject* centroNave = mSceneMgr->createManualObject("centroNave");
+
+		//Parte de arriba del centro de la nave
+		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->position(-3, 2.5, 0);
+			centroNave->position(-3, 2.5, -13);
+			centroNave->position(3, 2.5, -13);
+			centroNave->position(3, 2.5, 0);
+			centroNave->index(0);
+			centroNave->index(1);
+			centroNave->index(2);
+			centroNave->index(3);
+			centroNave->index(0);
+		centroNave->end();
+
+		//Parte de abajo del centro de la nave
+		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->position(-3, -2.5, 0);
+			centroNave->position(-3, -2.5, -13);
+			centroNave->position(3, -2.5, -13);
+			centroNave->position(3, -2.5, 0);
+			centroNave->index(0);
+			centroNave->index(1);
+			centroNave->index(2);
+			centroNave->index(3);
+			centroNave->index(0);
+		centroNave->end();
+
+		//Parte trasera del centro de la nave
+		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->position(-3, -2.5, 0);
+			centroNave->position(-4, 0, 0);
+			centroNave->position(-3, 2.5, 0);
+			centroNave->position(3, 2.5, 0);
+			centroNave->position(4, 0, 0);
+			centroNave->position(3, -2.5, 0);
+			
+			centroNave->index(0);
+			centroNave->index(1);
+			centroNave->index(2);
+			centroNave->index(3);
+			centroNave->index(4);
+			centroNave->index(5);
+			centroNave->index(0);
+		centroNave->end();
+
+		//Parte frontal del centro de la nave
+		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->position(-3, -2.5, -13);
+			centroNave->position(-4, 0, -13);
+			centroNave->position(-3, 2.5, -13);
+			centroNave->position(3, 2.5, -13);
+			centroNave->position(4, 0, -13);
+			centroNave->position(3, -2.5, -13);
+			
+			centroNave->index(0);
+			centroNave->index(1);
+			centroNave->index(2);
+			centroNave->index(3);
+			centroNave->index(4);
+			centroNave->index(5);
+			centroNave->index(0);
+		centroNave->end();
+
+		//Sección frontal de la cabina
+		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->position(-3, -2.5, -13);
+			centroNave->position(-4, 0, -13);
+			centroNave->position(-3, 2.5, -13);
+			centroNave->position(3, 2.5, -13);
+			centroNave->position(4, 0, -13);
+			centroNave->position(3, -2.5, -13);
+			
+			centroNave->index(0);
+			centroNave->index(1);
+			centroNave->index(2);
+			centroNave->index(3);
+			centroNave->index(4);
+			centroNave->index(5);
+			centroNave->index(0);
+		centroNave->end();
+
+		mSceneMgr->getRootSceneNode()->attachObject(centroNave);
+	}
+
+	void crearNave(){
+		crearCentroNave();
+		crearAlas();
+	}
+
 	void createScene() {
 
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0, 1.0, 1.0));
@@ -124,6 +264,7 @@ public:
 		mSceneMgr->getRootSceneNode()->attachObject(entEscena06);
 		
 		crearTorretas();
+		crearNave();
 	}
 };
 
