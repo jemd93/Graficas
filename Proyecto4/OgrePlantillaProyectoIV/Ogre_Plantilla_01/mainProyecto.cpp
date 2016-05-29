@@ -16,6 +16,12 @@ public:
 	// Nodos para canones.
 	Ogre::SceneNode* nodosCanon[4];
 
+	//Nodo para la nave
+	Ogre::SceneNode* nodoNave;
+
+	//Nodo para las alas (superiores e inferiores)
+	Ogre::SceneNode* nodosAlas[2];
+
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
@@ -201,57 +207,200 @@ public:
 	}
 
 	void crearAlas(){
-		ManualObject* alas = mSceneMgr->createManualObject("alas");
+		ManualObject* alasSuperior = mSceneMgr->createManualObject("alasSuperior");
+		ManualObject* alasInferior = mSceneMgr->createManualObject("alasInferior");
+
+		nodosAlas[0] = mSceneMgr->createSceneNode("nodoAlasSuperior");
+		mSceneMgr->getRootSceneNode()->addChild(nodosAlas[0]);
+
+		nodosAlas[1] = mSceneMgr->createSceneNode("nodoAlasInferior");
+		mSceneMgr->getRootSceneNode()->addChild(nodosAlas[1]);
+
 		//Ala derecha
-		alas->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
-			alas->position(4, 0, -2.5);
-			alas->position(4, 0, -17.5);
-			alas->position(32, 0, -17.5);
-			alas->position(32, 0, -3.5);
-			alas->position(8, 0, -2.5);
-			alas->position(7.5, 0, -4);
-			alas->position(5, 0, -4);
-			alas->position(4.5, 0, -2.5);
+		alasSuperior->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			alasSuperior->position(4, 0, -2.5);
+			alasSuperior->position(4, 0, -17.5);
+			alasSuperior->position(32, 0, -17.5);
+			alasSuperior->position(32, 0, -6.5);
+			alasSuperior->position(8, 0, -2.5);
+			alasSuperior->position(7.5, 0, -4);
+			alasSuperior->position(5, 0, -4);
+			alasSuperior->position(4.5, 0, -2.5);
+
+			//Parte de abajo
+			alasSuperior->position(4, -0.5, -2.5);
+			alasSuperior->position(4, -0.5, -17.5);
+			alasSuperior->position(32, -0.5, -17.5);
+			alasSuperior->position(32, -0.5, -6.5);
+			alasSuperior->position(8, -0.5, -2.5);
+			alasSuperior->position(7.5, -0.5, -4);
+			alasSuperior->position(5, -0.5, -4);
+			alasSuperior->position(4.5, -0.5, -2.5);
 			
-			alas->index(0);
-			alas->index(1);
-			alas->index(2);
-			alas->index(3);
-			alas->index(4);
-			alas->index(5);
-			alas->index(6);
-			alas->index(7);
-			alas->index(0);
-		alas->end();
+			alasSuperior->index(0);
+			alasSuperior->index(1);
+			alasSuperior->index(2);
+			alasSuperior->index(3);
+			alasSuperior->index(4);
+			alasSuperior->index(5);
+			alasSuperior->index(6);
+			alasSuperior->index(7);
+			alasSuperior->index(0);
+
+			alasSuperior->index(8);
+			alasSuperior->index(9);
+			alasSuperior->index(10);
+			alasSuperior->index(11);
+			alasSuperior->index(12);
+			alasSuperior->index(13);
+			alasSuperior->index(14);
+			alasSuperior->index(15);
+			alasSuperior->index(8);
+		alasSuperior->end();
 
 		//Ala izquierda
-		alas->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
-			alas->position(-4, 0, -2.5);
-			alas->position(-4, 0, -17.5);
-			alas->position(-32, 0, -17.5);
-			alas->position(-32, 0, -3.5);
-			alas->position(-8, 0, -2.5);
-			alas->position(-7.5, 0, -4);
-			alas->position(-5, 0, -4);
-			alas->position(-4.5, 0, -2.5);
+		alasSuperior->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			alasSuperior->position(-4, 0, -2.5);
+			alasSuperior->position(-4, 0, -17.5);
+			alasSuperior->position(-32, 0, -17.5);
+			alasSuperior->position(-32, 0, -6.5);
+			alasSuperior->position(-8, 0, -2.5);
+			alasSuperior->position(-7.5, 0, -4);
+			alasSuperior->position(-5, 0, -4);
+			alasSuperior->position(-4.5, 0, -2.5);
 			
-			alas->index(0);
-			alas->index(1);
-			alas->index(2);
-			alas->index(3);
-			alas->index(4);
-			alas->index(5);
-			alas->index(6);
-			alas->index(7);
-			alas->index(0);
-		alas->end();
+			//Parte de abajo
+			alasSuperior->position(-4, -0.5, -2.5);
+			alasSuperior->position(-4, -0.5, -17.5);
+			alasSuperior->position(-32, -0.5, -17.5);
+			alasSuperior->position(-32, -0.5, -6.5);
+			alasSuperior->position(-8, -0.5, -2.5);
+			alasSuperior->position(-7.5, -0.5, -4);
+			alasSuperior->position(-5, -0.5, -4);
+			alasSuperior->position(-4.5, -0.5, -2.5);
 
-		mSceneMgr->getRootSceneNode()->attachObject(alas);
+			alasSuperior->index(0);
+			alasSuperior->index(1);
+			alasSuperior->index(2);
+			alasSuperior->index(3);
+			alasSuperior->index(4);
+			alasSuperior->index(5);
+			alasSuperior->index(6);
+			alasSuperior->index(7);
+			alasSuperior->index(0);
+
+			alasSuperior->index(8);
+			alasSuperior->index(9);
+			alasSuperior->index(10);
+			alasSuperior->index(11);
+			alasSuperior->index(12);
+			alasSuperior->index(13);
+			alasSuperior->index(14);
+			alasSuperior->index(15);
+			alasSuperior->index(8);
+		alasSuperior->end();
+
+		nodosAlas[0]->attachObject(alasSuperior);
+
+		//Ala derecha
+		alasInferior->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			alasInferior->position(4, -0.5, -2.5);
+			alasInferior->position(4, -0.5, -17.5);
+			alasInferior->position(32, -0.5, -17.5);
+			alasInferior->position(32, -0.5, -6.5);
+			alasInferior->position(8, -0.5, -2.5);
+			alasInferior->position(7.5, -0.5, -4);
+			alasInferior->position(5, -0.5, -4);
+			alasInferior->position(4.5, -0.5, -2.5);
+			
+			//Parte de abajo
+			alasInferior->position(4, -1, -2.5);
+			alasInferior->position(4, -1, -17.5);
+			alasInferior->position(32, -1, -17.5);
+			alasInferior->position(32, -1, -6.5);
+			alasInferior->position(8, -1, -2.5);
+			alasInferior->position(7.5, -1, -4);
+			alasInferior->position(5, -1, -4);
+			alasInferior->position(4.5, -1, -2.5);
+
+			alasInferior->index(0);
+			alasInferior->index(1);
+			alasInferior->index(2);
+			alasInferior->index(3);
+			alasInferior->index(4);
+			alasInferior->index(5);
+			alasInferior->index(6);
+			alasInferior->index(7);
+			alasInferior->index(0);
+
+			alasInferior->index(8);
+			alasInferior->index(9);
+			alasInferior->index(10);
+			alasInferior->index(11);
+			alasInferior->index(12);
+			alasInferior->index(13);
+			alasInferior->index(14);
+			alasInferior->index(15);
+			alasInferior->index(8);
+		alasInferior->end();
+
+		//Ala izquierda
+		alasInferior->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			alasInferior->position(-4, -0.5, -2.5);
+			alasInferior->position(-4, -0.5, -17.5);
+			alasInferior->position(-32, -0.5, -17.5);
+			alasInferior->position(-32, -0.5, -6.5);
+			alasInferior->position(-8, -0.5, -2.5);
+			alasInferior->position(-7.5, -0.5, -4);
+			alasInferior->position(-5, -0.5, -4);
+			alasInferior->position(-4.5, -0.5, -2.5);
+
+			//Parte de abajo
+			alasInferior->position(-4, -1, -2.5);
+			alasInferior->position(-4, -1, -17.5);
+			alasInferior->position(-32, -1, -17.5);
+			alasInferior->position(-32, -1, -6.5);
+			alasInferior->position(-8, -1, -2.5);
+			alasInferior->position(-7.5, -1, -4);
+			alasInferior->position(-5, -1, -4);
+			alasInferior->position(-4.5, -1, -2.5);
+			
+			alasInferior->index(0);
+			alasInferior->index(1);
+			alasInferior->index(2);
+			alasInferior->index(3);
+			alasInferior->index(4);
+			alasInferior->index(5);
+			alasInferior->index(6);
+			alasInferior->index(7);
+			alasInferior->index(0);
+
+			alasInferior->index(8);
+			alasInferior->index(9);
+			alasInferior->index(10);
+			alasInferior->index(11);
+			alasInferior->index(12);
+			alasInferior->index(13);
+			alasInferior->index(14);
+			alasInferior->index(15);
+			alasInferior->index(8);
+		alasInferior->end();
+
+		nodosAlas[1]->attachObject(alasInferior);
 	}
 
 	void crearCentroNave(){
 		ManualObject* centroNave = mSceneMgr->createManualObject("centroNave");
+		nodoNave = mSceneMgr->createSceneNode("nodoNave");
+		mSceneMgr->getRootSceneNode()->addChild(nodoNave);
 
+
+		/*
+			|		|
+			|		|
+		 ---|		|---
+			---------
+		*/
 		//Parte de arriba del centro de la nave
 		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
 			centroNave->position(-3, 2.5, 0);
@@ -315,24 +464,63 @@ public:
 		centroNave->end();
 
 		//Sección frontal de la cabina
+		/*    | |
+		     |   |
+			|     |
+			-------
+		*/
+		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->position(-3, 2.5, -13);
+			centroNave->position(-2, 1.5, -33);
+			centroNave->position(2, 1.5, -33);
+			centroNave->position(3, 2.5, -13);
+			
+			centroNave->index(0);
+			centroNave->index(1);
+			centroNave->index(2);
+			centroNave->index(3);
+		centroNave->end();
+
 		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
 			centroNave->position(-3, -2.5, -13);
-			centroNave->position(-4, 0, -13);
-			centroNave->position(-3, 2.5, -13);
-			centroNave->position(3, 2.5, -13);
-			centroNave->position(4, 0, -13);
+			centroNave->position(-2, -1.5, -33);
+			centroNave->position(2, -1.5, -33);
 			centroNave->position(3, -2.5, -13);
 			
 			centroNave->index(0);
 			centroNave->index(1);
 			centroNave->index(2);
 			centroNave->index(3);
-			centroNave->index(4);
-			centroNave->index(5);
-			centroNave->index(0);
 		centroNave->end();
 
-		mSceneMgr->getRootSceneNode()->attachObject(centroNave);
+		//Punta de la nave superior
+		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->position(-2, 1.5, -33);
+			centroNave->position(-0.5, 1, -35);
+			centroNave->position(0.5, 1, -35);
+			centroNave->position(2, 1.5, -33);
+			
+			centroNave->index(0);
+			centroNave->index(1);
+			centroNave->index(2);
+			centroNave->index(3);
+		centroNave->end();
+
+		//Punta de la nave inferior
+		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->position(-2, -1.5, -33);
+			centroNave->position(-0.5, -1, -35);
+			centroNave->position(0.5, -1, -35);
+			centroNave->position(2, -1.5, -33);
+			
+			centroNave->index(0);
+			centroNave->index(1);
+			centroNave->index(2);
+			centroNave->index(3);
+		centroNave->end();
+
+
+		nodoNave->attachObject(centroNave);
 	}
 
 	void crearNave(){
