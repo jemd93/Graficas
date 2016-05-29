@@ -217,7 +217,8 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodosAlas[1]);
 
 		//Ala derecha
-		alasSuperior->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+		alasSuperior->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+			//Parte de arriba
 			alasSuperior->position(4, 0, -2.5);
 			alasSuperior->position(4, 0, -17.5);
 			alasSuperior->position(32, 0, -17.5);
@@ -226,6 +227,12 @@ public:
 			alasSuperior->position(7.5, 0, -4);
 			alasSuperior->position(5, 0, -4);
 			alasSuperior->position(4.5, 0, -2.5);
+
+			alasSuperior->triangle(0,7,1);
+			alasSuperior->triangle(6,2,1);
+			alasSuperior->quad(5,4,3,2);
+			alasSuperior->triangle(6,5,2);
+			alasSuperior->triangle(1,7,6);
 
 			//Parte de abajo
 			alasSuperior->position(4, -0.5, -2.5);
@@ -237,29 +244,33 @@ public:
 			alasSuperior->position(5, -0.5, -4);
 			alasSuperior->position(4.5, -0.5, -2.5);
 			
-			alasSuperior->index(0);
-			alasSuperior->index(1);
-			alasSuperior->index(2);
-			alasSuperior->index(3);
-			alasSuperior->index(4);
-			alasSuperior->index(5);
-			alasSuperior->index(6);
-			alasSuperior->index(7);
-			alasSuperior->index(0);
+			alasSuperior->triangle(8,15,9);
+			alasSuperior->triangle(14,10,9);
+			alasSuperior->quad(13,12,11,10);
+			alasSuperior->triangle(14,13,10);
+			alasSuperior->triangle(9,15,14);
 
-			alasSuperior->index(8);
-			alasSuperior->index(9);
-			alasSuperior->index(10);
-			alasSuperior->index(11);
-			alasSuperior->index(12);
-			alasSuperior->index(13);
-			alasSuperior->index(14);
-			alasSuperior->index(15);
-			alasSuperior->index(8);
+			//Lateral izquierdo
+			alasSuperior->quad(8,0,1,9);
+
+			//Lateral derecho
+			alasSuperior->quad(3,11,10,2);
+
+			//Lateral frontal
+			alasSuperior->quad(2,10,9,1);
+
+			//Lateral trasero
+			alasSuperior->quad(0,8,15,7);
+			alasSuperior->quad(7,15,14,6);
+			alasSuperior->quad(6,14,13,5);
+			alasSuperior->quad(5,13,12,4);
+			alasSuperior->quad(4,12,11,3);
+
 		alasSuperior->end();
 
 		//Ala izquierda
-		alasSuperior->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+		alasSuperior->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+			//Parte de arriba
 			alasSuperior->position(-4, 0, -2.5);
 			alasSuperior->position(-4, 0, -17.5);
 			alasSuperior->position(-32, 0, -17.5);
@@ -268,6 +279,12 @@ public:
 			alasSuperior->position(-7.5, 0, -4);
 			alasSuperior->position(-5, 0, -4);
 			alasSuperior->position(-4.5, 0, -2.5);
+
+			alasSuperior->triangle(1,7,0);
+			alasSuperior->triangle(1,2,6);
+			alasSuperior->quad(2,3,4,5);
+			alasSuperior->triangle(2,5,6);
+			alasSuperior->triangle(6,7,1);
 			
 			//Parte de abajo
 			alasSuperior->position(-4, -0.5, -2.5);
@@ -279,31 +296,34 @@ public:
 			alasSuperior->position(-5, -0.5, -4);
 			alasSuperior->position(-4.5, -0.5, -2.5);
 
-			alasSuperior->index(0);
-			alasSuperior->index(1);
-			alasSuperior->index(2);
-			alasSuperior->index(3);
-			alasSuperior->index(4);
-			alasSuperior->index(5);
-			alasSuperior->index(6);
-			alasSuperior->index(7);
-			alasSuperior->index(0);
+			alasSuperior->triangle(9,15,8);
+			alasSuperior->triangle(9,10,14);
+			alasSuperior->quad(10,11,12,13);
+			alasSuperior->triangle(10,13,14);
+			alasSuperior->triangle(14,15,9);
 
-			alasSuperior->index(8);
-			alasSuperior->index(9);
-			alasSuperior->index(10);
-			alasSuperior->index(11);
-			alasSuperior->index(12);
-			alasSuperior->index(13);
-			alasSuperior->index(14);
-			alasSuperior->index(15);
-			alasSuperior->index(8);
+			//Lateral izquierdo
+			alasSuperior->quad(8,0,1,9);
+
+			//Lateral derecho
+			alasSuperior->quad(3,11,10,2);
+
+			//Lateral frontal
+			alasSuperior->quad(2,10,9,1);
+
+			//Lateral trasero
+			alasSuperior->quad(0,8,15,7);
+			alasSuperior->quad(7,15,14,6);
+			alasSuperior->quad(6,14,13,5);
+			alasSuperior->quad(5,13,12,4);
+			alasSuperior->quad(4,12,11,3);
+			
 		alasSuperior->end();
 
 		nodosAlas[0]->attachObject(alasSuperior);
 
 		//Ala derecha
-		alasInferior->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+		alasInferior->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
 			alasInferior->position(4, -0.5, -2.5);
 			alasInferior->position(4, -0.5, -17.5);
 			alasInferior->position(32, -0.5, -17.5);
@@ -312,6 +332,12 @@ public:
 			alasInferior->position(7.5, -0.5, -4);
 			alasInferior->position(5, -0.5, -4);
 			alasInferior->position(4.5, -0.5, -2.5);
+
+			alasInferior->triangle(0,7,1);
+			alasInferior->triangle(6,2,1);
+			alasInferior->quad(5,4,3,2);
+			alasInferior->triangle(6,5,2);
+			alasInferior->triangle(1,7,6);
 			
 			//Parte de abajo
 			alasInferior->position(4, -1, -2.5);
@@ -323,29 +349,33 @@ public:
 			alasInferior->position(5, -1, -4);
 			alasInferior->position(4.5, -1, -2.5);
 
-			alasInferior->index(0);
-			alasInferior->index(1);
-			alasInferior->index(2);
-			alasInferior->index(3);
-			alasInferior->index(4);
-			alasInferior->index(5);
-			alasInferior->index(6);
-			alasInferior->index(7);
-			alasInferior->index(0);
+			alasInferior->triangle(8,15,9);
+			alasInferior->triangle(14,10,9);
+			alasInferior->quad(13,12,11,10);
+			alasInferior->triangle(14,13,10);
+			alasInferior->triangle(9,15,14);
 
-			alasInferior->index(8);
-			alasInferior->index(9);
-			alasInferior->index(10);
-			alasInferior->index(11);
-			alasInferior->index(12);
-			alasInferior->index(13);
-			alasInferior->index(14);
-			alasInferior->index(15);
-			alasInferior->index(8);
+			//Lateral izquierdo
+			alasInferior->quad(8,0,1,9);
+
+			//Lateral derecho
+			alasInferior->quad(3,11,10,2);
+
+			//Lateral frontal
+			alasInferior->quad(2,10,9,1);
+
+			//Lateral trasero
+			alasInferior->quad(0,8,15,7);
+			alasInferior->quad(7,15,14,6);
+			alasInferior->quad(6,14,13,5);
+			alasInferior->quad(5,13,12,4);
+			alasInferior->quad(4,12,11,3);
+
 		alasInferior->end();
 
 		//Ala izquierda
-		alasInferior->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+		alasInferior->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+			//Parte de arriba
 			alasInferior->position(-4, -0.5, -2.5);
 			alasInferior->position(-4, -0.5, -17.5);
 			alasInferior->position(-32, -0.5, -17.5);
@@ -354,6 +384,12 @@ public:
 			alasInferior->position(-7.5, -0.5, -4);
 			alasInferior->position(-5, -0.5, -4);
 			alasInferior->position(-4.5, -0.5, -2.5);
+
+			alasInferior->triangle(1,7,0);
+			alasInferior->triangle(1,2,6);
+			alasInferior->quad(2,3,4,5);
+			alasInferior->triangle(2,5,6);
+			alasInferior->triangle(6,7,1);
 
 			//Parte de abajo
 			alasInferior->position(-4, -1, -2.5);
@@ -364,26 +400,29 @@ public:
 			alasInferior->position(-7.5, -1, -4);
 			alasInferior->position(-5, -1, -4);
 			alasInferior->position(-4.5, -1, -2.5);
-			
-			alasInferior->index(0);
-			alasInferior->index(1);
-			alasInferior->index(2);
-			alasInferior->index(3);
-			alasInferior->index(4);
-			alasInferior->index(5);
-			alasInferior->index(6);
-			alasInferior->index(7);
-			alasInferior->index(0);
 
-			alasInferior->index(8);
-			alasInferior->index(9);
-			alasInferior->index(10);
-			alasInferior->index(11);
-			alasInferior->index(12);
-			alasInferior->index(13);
-			alasInferior->index(14);
-			alasInferior->index(15);
-			alasInferior->index(8);
+			alasInferior->triangle(9,15,8);
+			alasInferior->triangle(9,10,14);
+			alasInferior->quad(10,11,12,13);
+			alasInferior->triangle(10,13,14);
+			alasInferior->triangle(14,15,9);
+
+			//Lateral izquierdo
+			alasInferior->quad(8,0,1,9);
+
+			//Lateral derecho
+			alasInferior->quad(3,11,10,2);
+
+			//Lateral frontal
+			alasInferior->quad(2,10,9,1);
+
+			//Lateral trasero
+			alasInferior->quad(0,8,15,7);
+			alasInferior->quad(7,15,14,6);
+			alasInferior->quad(6,14,13,5);
+			alasInferior->quad(5,13,12,4);
+			alasInferior->quad(4,12,11,3);
+			
 		alasInferior->end();
 
 		nodosAlas[1]->attachObject(alasInferior);
@@ -524,7 +563,7 @@ public:
 	}
 
 	void crearNave(){
-		crearCentroNave();
+		//crearCentroNave();
 		crearAlas();
 	}
 
