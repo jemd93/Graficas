@@ -1,26 +1,136 @@
 #include "Ogre\ExampleApplication.h"
 
+float laserPos[4] = {0.0,0.0,0.0,0.0};
+
+
+// Nodos para torretas.
+Ogre::SceneNode* nodosTorreta[4];
+
+// Nodos para pipes.
+Ogre::SceneNode* nodosPipe[8];
+
+// Nodos para formas curvas.
+Ogre::SceneNode* nodosCurva[4];
+
+// Nodos para canones.
+Ogre::SceneNode* nodosCanon[4];
+
+// Nodos para lasers.
+Ogre::SceneNode* nodosLaser[4];
+
+class FrameListenerProy : public Ogre::FrameListener {
+private :
+	OIS::InputManager* _man;
+	OIS::Keyboard* _key;
+	OIS::Mouse* _mouse;
+	Ogre::Camera* _cam;
+	
+	Ogre::Timer _timer[4];
+
+public:
+	FrameListenerProy(Ogre::Camera* cam, RenderWindow* win) {
+		size_t windowHnd = 0;
+		std::stringstream windowHndStr;
+		win->getCustomAttribute("WINDOW",&windowHnd);
+		windowHndStr << windowHnd;
+
+		OIS::ParamList pl;
+		pl.insert(std::make_pair(std::string("WINDOW"),windowHndStr.str()));
+
+		// Eventos
+		_man = OIS::InputManager::createInputSystem(pl);
+		_key = static_cast<OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard,false));
+		_mouse = static_cast<OIS::Mouse*>(_man->createInputObject(OIS::OISMouse,false));
+
+		_cam = cam;
+
+		for (int i = 0;i < 4;i++){
+			_timer[i].reset();
+		}
+
+	}
+
+	~FrameListenerProy() {
+		_man->destroyInputObject(_key);
+		_man->destroyInputObject(_mouse);
+		OIS::InputManager::destroyInputSystem(_man);
+	}
+
+	bool frameStarted(const Ogre::FrameEvent &evt) {
+		_key->capture();
+		_mouse->capture();
+
+		float movSpeed = 10.0f;
+
+		Ogre::Vector3 tmov(0,0,0);
+		Ogre::Vector3 tcam(0,0,0);
+
+		if (_key->isKeyDown(OIS::KC_ESCAPE) || _key->isKeyDown(OIS::KC_Q))
+			return false;
+
+		if (_key->isKeyDown(OIS::KC_W)){
+			tcam+=Ogre::Vector3(0,0,-10);
+		}
+		if (_key->isKeyDown(OIS::KC_S)){
+			tcam+=Ogre::Vector3(0,0,10);
+		}
+		if (_key->isKeyDown(OIS::KC_A)){
+			tcam+=Ogre::Vector3(-10,0,0);
+		}
+		if (_key->isKeyDown(OIS::KC_D)){
+			tcam+=Ogre::Vector3(10,0,0);
+		}
+
+		float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame* -1;
+		float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame* -1;
+		_cam->yaw(Ogre::Radian(rotX));
+		_cam->pitch(Ogre::Radian(rotY));
+		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
+
+		for (int i = 0;i < 4;i++) {
+			nodosLaser[i]->setPosition(0.0,laserPos[i],0.0);
+			if (_timer[i].getMilliseconds() > 2000) {
+				_timer[i].reset();
+				laserPos[i] = 0.0;
+			}
+			else {
+				laserPos[i] += 1;
+			}
+		}
+
+
+		return true;
+	}
+};
+
 class Example1 : public ExampleApplication
 {
 
 public:
-	// Nodos para torretas.
-	Ogre::SceneNode* nodosTorreta[4];
 
-	// Nodos para pipes.
-	Ogre::SceneNode* nodosPipe[8];
-
-	// Nodos para formas curvas.
-	Ogre::SceneNode* nodosCurva[4];
-
-	// Nodos para canones.
-	Ogre::SceneNode* nodosCanon[4];
+	// Frame Listener
+	Ogre::FrameListener* frameListener;
 
 	//Nodo para la nave
 	Ogre::SceneNode* nodoNave;
 
 	//Nodo para las alas (superiores e inferiores)
 	Ogre::SceneNode* nodosAlas[2];
+
+	Example1() {
+		frameListener = NULL;
+	}
+
+	~Example1() {
+		if (frameListener) {
+			delete frameListener;
+		}
+	}
+
+	void createFrameListener() {
+		frameListener = new FrameListenerProy(mCamera,mWindow);
+		mRoot->addFrameListener(frameListener);
+	}
 
 	void createCamera() {
 
@@ -34,7 +144,7 @@ public:
 	void modificarColor(Ogre::Entity* entidad,float r, float g, float b) {
 		Ogre::MaterialPtr m_pMat = entidad->getSubEntity(0)->getMaterial();
 		m_pMat->getTechnique(0)->getPass(0)->setAmbient(r,g,b);
-		m_pMat->getTechnique(0)->getPass(0)->setDiffuse(0.0,0.0,0.0,0.0);
+		m_pMat->getTechnique(0)->getPass(0)->setDiffuse(1.0,1.0,1.0,1.0);
 		entidad->setMaterialName(m_pMat->getName());
 	}
 
@@ -80,6 +190,11 @@ public:
 		nodosCanon[0]->yaw(Degree(25));
 		nodosCanon[0]->pitch(Degree(60));
 
+		// Laser
+		Ogre::Entity* entLaser01 = mSceneMgr->createEntity("usb_laser.mesh");
+		nodosLaser[0] = mSceneMgr->createSceneNode("nodoLaser1");
+		nodosLaser[0]->attachObject(entLaser01);
+		nodosCanon[0]->addChild(nodosLaser[0]);
 
 		// TORRETA 2.
 		Ogre::Entity* entTorreta02 = mSceneMgr->createEntity("usb_cilindro.mesh");
@@ -120,6 +235,12 @@ public:
 		nodosCanon[1]->setPosition(1.0,7.0,2.0);
 		nodosCanon[1]->yaw(Degree(25));
 		nodosCanon[1]->pitch(Degree(60));
+
+		// Laser
+		Ogre::Entity* entLaser02 = mSceneMgr->createEntity("usb_laser.mesh");
+		nodosLaser[1] = mSceneMgr->createSceneNode("nodoLaser2");
+		nodosLaser[1]->attachObject(entLaser02);
+		nodosCanon[1]->addChild(nodosLaser[1]);
 
 
 		// TORRETA 3.
@@ -162,6 +283,11 @@ public:
 		nodosCanon[2]->yaw(Degree(-25));
 		nodosCanon[2]->pitch(Degree(60));
 
+		// Laser
+		Ogre::Entity* entLaser03 = mSceneMgr->createEntity("usb_laser.mesh");
+		nodosLaser[2] = mSceneMgr->createSceneNode("nodoLaser3");
+		nodosLaser[2]->attachObject(entLaser03);
+		nodosCanon[2]->addChild(nodosLaser[2]);
 
 		// TORRETA 4.
 		Ogre::Entity* entTorreta04 = mSceneMgr->createEntity("usb_cilindro.mesh");
@@ -170,7 +296,7 @@ public:
 		nodosTorreta[3]->attachObject(entTorreta04);
 		nodosTorreta[3]->setPosition(22,-5,-883.5);
 
-				// Pipes
+		// Pipes
 		Ogre::Entity* entPipe07 = mSceneMgr->createEntity("usb_pipe.mesh");
 		nodosPipe[6] = mSceneMgr->createSceneNode("nodoPipe7");
 		nodosPipe[6]->attachObject(entPipe07);
@@ -202,6 +328,12 @@ public:
 		nodosCanon[3]->setPosition(-1.0,7.0,2.0);
 		nodosCanon[3]->yaw(Degree(-25));
 		nodosCanon[3]->pitch(Degree(60));
+
+		// Laser
+		Ogre::Entity* entLaser04 = mSceneMgr->createEntity("usb_laser.mesh");
+		nodosLaser[3] = mSceneMgr->createSceneNode("nodoLaser4");
+		nodosLaser[3]->attachObject(entLaser04);
+		nodosCanon[3]->addChild(nodosLaser[3]);
 
 		modificarColor(entTorreta01,0.411,0.411,0.411);
 	}
