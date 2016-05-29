@@ -499,54 +499,58 @@ public:
 			|     |
 			-------
 		*/
-		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+		centroNave->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+			//Parte de arriba
 			centroNave->position(-3, 2.5, -13);
 			centroNave->position(-2, 1.5, -33);
 			centroNave->position(2, 1.5, -33);
 			centroNave->position(3, 2.5, -13);
 			
-			centroNave->index(0);
-			centroNave->index(1);
-			centroNave->index(2);
-			centroNave->index(3);
-		centroNave->end();
+			centroNave->quad(3,2,1,0);
 
-		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			//Parte de abajo
 			centroNave->position(-3, -2.5, -13);
 			centroNave->position(-2, -1.5, -33);
 			centroNave->position(2, -1.5, -33);
 			centroNave->position(3, -2.5, -13);
-			
-			centroNave->index(0);
-			centroNave->index(1);
-			centroNave->index(2);
-			centroNave->index(3);
-		centroNave->end();
 
-		//Punta de la nave superior
-		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->quad(4,5,6,7);
+
+			//Punta superior de la nave
 			centroNave->position(-2, 1.5, -33);
-			centroNave->position(-0.5, 1, -35);
-			centroNave->position(0.5, 1, -35);
+			centroNave->position(-0.5, 0.5, -35);
+			centroNave->position(0.5, 0.5, -35);
 			centroNave->position(2, 1.5, -33);
-			
-			centroNave->index(0);
-			centroNave->index(1);
-			centroNave->index(2);
-			centroNave->index(3);
-		centroNave->end();
 
-		//Punta de la nave inferior
-		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			centroNave->quad(11,10,9,8);
+
+			//Punta inferior de la nave
 			centroNave->position(-2, -1.5, -33);
-			centroNave->position(-0.5, -1, -35);
-			centroNave->position(0.5, -1, -35);
+			centroNave->position(-0.5, -0.5, -35);
+			centroNave->position(0.5, -0.5, -35);
 			centroNave->position(2, -1.5, -33);
+
+			centroNave->quad(12,13,14,15);
 			
-			centroNave->index(0);
-			centroNave->index(1);
-			centroNave->index(2);
-			centroNave->index(3);
+			//Lateral izquierdo de la punta
+			centroNave->quad(8,9,13,12);
+
+			//Lateral derecho de la punta
+			centroNave->quad(15,14,10,11);
+
+			//Lateral izquierdo de la nave
+			centroNave->position(-4, 0, -13); //Medio izquierdo atrás
+			centroNave->position(-2, 0, -33); //Medio de la punta
+
+			centroNave->quad(4,16,17,12);
+			centroNave->quad(0,8,17,16);
+
+			//Lateral derecho de la nave
+			centroNave->position(4, 0, -13); //Medio derecho atrás
+			centroNave->position(2, 0, -33); //Medio de la punta
+
+			centroNave->quad(7,15,19,18);
+			centroNave->quad(3,18,19,11);
 		centroNave->end();
 
 
