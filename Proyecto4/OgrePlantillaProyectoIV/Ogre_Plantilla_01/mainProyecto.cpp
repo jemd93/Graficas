@@ -440,34 +440,24 @@ public:
 		 ---|		|---
 			---------
 		*/
-		//Parte de arriba del centro de la nave
-		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+		centroNave->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+			//Parte de arriba del centro de la nave
 			centroNave->position(-3, 2.5, 0);
 			centroNave->position(-3, 2.5, -13);
 			centroNave->position(3, 2.5, -13);
 			centroNave->position(3, 2.5, 0);
-			centroNave->index(0);
-			centroNave->index(1);
-			centroNave->index(2);
-			centroNave->index(3);
-			centroNave->index(0);
-		centroNave->end();
+			
+			centroNave->quad(0,3,2,1);
 
-		//Parte de abajo del centro de la nave
-		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			//Parte de abajo del centro de la nave
 			centroNave->position(-3, -2.5, 0);
 			centroNave->position(-3, -2.5, -13);
 			centroNave->position(3, -2.5, -13);
 			centroNave->position(3, -2.5, 0);
-			centroNave->index(0);
-			centroNave->index(1);
-			centroNave->index(2);
-			centroNave->index(3);
-			centroNave->index(0);
-		centroNave->end();
+			
+			centroNave->quad(5,6,7,4);
 
-		//Parte trasera del centro de la nave
-		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			//Parte trasera del centro de la nave
 			centroNave->position(-3, -2.5, 0);
 			centroNave->position(-4, 0, 0);
 			centroNave->position(-3, 2.5, 0);
@@ -475,17 +465,11 @@ public:
 			centroNave->position(4, 0, 0);
 			centroNave->position(3, -2.5, 0);
 			
-			centroNave->index(0);
-			centroNave->index(1);
-			centroNave->index(2);
-			centroNave->index(3);
-			centroNave->index(4);
-			centroNave->index(5);
-			centroNave->index(0);
-		centroNave->end();
+			centroNave->triangle(10,9,8);
+			centroNave->quad(8,13,11,10);
+			centroNave->triangle(13,12,11);
 
-		//Parte frontal del centro de la nave
-		centroNave->begin("BaseWhiteNoLighting", RenderOperation::OT_LINE_STRIP);
+			//Parte frontal del centro de la nave
 			centroNave->position(-3, -2.5, -13);
 			centroNave->position(-4, 0, -13);
 			centroNave->position(-3, 2.5, -13);
@@ -493,14 +477,21 @@ public:
 			centroNave->position(4, 0, -13);
 			centroNave->position(3, -2.5, -13);
 			
-			centroNave->index(0);
-			centroNave->index(1);
-			centroNave->index(2);
-			centroNave->index(3);
-			centroNave->index(4);
-			centroNave->index(5);
-			centroNave->index(0);
+			centroNave->triangle(16,15,14);
+			centroNave->quad(14,19,17,16);
+			centroNave->triangle(19,18,17);
+
+			//Lateral izquierdo del centro de la nave
+			centroNave->quad(8,9,15,14);
+			centroNave->quad(9,10,16,15);
+
+			//Lateral derecho del centro de la nave
+			centroNave->quad(19,18,12,13);
+			centroNave->quad(11,12,18,17);
+
+
 		centroNave->end();
+
 
 		//Sección frontal de la cabina
 		/*    | |
@@ -563,7 +554,7 @@ public:
 	}
 
 	void crearNave(){
-		//crearCentroNave();
+		crearCentroNave();
 		crearAlas();
 	}
 
