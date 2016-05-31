@@ -351,14 +351,23 @@ public:
 		//Ala derecha
 		alasSuperior->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
+
 			alasSuperior->position(4, 0, -2.5);
+			alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(4, 0, -17.5);
+			alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(20, 0, -17.5);
+			alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(20, 0, -6.5);
+			alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(8, 0, -2.5);
+			alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(7.5, 0, -4);
+			alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(5, 0, -4);
+			alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(4.5, 0, -2.5);
+
 
 			alasSuperior->triangle(0,7,1);
 			alasSuperior->triangle(6,2,1);
@@ -726,6 +735,8 @@ public:
 		
 		crearTorretas();
 		crearNave();
+
+		//mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox",5000);
 	}
 };
 
