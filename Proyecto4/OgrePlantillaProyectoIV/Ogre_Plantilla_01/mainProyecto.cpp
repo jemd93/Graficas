@@ -353,8 +353,8 @@ public:
 			//Parte de arriba
 			alasSuperior->position(4, 0, -2.5);
 			alasSuperior->position(4, 0, -17.5);
-			alasSuperior->position(32, 0, -17.5);
-			alasSuperior->position(32, 0, -6.5);
+			alasSuperior->position(20, 0, -17.5);
+			alasSuperior->position(20, 0, -6.5);
 			alasSuperior->position(8, 0, -2.5);
 			alasSuperior->position(7.5, 0, -4);
 			alasSuperior->position(5, 0, -4);
@@ -369,8 +369,8 @@ public:
 			//Parte de abajo
 			alasSuperior->position(4, -0.5, -2.5);
 			alasSuperior->position(4, -0.5, -17.5);
-			alasSuperior->position(32, -0.5, -17.5);
-			alasSuperior->position(32, -0.5, -6.5);
+			alasSuperior->position(20, -0.5, -17.5);
+			alasSuperior->position(20, -0.5, -6.5);
 			alasSuperior->position(8, -0.5, -2.5);
 			alasSuperior->position(7.5, -0.5, -4);
 			alasSuperior->position(5, -0.5, -4);
@@ -405,8 +405,8 @@ public:
 			//Parte de arriba
 			alasSuperior->position(-4, 0, -2.5);
 			alasSuperior->position(-4, 0, -17.5);
-			alasSuperior->position(-32, 0, -17.5);
-			alasSuperior->position(-32, 0, -6.5);
+			alasSuperior->position(-20, 0, -17.5);
+			alasSuperior->position(-20, 0, -6.5);
 			alasSuperior->position(-8, 0, -2.5);
 			alasSuperior->position(-7.5, 0, -4);
 			alasSuperior->position(-5, 0, -4);
@@ -421,8 +421,8 @@ public:
 			//Parte de abajo
 			alasSuperior->position(-4, -0.5, -2.5);
 			alasSuperior->position(-4, -0.5, -17.5);
-			alasSuperior->position(-32, -0.5, -17.5);
-			alasSuperior->position(-32, -0.5, -6.5);
+			alasSuperior->position(-20, -0.5, -17.5);
+			alasSuperior->position(-20, -0.5, -6.5);
 			alasSuperior->position(-8, -0.5, -2.5);
 			alasSuperior->position(-7.5, -0.5, -4);
 			alasSuperior->position(-5, -0.5, -4);
@@ -458,8 +458,8 @@ public:
 		alasInferior->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
 			alasInferior->position(4, -0.5, -2.5);
 			alasInferior->position(4, -0.5, -17.5);
-			alasInferior->position(32, -0.5, -17.5);
-			alasInferior->position(32, -0.5, -6.5);
+			alasInferior->position(20, -0.5, -17.5);
+			alasInferior->position(20, -0.5, -6.5);
 			alasInferior->position(8, -0.5, -2.5);
 			alasInferior->position(7.5, -0.5, -4);
 			alasInferior->position(5, -0.5, -4);
@@ -474,8 +474,8 @@ public:
 			//Parte de abajo
 			alasInferior->position(4, -1, -2.5);
 			alasInferior->position(4, -1, -17.5);
-			alasInferior->position(32, -1, -17.5);
-			alasInferior->position(32, -1, -6.5);
+			alasInferior->position(20, -1, -17.5);
+			alasInferior->position(20, -1, -6.5);
 			alasInferior->position(8, -1, -2.5);
 			alasInferior->position(7.5, -1, -4);
 			alasInferior->position(5, -1, -4);
@@ -510,8 +510,8 @@ public:
 			//Parte de arriba
 			alasInferior->position(-4, -0.5, -2.5);
 			alasInferior->position(-4, -0.5, -17.5);
-			alasInferior->position(-32, -0.5, -17.5);
-			alasInferior->position(-32, -0.5, -6.5);
+			alasInferior->position(-20, -0.5, -17.5);
+			alasInferior->position(-20, -0.5, -6.5);
 			alasInferior->position(-8, -0.5, -2.5);
 			alasInferior->position(-7.5, -0.5, -4);
 			alasInferior->position(-5, -0.5, -4);
@@ -526,8 +526,8 @@ public:
 			//Parte de abajo
 			alasInferior->position(-4, -1, -2.5);
 			alasInferior->position(-4, -1, -17.5);
-			alasInferior->position(-32, -1, -17.5);
-			alasInferior->position(-32, -1, -6.5);
+			alasInferior->position(-20, -1, -17.5);
+			alasInferior->position(-20, -1, -6.5);
 			alasInferior->position(-8, -1, -2.5);
 			alasInferior->position(-7.5, -1, -4);
 			alasInferior->position(-5, -1, -4);
