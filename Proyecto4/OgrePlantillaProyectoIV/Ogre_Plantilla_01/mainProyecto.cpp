@@ -18,6 +18,11 @@ Ogre::SceneNode* nodosCanon[4];
 // Nodos para lasers.
 Ogre::SceneNode* nodosLaser[4];
 
+// Luz para las torretas
+Ogre::Light* lucesTorr[4];
+Ogre::SceneNode* nodosLuz[4];
+Ogre::SceneNode* nodoEsfera1;
+
 class FrameListenerProy : public Ogre::FrameListener {
 private :
 	OIS::InputManager* _man;
@@ -156,6 +161,7 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodosTorreta[0]);
 		nodosTorreta[0]->attachObject(entTorreta01);
 		nodosTorreta[0]->setPosition(-22,-5,-227);
+		entTorreta01->setMaterialName("matTorretas01");
 
 		// Pipes
 		Ogre::Entity* entPipe01 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -164,6 +170,7 @@ public:
 		nodosTorreta[0]->addChild(nodosPipe[0]);
 		nodosPipe[0]->setScale(0.65,0.65,0.65);
 		nodosPipe[0]->setPosition(0.0,-2.0,0.0);
+		entPipe01->setMaterialName("matTorretas01");
 
 		Ogre::Entity* entPipe02 = mSceneMgr->createEntity("usb_pipe.mesh");
 		nodosPipe[1] = mSceneMgr->createSceneNode("nodoPipe2");
@@ -171,6 +178,7 @@ public:
 		nodosTorreta[0]->addChild(nodosPipe[1]);
 		nodosPipe[1]->setScale(0.65,0.65,0.65);
 		nodosPipe[1]->setPosition(0.0,3.0,0.0);
+		entPipe02->setMaterialName("matTorretas01");
 
 		// Forma curva.
 		Ogre::Entity* entCurva01 = mSceneMgr->createEntity("usb_formacurva.mesh");
@@ -179,6 +187,7 @@ public:
 		nodosTorreta[0]->addChild(nodosCurva[0]);
 		nodosCurva[0]->setScale(0.65,0.65,0.65);
 		nodosCurva[0]->setPosition(0.0,5.0,0.0);
+		entCurva01->setMaterialName("matTorretas01");
 
 		// Canon de la torreta
 		Ogre::Entity* entCanon01 = mSceneMgr->createEntity("usb_cilindro02.mesh");
@@ -189,6 +198,7 @@ public:
 		nodosCanon[0]->setPosition(1.0,7.0,2.0);
 		nodosCanon[0]->yaw(Degree(25));
 		nodosCanon[0]->pitch(Degree(60));
+		entCanon01->setMaterialName("matTorretas01");
 
 		// Laser
 		Ogre::Entity* entLaser01 = mSceneMgr->createEntity("usb_laser.mesh");
@@ -196,12 +206,35 @@ public:
 		nodosLaser[0]->attachObject(entLaser01);
 		nodosCanon[0]->addChild(nodosLaser[0]);
 
+		// Luz
+		//lucesTorr[0] = mSceneMgr->createLight("Luz1");
+		//lucesTorr[0]->setType(Ogre::Light::LT_POINT);
+		//lucesTorr[0]->setDiffuseColour(1.0,1.0,1.0);
+		//lucesTorr[0]->setPosition(0,0,0);
+		//
+		//nodosLuz[0] = mSceneMgr->createSceneNode("nodoLuz1");
+		//nodosLuz[0]->attachObject(lucesTorr[0]);
+		//nodosTorreta[0]->addChild(nodosLuz[0]);
+		//nodosLuz[0]->setPosition(0,0,10);
+
+		//Ogre::Entity* entEsferaPrueba = mSceneMgr->createEntity("EsferaLuz1",Ogre::SceneManager::PT_SPHERE);
+		//nodoEsfera1 = mSceneMgr->createSceneNode("nodoEsferaLuz1");
+		//mSceneMgr->getRootSceneNode()->addChild(nodoEsfera1);
+		//nodoEsfera1->attachObject(entEsferaPrueba);
+		//entEsferaPrueba->setCastShadows(false);
+		//nodoEsfera1->addChild(nodosLuz[0]);
+		//nodoEsfera1->setScale(0.03,0.03,0.03);
+		//nodoEsfera1->setPosition(30,30,0);
+
+
+
 		// TORRETA 2.
 		Ogre::Entity* entTorreta02 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		nodosTorreta[1] = mSceneMgr->createSceneNode("nodoTorreta2");
 		mSceneMgr->getRootSceneNode()->addChild(nodosTorreta[1]);
 		nodosTorreta[1]->attachObject(entTorreta02);
 		nodosTorreta[1]->setPosition(-22.5,-5,-638);
+		entTorreta02->setMaterialName("matTorretas01");
 		
 		// Pipes
 		Ogre::Entity* entPipe03 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -210,6 +243,7 @@ public:
 		nodosTorreta[1]->addChild(nodosPipe[2]);
 		nodosPipe[2]->setScale(0.65,0.65,0.65);
 		nodosPipe[2]->setPosition(0.0,-2.0,0.0);
+		entPipe03->setMaterialName("matTorretas01");
 
 		Ogre::Entity* entPipe04 = mSceneMgr->createEntity("usb_pipe.mesh");
 		nodosPipe[3] = mSceneMgr->createSceneNode("nodoPipe4");
@@ -217,6 +251,7 @@ public:
 		nodosTorreta[1]->addChild(nodosPipe[3]);
 		nodosPipe[3]->setScale(0.65,0.65,0.65);
 		nodosPipe[3]->setPosition(0.0,3.0,0.0);
+		entPipe04->setMaterialName("matTorretas01");
 
 		// Forma curva.
 		Ogre::Entity* entCurva02 = mSceneMgr->createEntity("usb_formacurva.mesh");
@@ -225,6 +260,7 @@ public:
 		nodosTorreta[1]->addChild(nodosCurva[1]);
 		nodosCurva[1]->setScale(0.65,0.65,0.65);
 		nodosCurva[1]->setPosition(0.0,5.0,0.0);
+		entCurva02->setMaterialName("matTorretas01");
 
 		// Canon de la torreta.
 		Ogre::Entity* entCanon02 = mSceneMgr->createEntity("usb_cilindro02.mesh");
@@ -235,6 +271,7 @@ public:
 		nodosCanon[1]->setPosition(1.0,7.0,2.0);
 		nodosCanon[1]->yaw(Degree(25));
 		nodosCanon[1]->pitch(Degree(60));
+		entCanon02->setMaterialName("matTorretas01");
 
 		// Laser
 		Ogre::Entity* entLaser02 = mSceneMgr->createEntity("usb_laser.mesh");
@@ -249,6 +286,7 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodosTorreta[2]);
 		nodosTorreta[2]->attachObject(entTorreta03);
 		nodosTorreta[2]->setPosition(22.5,-5,-407.5);
+		entTorreta03->setMaterialName("matTorretas01");
 
 		// Pipes
 		Ogre::Entity* entPipe05 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -257,6 +295,7 @@ public:
 		nodosTorreta[2]->addChild(nodosPipe[4]);
 		nodosPipe[4]->setScale(0.65,0.65,0.65);
 		nodosPipe[4]->setPosition(0.0,-2.0,0.0);
+		entPipe05->setMaterialName("matTorretas01");
 
 		Ogre::Entity* entPipe06 = mSceneMgr->createEntity("usb_pipe.mesh");
 		nodosPipe[5] = mSceneMgr->createSceneNode("nodoPipe6");
@@ -264,6 +303,7 @@ public:
 		nodosTorreta[2]->addChild(nodosPipe[5]);
 		nodosPipe[5]->setScale(0.65,0.65,0.65);
 		nodosPipe[5]->setPosition(0.0,3.0,0.0);
+		entPipe06->setMaterialName("matTorretas01");
 
 		// Forma curva.
 		Ogre::Entity* entCurva03 = mSceneMgr->createEntity("usb_formacurva.mesh");
@@ -272,6 +312,7 @@ public:
 		nodosTorreta[2]->addChild(nodosCurva[2]);
 		nodosCurva[2]->setScale(0.65,0.65,0.65);
 		nodosCurva[2]->setPosition(0.0,5.0,0.0);
+		entCurva03->setMaterialName("matTorretas01");
 
 		// Canon de la torreta.
 		Ogre::Entity* entCanon03 = mSceneMgr->createEntity("usb_cilindro02.mesh");
@@ -282,6 +323,7 @@ public:
 		nodosCanon[2]->setPosition(-1.0,7.0,2.0);
 		nodosCanon[2]->yaw(Degree(-25));
 		nodosCanon[2]->pitch(Degree(60));
+		entCanon03->setMaterialName("matTorretas01");
 
 		// Laser
 		Ogre::Entity* entLaser03 = mSceneMgr->createEntity("usb_laser.mesh");
@@ -295,6 +337,7 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodosTorreta[3]);
 		nodosTorreta[3]->attachObject(entTorreta04);
 		nodosTorreta[3]->setPosition(22,-5,-883.5);
+		entTorreta04->setMaterialName("matTorretas01");
 
 		// Pipes
 		Ogre::Entity* entPipe07 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -303,6 +346,7 @@ public:
 		nodosTorreta[3]->addChild(nodosPipe[6]);
 		nodosPipe[6]->setScale(0.65,0.65,0.65);
 		nodosPipe[6]->setPosition(0.0,-2.0,0.0);
+		entPipe07->setMaterialName("matTorretas01");
 
 		Ogre::Entity* entPipe08 = mSceneMgr->createEntity("usb_pipe.mesh");
 		nodosPipe[7] = mSceneMgr->createSceneNode("nodoPipe8");
@@ -310,6 +354,7 @@ public:
 		nodosTorreta[3]->addChild(nodosPipe[7]);
 		nodosPipe[7]->setScale(0.65,0.65,0.65);
 		nodosPipe[7]->setPosition(0.0,3.0,0.0);
+		entPipe08->setMaterialName("matTorretas01");
 
 		// Forma curva.
 		Ogre::Entity* entCurva04 = mSceneMgr->createEntity("usb_formacurva.mesh");
@@ -318,6 +363,7 @@ public:
 		nodosTorreta[3]->addChild(nodosCurva[3]);
 		nodosCurva[3]->setScale(0.65,0.65,0.65);
 		nodosCurva[3]->setPosition(0.0,5.0,0.0);
+		entCurva04->setMaterialName("matTorretas01");
 
 		// Canon de la torreta.
 		Ogre::Entity* entCanon04 = mSceneMgr->createEntity("usb_cilindro02.mesh");
@@ -328,6 +374,7 @@ public:
 		nodosCanon[3]->setPosition(-1.0,7.0,2.0);
 		nodosCanon[3]->yaw(Degree(-25));
 		nodosCanon[3]->pitch(Degree(60));
+		entCanon04->setMaterialName("matTorretas01");
 
 		// Laser
 		Ogre::Entity* entLaser04 = mSceneMgr->createEntity("usb_laser.mesh");
@@ -335,7 +382,7 @@ public:
 		nodosLaser[3]->attachObject(entLaser04);
 		nodosCanon[3]->addChild(nodosLaser[3]);
 
-		modificarColor(entTorreta01,0.411,0.411,0.411);
+		modificarColor(entLaser01,1.0,0.0,0.0);
 	}
 
 	void crearAlas(){
