@@ -23,6 +23,12 @@ Ogre::Light* lucesTorr[4];
 Ogre::SceneNode* nodosLuz[4];
 Ogre::SceneNode* nodoEsfera1;
 
+//Nodo para la nave
+Ogre::SceneNode* nodoNave;
+
+//Nodo para las alas (superiores e inferiores)
+Ogre::SceneNode* nodosAlas[2];
+
 class FrameListenerProy : public Ogre::FrameListener {
 private :
 	OIS::InputManager* _man;
@@ -116,12 +122,6 @@ public:
 	// Frame Listener
 	Ogre::FrameListener* frameListener;
 
-	//Nodo para la nave
-	Ogre::SceneNode* nodoNave;
-
-	//Nodo para las alas (superiores e inferiores)
-	Ogre::SceneNode* nodosAlas[2];
-
 	Example1() {
 		frameListener = NULL;
 	}
@@ -148,9 +148,9 @@ public:
 
 	void modificarColor(Ogre::Entity* entidad,float r, float g, float b) {
 		Ogre::MaterialPtr m_pMat = entidad->getSubEntity(0)->getMaterial();
-		m_pMat->getTechnique(0)->getPass(0)->setAmbient(r,g,b);
-		m_pMat->getTechnique(0)->getPass(0)->setDiffuse(1.0,1.0,1.0,1.0);
-		entidad->setMaterialName(m_pMat->getName());
+		//m_pMat->getTechnique(0)->getPass(0)->setAmbient(r,g,b);
+		//m_pMat->getTechnique(0)->getPass(0)->setDiffuse(1.0,1.0,1.0,1.0);
+		//entidad->setMaterialName(m_pMat->getName());
 	}
 
 	void crearTorretas() {
@@ -400,19 +400,19 @@ public:
 			//Parte de arriba
 
 			alasSuperior->position(4, 0, -2.5);
-			alasSuperior->normal(0.0,1.0,0.0);
+			//alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(4, 0, -17.5);
-			alasSuperior->normal(0.0,1.0,0.0);
+			//alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(20, 0, -17.5);
-			alasSuperior->normal(0.0,1.0,0.0);
+			//alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(20, 0, -6.5);
-			alasSuperior->normal(0.0,1.0,0.0);
+			//alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(8, 0, -2.5);
-			alasSuperior->normal(0.0,1.0,0.0);
+			//alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(7.5, 0, -4);
-			alasSuperior->normal(0.0,1.0,0.0);
+			//alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(5, 0, -4);
-			alasSuperior->normal(0.0,1.0,0.0);
+			//alasSuperior->normal(0.0,1.0,0.0);
 			alasSuperior->position(4.5, 0, -2.5);
 
 
@@ -748,6 +748,9 @@ public:
 	void crearNave(){
 		crearCentroNave();
 		crearAlas();
+		nodoNave->scale(0.5,0.5,0.5);
+		nodosAlas[0]->scale(0.5,0.5,0.5);
+		nodosAlas[1]->scale(0.5,0.5,0.5);
 	}
 
 	void createScene() {
@@ -783,7 +786,9 @@ public:
 		crearTorretas();
 		crearNave();
 
-		//mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox",5000);
+		//mSceneMgr->setSkyBox(true, "skyBoxSW1",5000);
+		//mSceneMgr->setSkyBox(true, "skyBoxSW2",5000);
+		mSceneMgr->setSkyBox(true, "skyBoxSW3",5000);
 	}
 };
 

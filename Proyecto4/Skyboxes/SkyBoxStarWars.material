@@ -1,0 +1,53 @@
+material skyBoxSW1
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				cubic_texture sky08_ft.jpg sky08_bk.jpg sky08_lf.jpg sky08_rt.jpg sky08_up.jpg sky08_dn.jpg separateUV
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+material skyBoxSW2
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				cubic_texture sky11_ft.jpg sky11_bk.jpg sky11_lf.jpg sky11_rt.jpg sky11_up.jpg sky11_dn.jpg separateUV
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+material skyBoxSW3
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+
+			texture_unit
+			{
+				cubic_texture sky18_ft.jpg sky18_bk.jpg sky18_lf.jpg sky18_rt.jpg sky18_up.jpg sky18_dn.jpg separateUV
+				tex_address_mode clamp
+			}
+		}
+	}
+}
