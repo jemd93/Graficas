@@ -9,6 +9,7 @@
 #include <OgreEntity.h>
 #include <OgreWindowEventUtilities.h>
 #include "Ogre\ExampleApplication.h"
+#include <string>
 
 // any other header can be included, as usual
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
