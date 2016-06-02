@@ -29,6 +29,9 @@ Ogre::SceneNode* nodoNave;
 //Nodo para las alas (superiores e inferiores)
 Ogre::SceneNode* nodosAlas[2];
 
+//Nodos para los misiles de la nave
+Ogre::SceneNode* nodosMisiles[4];
+
 class FrameListenerProy : public Ogre::FrameListener {
 private :
 	OIS::InputManager* _man;
@@ -537,11 +540,17 @@ public:
 			alasInferior->position(5, -1, -4);
 			alasInferior->position(4.5, -1, -2.5);
 
-			alasInferior->triangle(8,15,9);
+			/*alasInferior->triangle(8,15,9);
 			alasInferior->triangle(14,10,9);
 			alasInferior->quad(13,12,11,10);
 			alasInferior->triangle(14,13,10);
-			alasInferior->triangle(9,15,14);
+			alasInferior->triangle(9,15,14);*/
+			alasInferior->triangle(9,15,8);
+			alasInferior->triangle(9,10,14);
+			alasInferior->quad(10,11,12,13);
+			alasInferior->triangle(10,13,14);
+			alasInferior->triangle(14,15,9);
+
 
 			//Lateral izquierdo
 			alasInferior->quad(8,0,1,9);
@@ -745,12 +754,108 @@ public:
 		nodoNave->attachObject(centroNave);
 	}
 
+	void agregarMisiles(int numMisil, float x, float y){
+		nodosMisiles[numMisil] = mSceneMgr->createSceneNode("nodoMisil"+std::to_string(numMisil));
+
+		Ogre::SceneNode* nodoCilindro;
+		Ogre::Entity* entCilindro = mSceneMgr->createEntity("usb_cilindro.mesh");
+		//entCilindro->setMaterialName("matTorretas01");
+		nodoCilindro = mSceneMgr->createSceneNode("nodoCilindro"+std::to_string(numMisil));
+		mSceneMgr->getRootSceneNode()->addChild(nodosMisiles[numMisil]);
+		nodosMisiles[numMisil]->addChild(nodoCilindro);
+		nodoCilindro->attachObject(entCilindro);
+		nodoCilindro->setPosition(x,y,-6);
+		nodoCilindro->setScale(0.2,0.5,0.2);
+		nodoCilindro->roll(Degree(90));
+		nodoCilindro->pitch(Degree(90));
+
+		Ogre::SceneNode* nodoPipeMisil;
+		Ogre::Entity* entPipe = mSceneMgr->createEntity("usb_pipe.mesh");
+		//entPipe->setMaterialName("matBase01");
+		nodoPipeMisil = mSceneMgr->createSceneNode("nodoPipeMisil"+std::to_string(numMisil));
+		nodosMisiles[numMisil]->addChild(nodoPipeMisil);
+		nodoPipeMisil->attachObject(entPipe);
+		nodoPipeMisil->setPosition(x,y,-9.2);
+		nodoPipeMisil->setScale(0.10,0.10,0.10);
+		nodoPipeMisil->pitch(Degree(90));
+
+		Ogre::SceneNode* nodoCilindro2;
+		Ogre::Entity* entCilindro2 = mSceneMgr->createEntity("usb_cilindro02.mesh");
+		entCilindro2->setMaterialName("Examples/RustySteel");
+		nodoCilindro2 = mSceneMgr->createSceneNode("nodoCilindro2"+std::to_string(numMisil));
+		nodosMisiles[numMisil]->addChild(nodoCilindro2);
+		nodoCilindro2->attachObject(entCilindro2);
+		nodoCilindro2->setPosition(x,y,-11);
+		nodoCilindro2->setScale(0.025,0.5,0.025);
+		nodoCilindro2->roll(Degree(90));
+		nodoCilindro2->pitch(Degree(-90));
+
+		Ogre::SceneNode* nodoCurvo;
+		Ogre::Entity* entCurvo = mSceneMgr->createEntity("usb_formacurva.mesh");
+		//entCurvo->setMaterialName("matTorretas01");
+		nodoCurvo = mSceneMgr->createSceneNode("nodoCurvo"+std::to_string(numMisil));
+		nodosMisiles[numMisil]->addChild(nodoCurvo);
+		nodoCurvo->attachObject(entCurvo);
+		nodoCurvo->setPosition(x,y,-13);
+		nodoCurvo->setScale(0.08,0.08,0.08);
+		nodoCurvo->pitch(Degree(-90));
+		
+		Ogre::SceneNode* nodoCurvo2;
+		Ogre::Entity* entCurvo2 = mSceneMgr->createEntity("usb_formacurva.mesh");
+		//entCurvo2->setMaterialName("matTorretas01");
+		nodoCurvo2 = mSceneMgr->createSceneNode("nodoCurvo2"+std::to_string(numMisil));
+		nodosMisiles[numMisil]->addChild(nodoCurvo2);
+		nodoCurvo2->attachObject(entCurvo2);
+		nodoCurvo2->setPosition(x,y,-13.3);
+		nodoCurvo2->setScale(0.07,0.07,0.07);
+		nodoCurvo2->pitch(Degree(-45));
+
+		Ogre::SceneNode* nodoCurvo3;
+		Ogre::Entity* entCurvo3 = mSceneMgr->createEntity("usb_formacurva.mesh");
+		//entCurvo3->setMaterialName("matTorretas01");
+		nodoCurvo3 = mSceneMgr->createSceneNode("nodoCurvo3"+std::to_string(numMisil));
+		nodosMisiles[numMisil]->addChild(nodoCurvo3);
+		nodoCurvo3->attachObject(entCurvo3);
+		nodoCurvo3->setPosition(x,y,-13.3);
+		nodoCurvo3->setScale(0.07,0.07,0.07);
+		nodoCurvo3->pitch(Degree(45));
+
+	}
+
+	void agregarTurbinas(int numTurbina, float x, float y){
+		Ogre::SceneNode* nodoTurbina;
+		Ogre::Entity* entTurbina = mSceneMgr->createEntity("usb_cilindro.mesh");
+		entTurbina->setMaterialName("matTorretas01");
+		nodoTurbina = mSceneMgr->createSceneNode("nodoTurbina"+std::to_string(numTurbina));
+		mSceneMgr->getRootSceneNode()->addChild(nodoTurbina);
+		nodoTurbina->attachObject(entTurbina);
+		nodoTurbina->setPosition(x,y,-2);
+		nodoTurbina->setScale(0.3,0.7,0.3);
+		nodoTurbina->roll(Degree(90));
+		nodoTurbina->pitch(Degree(90));
+
+		Ogre::SceneNode* nodoTurbina2;
+		Ogre::Entity* entTurbina2 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		entTurbina2->setMaterialName("matTorretas01");
+		nodoTurbina2 = mSceneMgr->createSceneNode("nodoTurbina2"+std::to_string(numTurbina));
+		mSceneMgr->getRootSceneNode()->addChild(nodoTurbina2);
+		nodoTurbina2->attachObject(entTurbina2);
+		nodoTurbina2->setPosition(x,y+1,-7);
+		nodoTurbina2->setScale(0.5,0.3,0.5);
+		nodoTurbina2->roll(Degree(90));
+		nodoTurbina2->pitch(Degree(90));
+	}
+
 	void crearNave(){
 		crearCentroNave();
 		crearAlas();
 		nodoNave->scale(0.5,0.5,0.5);
 		nodosAlas[0]->scale(0.5,0.5,0.5);
 		nodosAlas[1]->scale(0.5,0.5,0.5);
+		for(int i = 0 ; i < 4; i++){
+			agregarMisiles(i,((i==0 || i==1) ? 10 : -10),((i==1 || i==3) ? 0.6 : -1.1));
+			//agregarTurbinas(i,((i==0 || i==1) ? 3 : -3),((i==1 || i==3) ? 0.6 : -1.1));
+		}
 	}
 
 	void createScene() {
@@ -787,8 +892,8 @@ public:
 		crearNave();
 
 		//mSceneMgr->setSkyBox(true, "skyBoxSW1",5000);
-		//mSceneMgr->setSkyBox(true, "skyBoxSW2",5000);
-		mSceneMgr->setSkyBox(true, "skyBoxSW3",5000);
+		mSceneMgr->setSkyBox(true, "skyBoxSW2",5000);
+		//mSceneMgr->setSkyBox(true, "skyBoxSW3",5000);
 	}
 };
 
