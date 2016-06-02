@@ -103,7 +103,7 @@ public:
 
 		for (int i = 0;i < 4;i++) {
 			nodosLaser[i]->setPosition(0.0,laserPos[i],0.0);
-			if (_timer[i].getMilliseconds() > 2000) {
+			if (_timer[i].getMilliseconds() > 3000) {
 				_timer[i].reset();
 				laserPos[i] = 0.0;
 			}
@@ -198,9 +198,9 @@ public:
 		nodosCanon[0]->attachObject(entCanon01);
 		nodosTorreta[0]->addChild(nodosCanon[0]);
 		nodosCanon[0]->setScale(0.65,0.65,0.65);
-		nodosCanon[0]->setPosition(1.0,7.0,2.0);
-		nodosCanon[0]->yaw(Degree(25));
-		nodosCanon[0]->pitch(Degree(60));
+		nodosCanon[0]->setPosition(0.5,3.5,5.0);
+		nodosCanon[0]->yaw(Degree(5));
+		nodosCanon[0]->pitch(Degree(85));
 		entCanon01->setMaterialName("matTorretas01");
 
 		// Laser
@@ -208,6 +208,7 @@ public:
 		nodosLaser[0] = mSceneMgr->createSceneNode("nodoLaser1");
 		nodosLaser[0]->attachObject(entLaser01);
 		nodosCanon[0]->addChild(nodosLaser[0]);
+		entLaser01->setMaterialName("matLaser01");
 
 		// Luz
 		//lucesTorr[0] = mSceneMgr->createLight("Luz1");
@@ -271,9 +272,9 @@ public:
 		nodosCanon[1]->attachObject(entCanon02);
 		nodosTorreta[1]->addChild(nodosCanon[1]);
 		nodosCanon[1]->setScale(0.65,0.65,0.65);
-		nodosCanon[1]->setPosition(1.0,7.0,2.0);
-		nodosCanon[1]->yaw(Degree(25));
-		nodosCanon[1]->pitch(Degree(60));
+		nodosCanon[1]->setPosition(0.5,3.5,5.0);
+		nodosCanon[1]->yaw(Degree(5));
+		nodosCanon[1]->pitch(Degree(85));
 		entCanon02->setMaterialName("matTorretas01");
 
 		// Laser
@@ -281,6 +282,7 @@ public:
 		nodosLaser[1] = mSceneMgr->createSceneNode("nodoLaser2");
 		nodosLaser[1]->attachObject(entLaser02);
 		nodosCanon[1]->addChild(nodosLaser[1]);
+		entLaser02->setMaterialName("matLaser01");
 
 
 		// TORRETA 3.
@@ -323,9 +325,9 @@ public:
 		nodosCanon[2]->attachObject(entCanon03);
 		nodosTorreta[2]->addChild(nodosCanon[2]);
 		nodosCanon[2]->setScale(0.65,0.65,0.65);
-		nodosCanon[2]->setPosition(-1.0,7.0,2.0);
-		nodosCanon[2]->yaw(Degree(-25));
-		nodosCanon[2]->pitch(Degree(60));
+		nodosCanon[2]->setPosition(-0.5,3.5,5.0);
+		nodosCanon[2]->yaw(Degree(-5));
+		nodosCanon[2]->pitch(Degree(85));
 		entCanon03->setMaterialName("matTorretas01");
 
 		// Laser
@@ -333,6 +335,7 @@ public:
 		nodosLaser[2] = mSceneMgr->createSceneNode("nodoLaser3");
 		nodosLaser[2]->attachObject(entLaser03);
 		nodosCanon[2]->addChild(nodosLaser[2]);
+		entLaser03->setMaterialName("matLaser01");
 
 		// TORRETA 4.
 		Ogre::Entity* entTorreta04 = mSceneMgr->createEntity("usb_cilindro.mesh");
@@ -374,9 +377,9 @@ public:
 		nodosCanon[3]->attachObject(entCanon04);
 		nodosTorreta[3]->addChild(nodosCanon[3]);
 		nodosCanon[3]->setScale(0.65,0.65,0.65);
-		nodosCanon[3]->setPosition(-1.0,7.0,2.0);
-		nodosCanon[3]->yaw(Degree(-25));
-		nodosCanon[3]->pitch(Degree(60));
+		nodosCanon[3]->setPosition(-0.5,3.5,5.0);
+		nodosCanon[3]->yaw(Degree(-5));
+		nodosCanon[3]->pitch(Degree(85));
 		entCanon04->setMaterialName("matTorretas01");
 
 		// Laser
@@ -384,8 +387,7 @@ public:
 		nodosLaser[3] = mSceneMgr->createSceneNode("nodoLaser4");
 		nodosLaser[3]->attachObject(entLaser04);
 		nodosCanon[3]->addChild(nodosLaser[3]);
-
-		modificarColor(entLaser01,1.0,0.0,0.0);
+		entLaser04->setMaterialName("matLaser01");
 	}
 
 	void crearAlas(){
