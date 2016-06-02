@@ -1,7 +1,7 @@
 #include "Ogre\ExampleApplication.h"
 
-float laserPos[4] = {0.0,0.0,0.0,0.0};
-
+float laserPos[4] = {0.0,-7.0,-7.0,-7.0};
+float laserAlt[4] = {0.0,36.0,36.0,36.0};
 
 // Nodos para torretas.
 Ogre::SceneNode* nodosTorreta[4];
@@ -18,6 +18,8 @@ Ogre::SceneNode* nodosCanon[4];
 // Nodos para lasers.
 Ogre::SceneNode* nodosLaser[4];
 
+int laserFinal = 2;
+
 // Luz para las torretas
 Ogre::Light* lucesTorr[4];
 Ogre::SceneNode* nodosLuz[4];
@@ -31,6 +33,11 @@ Ogre::SceneNode* nodosAlas[2];
 
 //Nodos para los misiles de la nave
 Ogre::SceneNode* nodosMisiles[4];
+
+// Posicion de la nave.
+float naveZ = 0.0;
+float naveX = 0.0;
+float anguloNave = 0.0;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -70,6 +77,15 @@ public:
 		OIS::InputManager::destroyInputSystem(_man);
 	}
 
+	void rotarNave() {
+		nodoNave->roll(Degree(anguloNave));
+		nodosAlas[0]->roll(Degree(anguloNave));
+		nodosAlas[1]->roll(Degree(anguloNave));
+		for (int i = 0; i < 4;i++) {
+			nodosMisiles[i]->roll(Degree(anguloNave));
+		}
+	}
+
 	bool frameStarted(const Ogre::FrameEvent &evt) {
 		_key->capture();
 		_mouse->capture();
@@ -94,6 +110,23 @@ public:
 		if (_key->isKeyDown(OIS::KC_D)){
 			tcam+=Ogre::Vector3(10,0,0);
 		}
+		if (_key->isKeyDown(OIS::KC_UP)){
+			naveZ -= 1;
+		}
+		if (_key->isKeyDown(OIS::KC_RIGHT)){
+			if (naveX+0.5 < 24) {
+				naveX += 0.5;
+				anguloNave = -0.5;
+				rotarNave();
+			}
+		}
+		if (_key->isKeyDown(OIS::KC_LEFT)){
+			if (naveX - 0.5 > -24) { 
+				naveX -= 0.5;
+				anguloNave = 0.5;
+				rotarNave();
+			}
+		}
 
 		float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame* -1;
 		float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame* -1;
@@ -101,17 +134,50 @@ public:
 		_cam->pitch(Ogre::Radian(rotY));
 		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
 
-		for (int i = 0;i < 4;i++) {
-			nodosLaser[i]->setPosition(0.0,laserPos[i],0.0);
-			if (_timer[i].getMilliseconds() > 3000) {
-				_timer[i].reset();
-				laserPos[i] = 0.0;
+		if (naveZ <= -150) {
+			if (laserPos[2] == -7.0) {
+				laserPos[2] = 0.0;
+				laserAlt[2] = 0.0;
+				_timer[2].reset();
 			}
-			else {
-				laserPos[i] += 1;
+		}
+		if (naveZ <= -300) {
+			if (laserPos[1] == -7.0) {
+				laserPos[1] = 0.0;
+				laserAlt[1] = 0.0;
+				_timer[1].reset();
+			}
+		}
+		if (naveZ <= -450) {
+			if (laserPos[3] == -7.0) {
+				laserPos[3] = 0.0;
+				laserAlt[3] = 0.0;
+				_timer[3].reset();
 			}
 		}
 
+		for (int i = 0; i < 4;i++) {
+			nodosLaser[i]->setPosition(0.0,laserPos[i],laserAlt[i]);
+			if (_timer[i].getMilliseconds() > 3500) {
+				_timer[i].reset();
+				if (laserPos[i] != -7.0) {
+					laserPos[i] = 0.0;
+				}
+			}
+			else {
+				if (laserPos[i] != -7.0) {
+					laserPos[i] += 1;
+				}
+			}
+		}
+
+		// Aplicando las nuevas posiciones a la nave.
+		nodoNave->setPosition(naveX,0,naveZ);
+		nodosAlas[0]->setPosition(naveX,0,naveZ);
+		nodosAlas[1]->setPosition(naveX,0,naveZ);
+		for (int i = 0; i < 4;i++) {
+			nodosMisiles[i]->setPosition(naveX,0,naveZ);
+		}
 
 		return true;
 	}
@@ -200,7 +266,7 @@ public:
 		nodosCanon[0]->setScale(0.65,0.65,0.65);
 		nodosCanon[0]->setPosition(0.5,3.5,5.0);
 		nodosCanon[0]->yaw(Degree(5));
-		nodosCanon[0]->pitch(Degree(85));
+		nodosCanon[0]->pitch(Degree(90));
 		entCanon01->setMaterialName("matTorretas01");
 
 		// Laser
@@ -274,7 +340,7 @@ public:
 		nodosCanon[1]->setScale(0.65,0.65,0.65);
 		nodosCanon[1]->setPosition(0.5,3.5,5.0);
 		nodosCanon[1]->yaw(Degree(5));
-		nodosCanon[1]->pitch(Degree(85));
+		nodosCanon[1]->pitch(Degree(90));
 		entCanon02->setMaterialName("matTorretas01");
 
 		// Laser
@@ -327,7 +393,7 @@ public:
 		nodosCanon[2]->setScale(0.65,0.65,0.65);
 		nodosCanon[2]->setPosition(-0.5,3.5,5.0);
 		nodosCanon[2]->yaw(Degree(-5));
-		nodosCanon[2]->pitch(Degree(85));
+		nodosCanon[2]->pitch(Degree(90));
 		entCanon03->setMaterialName("matTorretas01");
 
 		// Laser
@@ -379,7 +445,7 @@ public:
 		nodosCanon[3]->setScale(0.65,0.65,0.65);
 		nodosCanon[3]->setPosition(-0.5,3.5,5.0);
 		nodosCanon[3]->yaw(Degree(-5));
-		nodosCanon[3]->pitch(Degree(85));
+		nodosCanon[3]->pitch(Degree(90));
 		entCanon04->setMaterialName("matTorretas01");
 
 		// Laser
@@ -720,7 +786,7 @@ public:
 			centroNave->position(0.5, 0.5, -35);
 			centroNave->position(2, 1.5, -33);
 
-			centroNave->quad(11,10,9,8);
+			centroNave->quad(11,10,9,+8);
 
 			//Punta inferior de la nave
 			centroNave->position(-2, -1.5, -33);
@@ -729,7 +795,6 @@ public:
 			centroNave->position(2, -1.5, -33);
 
 			centroNave->quad(12,13,14,15);
-			
 			//Lateral izquierdo de la punta
 			centroNave->quad(8,9,13,12);
 
