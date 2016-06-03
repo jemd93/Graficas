@@ -473,7 +473,7 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodosAlas[3]);
 
 		//Ala derecha
-		alaSuperiorDer->begin("matNaveSW4", RenderOperation::OT_TRIANGLE_LIST);
+		alaSuperiorDer->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
 			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,0);
 			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,0);
@@ -528,7 +528,7 @@ public:
 		nodosAlas[2]->attachObject(alaSuperiorDer);
 
 		//Ala izquierda
-		alaSuperiorIzq->begin("matNaveSW4", RenderOperation::OT_TRIANGLE_LIST);
+		alaSuperiorIzq->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
 			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
 			alaSuperiorIzq->position(-4, 0, -17.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
@@ -582,7 +582,7 @@ public:
 		nodosAlas[0]->attachObject(alaSuperiorIzq);
 
 		//Ala derecha
-		alaInferiorDer->begin("matNaveSW4", RenderOperation::OT_TRIANGLE_LIST);
+		alaInferiorDer->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
 			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0);
 			alaInferiorDer->position(4, -0.5, -17.5); alaInferiorDer->normal(0.0,1.0,0.0); 
@@ -637,7 +637,7 @@ public:
 		nodosAlas[3]->attachObject(alaInferiorDer);
 
 		//Ala izquierda
-		alaInferiorIzq->begin("matNaveSW4", RenderOperation::OT_TRIANGLE_LIST);
+		alaInferiorIzq->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
 			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
 			alaInferiorIzq->position(-4, -0.5, -17.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
@@ -703,7 +703,7 @@ public:
 		 ---|		|---
 			---------
 		*/
-		centroNave->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+		centroNave->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba del centro de la nave
 			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,1.0,0.0);
 			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,1.0,0.0);
@@ -762,7 +762,7 @@ public:
 			|     |
 			-------
 		*/
-		centroNave->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+		centroNave->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
 			centroNave->position(-3, 2.5, -13);
 			centroNave->position(-2, 1.5, -33);
