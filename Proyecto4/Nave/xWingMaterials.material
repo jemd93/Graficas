@@ -10,6 +10,7 @@ material matNaveSW1
 			texture_unit
 			{
 				texture metal1.jpg
+				scale 0.2 0.2
 				colour_op_ex add src_texture src_current
 				colour_op_multipass_fallback one one
 			}
@@ -32,6 +33,28 @@ material matNaveSW2
 			texture_unit
 			{
 				texture metal_metal3.jpg
+				colour_op_ex add src_texture src_current
+				colour_op_multipass_fallback one one
+			}
+						
+		}
+
+	}
+
+}
+
+material matNaveSW3
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0 0 0 1
+			
+			texture_unit
+			{
+				texture metal_gray1.jpg
 				colour_op_ex add src_texture src_current
 				colour_op_multipass_fallback one one
 			}
