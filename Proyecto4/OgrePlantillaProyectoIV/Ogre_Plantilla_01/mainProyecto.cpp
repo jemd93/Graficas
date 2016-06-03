@@ -79,9 +79,8 @@ public:
 
 	void rotarNave() {
 		nodoNave->roll(Degree(anguloNave));
-		nodosAlas[0]->roll(Degree(anguloNave));
-		nodosAlas[1]->roll(Degree(anguloNave));
 		for (int i = 0; i < 4;i++) {
+			nodosAlas[i]->roll(Degree(anguloNave));
 			nodosMisiles[i]->roll(Degree(anguloNave));
 		}
 	}
@@ -173,9 +172,8 @@ public:
 
 		// Aplicando las nuevas posiciones a la nave.
 		nodoNave->setPosition(naveX,0,naveZ);
-		nodosAlas[0]->setPosition(naveX,0,naveZ);
-		nodosAlas[1]->setPosition(naveX,0,naveZ);
 		for (int i = 0; i < 4;i++) {
+			nodosAlas[i]->setPosition(naveX,0,naveZ);
 			nodosMisiles[i]->setPosition(naveX,0,naveZ);
 		}
 
