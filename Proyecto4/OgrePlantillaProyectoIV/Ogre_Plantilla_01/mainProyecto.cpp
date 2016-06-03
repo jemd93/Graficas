@@ -475,23 +475,16 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(nodosAlas[3]);
 
 		//Ala derecha
-		alaSuperiorDer->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+		alaSuperiorDer->begin("matNaveSW4", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			alaSuperiorDer->position(4, 0, -2.5);
-			alaSuperiorDer->normal(0.0,1.0,0.0);
-			alaSuperiorDer->position(4, 0, -17.5);
-			alaSuperiorDer->normal(0.0,1.0,0.0);
-			alaSuperiorDer->position(20, 0, -17.5);
-			alaSuperiorDer->normal(0.0,1.0,0.0);
-			alaSuperiorDer->position(20, 0, -6.5);
-			alaSuperiorDer->normal(0.0,1.0,0.0);
-			alaSuperiorDer->position(8, 0, -2.5);
-			alaSuperiorDer->normal(0.0,1.0,0.0);
-			alaSuperiorDer->position(7.5, 0, -4);
-			alaSuperiorDer->normal(0.0,1.0,0.0);
-			alaSuperiorDer->position(5, 0, -4);
-			alaSuperiorDer->normal(0.0,1.0,0.0);
-			alaSuperiorDer->position(4.5, 0, -2.5);
+			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,0);
+			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,0);
+			alaSuperiorDer->position(20, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,1);
+			alaSuperiorDer->position(20, 0, -6.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,0);
+			alaSuperiorDer->position(8, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(1,0);
+			alaSuperiorDer->position(7.5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,1);
+			alaSuperiorDer->position(5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,0);
+			alaSuperiorDer->position(4.5, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(1,0);
 
 
 			alaSuperiorDer->triangle(0,7,1);
@@ -501,14 +494,14 @@ public:
 			alaSuperiorDer->triangle(1,7,6);
 
 			//Parte de abajo
-			alaSuperiorDer->position(4, -0.5, -2.5);
-			alaSuperiorDer->position(4, -0.5, -17.5);
-			alaSuperiorDer->position(20, -0.5, -17.5);
-			alaSuperiorDer->position(20, -0.5, -6.5);
-			alaSuperiorDer->position(8, -0.5, -2.5);
-			alaSuperiorDer->position(7.5, -0.5, -4);
-			alaSuperiorDer->position(5, -0.5, -4);
-			alaSuperiorDer->position(4.5, -0.5, -2.5);
+			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
+			alaSuperiorDer->position(4, -0.5, -17.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
+			alaSuperiorDer->position(20, -0.5, -17.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
+			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
+			alaSuperiorDer->position(8, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
+			alaSuperiorDer->position(7.5, -0.5, -4); alaSuperiorDer->normal(0.0,-1.0,0.0);
+			alaSuperiorDer->position(5, -0.5, -4); alaSuperiorDer->normal(0.0,-1.0,0.0);
+			alaSuperiorDer->position(4.5, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
 			
 			alaSuperiorDer->triangle(8,15,9);
 			alaSuperiorDer->triangle(14,10,9);
@@ -537,16 +530,16 @@ public:
 		nodosAlas[2]->attachObject(alaSuperiorDer);
 
 		//Ala izquierda
-		alaSuperiorIzq->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+		alaSuperiorIzq->begin("matNaveSW4", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			alaSuperiorIzq->position(-4, 0, -2.5);
-			alaSuperiorIzq->position(-4, 0, -17.5);
-			alaSuperiorIzq->position(-20, 0, -17.5);
-			alaSuperiorIzq->position(-20, 0, -6.5);
-			alaSuperiorIzq->position(-8, 0, -2.5);
-			alaSuperiorIzq->position(-7.5, 0, -4);
-			alaSuperiorIzq->position(-5, 0, -4);
-			alaSuperiorIzq->position(-4.5, 0, -2.5);
+			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
+			alaSuperiorIzq->position(-4, 0, -17.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
+			alaSuperiorIzq->position(-20, 0, -17.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
+			alaSuperiorIzq->position(-20, 0, -6.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
+			alaSuperiorIzq->position(-8, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
+			alaSuperiorIzq->position(-7.5, 0, -4); alaSuperiorIzq->normal(0.0,1.0,0.0);
+			alaSuperiorIzq->position(-5, 0, -4); alaSuperiorIzq->normal(0.0,1.0,0.0);
+			alaSuperiorIzq->position(-4.5, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
 
 			alaSuperiorIzq->triangle(1,7,0);
 			alaSuperiorIzq->triangle(1,2,6);
@@ -555,14 +548,14 @@ public:
 			alaSuperiorIzq->triangle(6,7,1);
 			
 			//Parte de abajo
-			alaSuperiorIzq->position(-4, -0.5, -2.5);
-			alaSuperiorIzq->position(-4, -0.5, -17.5);
-			alaSuperiorIzq->position(-20, -0.5, -17.5);
-			alaSuperiorIzq->position(-20, -0.5, -6.5);
-			alaSuperiorIzq->position(-8, -0.5, -2.5);
-			alaSuperiorIzq->position(-7.5, -0.5, -4);
-			alaSuperiorIzq->position(-5, -0.5, -4);
-			alaSuperiorIzq->position(-4.5, -0.5, -2.5);
+			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
+			alaSuperiorIzq->position(-4, -0.5, -17.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
+			alaSuperiorIzq->position(-20, -0.5, -17.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
+			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
+			alaSuperiorIzq->position(-8, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
+			alaSuperiorIzq->position(-7.5, -0.5, -4); alaSuperiorIzq->normal(0.0,-1.0,0.0);
+			alaSuperiorIzq->position(-5, -0.5, -4); alaSuperiorIzq->normal(0.0,-1.0,0.0);
+			alaSuperiorIzq->position(-4.5, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
 
 			alaSuperiorIzq->triangle(9,15,8);
 			alaSuperiorIzq->triangle(9,10,14);
@@ -591,15 +584,16 @@ public:
 		nodosAlas[0]->attachObject(alaSuperiorIzq);
 
 		//Ala derecha
-		alaInferiorDer->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
-			alaInferiorDer->position(4, -0.5, -2.5);
-			alaInferiorDer->position(4, -0.5, -17.5);
-			alaInferiorDer->position(20, -0.5, -17.5);
-			alaInferiorDer->position(20, -0.5, -6.5);
-			alaInferiorDer->position(8, -0.5, -2.5);
-			alaInferiorDer->position(7.5, -0.5, -4);
-			alaInferiorDer->position(5, -0.5, -4);
-			alaInferiorDer->position(4.5, -0.5, -2.5);
+		alaInferiorDer->begin("matNaveSW4", RenderOperation::OT_TRIANGLE_LIST);
+			//Parte de arriba
+			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0);
+			alaInferiorDer->position(4, -0.5, -17.5); alaInferiorDer->normal(0.0,1.0,0.0); 
+			alaInferiorDer->position(20, -0.5, -17.5); alaInferiorDer->normal(0.0,1.0,0.0); 
+			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(0.0,1.0,0.0); 
+			alaInferiorDer->position(8, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0); 
+			alaInferiorDer->position(7.5, -0.5, -4); alaInferiorDer->normal(0.0,1.0,0.0); 
+			alaInferiorDer->position(5, -0.5, -4); alaInferiorDer->normal(0.0,1.0,0.0); 
+			alaInferiorDer->position(4.5, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0); 
 
 			alaInferiorDer->triangle(0,7,1);
 			alaInferiorDer->triangle(6,2,1);
@@ -608,20 +602,15 @@ public:
 			alaInferiorDer->triangle(1,7,6);
 			
 			//Parte de abajo
-			alaInferiorDer->position(4, -1, -2.5);
-			alaInferiorDer->position(4, -1, -17.5);
-			alaInferiorDer->position(20, -1, -17.5);
-			alaInferiorDer->position(20, -1, -6.5);
-			alaInferiorDer->position(8, -1, -2.5);
-			alaInferiorDer->position(7.5, -1, -4);
-			alaInferiorDer->position(5, -1, -4);
-			alaInferiorDer->position(4.5, -1, -2.5);
+			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
+			alaInferiorDer->position(4, -1, -17.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
+			alaInferiorDer->position(20, -1, -17.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
+			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
+			alaInferiorDer->position(8, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
+			alaInferiorDer->position(7.5, -1, -4); alaInferiorDer->normal(0.0,-1.0,0.0); 
+			alaInferiorDer->position(5, -1, -4); alaInferiorDer->normal(0.0,-1.0,0.0); 
+			alaInferiorDer->position(4.5, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
 
-			/*alaInferiorDer->triangle(8,15,9);
-			alaInferiorDer->triangle(14,10,9);
-			alaInferiorDer->quad(13,12,11,10);
-			alaInferiorDer->triangle(14,13,10);
-			alaInferiorDer->triangle(9,15,14);*/
 			alaInferiorDer->triangle(9,15,8);
 			alaInferiorDer->triangle(9,10,14);
 			alaInferiorDer->quad(10,11,12,13);
@@ -650,16 +639,16 @@ public:
 		nodosAlas[3]->attachObject(alaInferiorDer);
 
 		//Ala izquierda
-		alaInferiorIzq->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
+		alaInferiorIzq->begin("matNaveSW4", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			alaInferiorIzq->position(-4, -0.5, -2.5);
-			alaInferiorIzq->position(-4, -0.5, -17.5);
-			alaInferiorIzq->position(-20, -0.5, -17.5);
-			alaInferiorIzq->position(-20, -0.5, -6.5);
-			alaInferiorIzq->position(-8, -0.5, -2.5);
-			alaInferiorIzq->position(-7.5, -0.5, -4);
-			alaInferiorIzq->position(-5, -0.5, -4);
-			alaInferiorIzq->position(-4.5, -0.5, -2.5);
+			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
+			alaInferiorIzq->position(-4, -0.5, -17.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
+			alaInferiorIzq->position(-20, -0.5, -17.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
+			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
+			alaInferiorIzq->position(-8, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
+			alaInferiorIzq->position(-7.5, -0.5, -4); alaInferiorIzq->normal(0.0,1.0,0.0); 
+			alaInferiorIzq->position(-5, -0.5, -4); alaInferiorIzq->normal(0.0,1.0,0.0); 
+			alaInferiorIzq->position(-4.5, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
 
 			alaInferiorIzq->triangle(1,7,0);
 			alaInferiorIzq->triangle(1,2,6);
@@ -668,14 +657,14 @@ public:
 			alaInferiorIzq->triangle(6,7,1);
 
 			//Parte de abajo
-			alaInferiorIzq->position(-4, -1, -2.5);
-			alaInferiorIzq->position(-4, -1, -17.5);
-			alaInferiorIzq->position(-20, -1, -17.5);
-			alaInferiorIzq->position(-20, -1, -6.5);
-			alaInferiorIzq->position(-8, -1, -2.5);
-			alaInferiorIzq->position(-7.5, -1, -4);
-			alaInferiorIzq->position(-5, -1, -4);
-			alaInferiorIzq->position(-4.5, -1, -2.5);
+			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
+			alaInferiorIzq->position(-4, -1, -17.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
+			alaInferiorIzq->position(-20, -1, -17.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
+			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
+			alaInferiorIzq->position(-8, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
+			alaInferiorIzq->position(-7.5, -1, -4); alaInferiorIzq->normal(0.0,-1.0,0.0); 
+			alaInferiorIzq->position(-5, -1, -4); alaInferiorIzq->normal(0.0,-1.0,0.0); 
+			alaInferiorIzq->position(-4.5, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
 
 			alaInferiorIzq->triangle(15,9,8);
 			alaInferiorIzq->triangle(14,10,9);
@@ -718,40 +707,40 @@ public:
 		*/
 		centroNave->begin("BaseWhite", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba del centro de la nave
-			centroNave->position(-3, 2.5, 0);
-			centroNave->position(-3, 2.5, -13);
-			centroNave->position(3, 2.5, -13);
-			centroNave->position(3, 2.5, 0);
+			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,1.0,0.0);
+			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,1.0,0.0);
+			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,1.0,0.0);
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,1.0,0.0);
 			
 			centroNave->quad(0,3,2,1);
 
 			//Parte de abajo del centro de la nave
-			centroNave->position(-3, -2.5, 0);
-			centroNave->position(-3, -2.5, -13);
-			centroNave->position(3, -2.5, -13);
-			centroNave->position(3, -2.5, 0);
+			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0);
+			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0);
+			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0);
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0);
 			
 			centroNave->quad(5,6,7,4);
 
 			//Parte trasera del centro de la nave
-			centroNave->position(-3, -2.5, 0);
-			centroNave->position(-4, 0, 0);
-			centroNave->position(-3, 2.5, 0);
-			centroNave->position(3, 2.5, 0);
-			centroNave->position(4, 0, 0);
-			centroNave->position(3, -2.5, 0);
+			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0);
 			
 			centroNave->triangle(10,9,8);
 			centroNave->quad(8,13,11,10);
 			centroNave->triangle(13,12,11);
 
 			//Parte frontal del centro de la nave
-			centroNave->position(-3, -2.5, -13);
-			centroNave->position(-4, 0, -13);
-			centroNave->position(-3, 2.5, -13);
-			centroNave->position(3, 2.5, -13);
-			centroNave->position(4, 0, -13);
-			centroNave->position(3, -2.5, -13);
+			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0);
+			centroNave->position(-4, 0, -13); centroNave->normal(0.0,0.0,-1.0);
+			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0);
+			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0);
+			centroNave->position(4, 0, -13); centroNave->normal(0.0,0.0,-1.0);
+			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0);
 			
 			centroNave->triangle(16,15,14);
 			centroNave->quad(14,19,17,16);
@@ -807,6 +796,7 @@ public:
 			centroNave->position(2, -1.5, -33);
 
 			centroNave->quad(12,13,14,15);
+
 			//Lateral izquierdo de la punta
 			centroNave->quad(8,9,13,12);
 
@@ -913,26 +903,66 @@ public:
 	void agregarTurbinas(int numTurbina, float x, float y){
 		Ogre::SceneNode* nodoTurbina;
 		Ogre::Entity* entTurbina = mSceneMgr->createEntity("usb_cilindro.mesh");
-		entTurbina->setMaterialName("matNaveSW2");
+		entTurbina->setMaterialName("matNaveSW1");
 		nodoTurbina = mSceneMgr->createSceneNode("nodoTurbina"+std::to_string(numTurbina));
 		nodosMisiles[numTurbina]->addChild(nodoTurbina);
 		nodoTurbina->attachObject(entTurbina);
-		nodoTurbina->setPosition(x,y,0);
-		nodoTurbina->setScale(0.3,0.4,0.3);
+		nodoTurbina->setPosition(x,y,-1.5);
+		nodoTurbina->setScale(0.25,0.4,0.25);
 		nodoTurbina->roll(Degree(90));
 		nodoTurbina->pitch(Degree(90));
 
+		Ogre::SceneNode* nodoCurvo;
+		Ogre::Entity* entCurvo = mSceneMgr->createEntity("usb_formacurva.mesh");
+		entCurvo->setMaterialName("matNaveSW2");
+		nodoCurvo = mSceneMgr->createSceneNode("nodoCurvoTurbina"+std::to_string(numTurbina));
+		nodosMisiles[numTurbina]->addChild(nodoCurvo);
+		nodoCurvo->attachObject(entCurvo);
+		nodoCurvo->setPosition(x,y,1.2);
+		nodoCurvo->setScale(0.09,0.09,0.09);
+		nodoCurvo->pitch(Degree(90));
+		nodoCurvo->roll(Degree(180));
 
-		/*Ogre::SceneNode* nodoTurbina2;
+		Ogre::SceneNode* nodoTurbina2;
 		Ogre::Entity* entTurbina2 = mSceneMgr->createEntity("usb_cilindro.mesh");
-		entTurbina2->setMaterialName("matNaveSW2");
+		entTurbina2->setMaterialName("matNaveSW1");
 		nodoTurbina2 = mSceneMgr->createSceneNode("nodoTurbina2"+std::to_string(numTurbina));
-		mSceneMgr->getRootSceneNode()->addChild(nodoTurbina2);
+		nodosMisiles[numTurbina]->addChild(nodoTurbina2);
 		nodoTurbina2->attachObject(entTurbina2);
-		nodoTurbina2->setPosition(x,y+1,-7);
-		nodoTurbina2->setScale(0.5,0.3,0.5);
+		nodoTurbina2->setPosition(x,((numTurbina==1 || numTurbina==3) ? y+0.5 : y-0.6),-6.5);
+		nodoTurbina2->setScale(0.4,0.4,0.4);
 		nodoTurbina2->roll(Degree(90));
-		nodoTurbina2->pitch(Degree(90));*/
+		nodoTurbina2->pitch(Degree(90));
+
+		Ogre::SceneNode* nodoPipeTurbina;
+		Ogre::Entity* entPipe = mSceneMgr->createEntity("usb_pipe.mesh");
+		entPipe->setMaterialName("matNaveSW2");
+		nodoPipeTurbina = mSceneMgr->createSceneNode("nodoPipeTurbina"+std::to_string(numTurbina));
+		nodosMisiles[numTurbina]->addChild(nodoPipeTurbina);
+		nodoPipeTurbina->attachObject(entPipe);
+		nodoPipeTurbina->setPosition(x,((numTurbina==1 || numTurbina==3) ? y+0.5 : y-0.6),-6.5);
+		nodoPipeTurbina->setScale(0.2,0.2,0.2);
+		nodoPipeTurbina->pitch(Degree(90));
+
+		Ogre::SceneNode* nodoPipeTurbina2;
+		Ogre::Entity* entPipe2 = mSceneMgr->createEntity("usb_pipe.mesh");
+		entPipe2->setMaterialName("matNaveSW2");
+		nodoPipeTurbina2 = mSceneMgr->createSceneNode("nodoPipeTurbina2"+std::to_string(numTurbina));
+		nodosMisiles[numTurbina]->addChild(nodoPipeTurbina2);
+		nodoPipeTurbina2->attachObject(entPipe2);
+		nodoPipeTurbina2->setPosition(x,((numTurbina==1 || numTurbina==3) ? y+0.5 : y-0.6),-9);
+		nodoPipeTurbina2->setScale(0.2,0.2,0.2);
+		nodoPipeTurbina2->pitch(Degree(90));
+
+		Ogre::SceneNode* nodoCurvo2;
+		Ogre::Entity* entCurvo2 = mSceneMgr->createEntity("usb_formacurva.mesh");
+		entCurvo2->setMaterialName("matNaveSW2");
+		nodoCurvo2 = mSceneMgr->createSceneNode("nodoCurvoTurbina2"+std::to_string(numTurbina));
+		nodosMisiles[numTurbina]->addChild(nodoCurvo2);
+		nodoCurvo2->attachObject(entCurvo2);
+		nodoCurvo2->setPosition(x,((numTurbina==1 || numTurbina==3) ? y+0.5 : y-0.6),-4);
+		nodoCurvo2->setScale(0.14,0.14,0.14);
+		nodoCurvo2->pitch(Degree(90));
 	}
 
 	void crearNave(){
@@ -944,7 +974,7 @@ public:
 
 		for(int i = 0 ; i < 4; i++){
 			agregarMisiles(i,((i==0 || i==1) ? 10 : -10),((i==1 || i==3) ? 0.6 : -1.1));
-			agregarTurbinas(i,((i==0 || i==1) ? 3 : -3),((i==1 || i==3) ? 0.9 : -1.4));
+			agregarTurbinas(i,((i==0 || i==1) ? 3 : -3),((i==1 || i==3) ? 0.85 : -1.29));
 		}
 	}
 
@@ -981,9 +1011,7 @@ public:
 		crearTorretas();
 		crearNave();
 
-		//mSceneMgr->setSkyBox(true, "skyBoxSW1",5000);
 		mSceneMgr->setSkyBox(true, "skyBoxSW2",5000);
-		//mSceneMgr->setSkyBox(true, "skyBoxSW3",5000);
 	}
 };
 
