@@ -677,11 +677,11 @@ public:
 			alaInferiorIzq->position(-5, -1, -4);
 			alaInferiorIzq->position(-4.5, -1, -2.5);
 
-			alaInferiorIzq->triangle(9,15,8);
-			alaInferiorIzq->triangle(9,10,14);
-			alaInferiorIzq->quad(10,11,12,13);
-			alaInferiorIzq->triangle(10,13,14);
-			alaInferiorIzq->triangle(14,15,9);
+			alaInferiorIzq->triangle(15,9,8);
+			alaInferiorIzq->triangle(14,10,9);
+			alaInferiorIzq->quad(13,12,11,10);
+			alaInferiorIzq->triangle(14,13,10);
+			alaInferiorIzq->triangle(9,15,14);
 
 			//Lateral izquierdo
 			alaInferiorIzq->quad(8,0,1,9);
@@ -917,7 +917,7 @@ public:
 		nodoTurbina = mSceneMgr->createSceneNode("nodoTurbina"+std::to_string(numTurbina));
 		nodosMisiles[numTurbina]->addChild(nodoTurbina);
 		nodoTurbina->attachObject(entTurbina);
-		nodoTurbina->setPosition(x,y,-2);
+		nodoTurbina->setPosition(x,y,0);
 		nodoTurbina->setScale(0.3,0.4,0.3);
 		nodoTurbina->roll(Degree(90));
 		nodoTurbina->pitch(Degree(90));
