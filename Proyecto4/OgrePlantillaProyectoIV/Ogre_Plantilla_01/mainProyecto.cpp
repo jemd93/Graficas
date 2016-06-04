@@ -546,14 +546,14 @@ public:
 		//Ala derecha
 		alaSuperiorDer->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,0);
-			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,0);
-			alaSuperiorDer->position(20, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,1);
-			alaSuperiorDer->position(20, 0, -6.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,0);
-			alaSuperiorDer->position(8, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(1,0);
-			alaSuperiorDer->position(7.5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,1);
-			alaSuperiorDer->position(5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(0,0);
-			alaSuperiorDer->position(4.5, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0);//alaSuperiorDer->textureCoord(1,0);
+			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(0,1);
+			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(0,0);
+			alaSuperiorDer->position(20, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0);// alaSuperiorDer->textureCoord(1,0);
+			alaSuperiorDer->position(20, 0, -6.5);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,1);
+			alaSuperiorDer->position(8, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,1);
+			alaSuperiorDer->position(7.5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,0);
+			alaSuperiorDer->position(5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(0,0);
+			alaSuperiorDer->position(4.5, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(0,1);
 
 
 			alaSuperiorDer->triangle(0,7,1);
@@ -579,20 +579,37 @@ public:
 			alaSuperiorDer->triangle(9,15,14);
 
 			//Lateral izquierdo
-			alaSuperiorDer->quad(8,0,1,9);
+			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(-1.0,0.0,0.0); //Antiguo 8
+			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(-1.0,0.0,0.0); //Antiguo 0
+			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(-1.0,0.0,0.0); //Antiguo 1
+			alaSuperiorDer->position(4, -0.5, -17.5); alaSuperiorDer->normal(-1.0,0.0,0.0); //Antiguo 9
+			alaSuperiorDer->quad(16,17,18,19);
 
 			//Lateral derecho
-			alaSuperiorDer->quad(3,11,10,2);
-
-			//Lateral frontal
-			alaSuperiorDer->quad(2,10,9,1);
+			alaSuperiorDer->position(20, 0, -6.5); alaSuperiorDer->normal(1.0,0.0,0.0); //Antiguo 3
+			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(1.0,0.0,0.0); //Antiguo 11
+			alaSuperiorDer->position(20, -0.5, -17.5); alaSuperiorDer->normal(1.0,0.0,0.0); //Antiguo 10
+			alaSuperiorDer->position(20, 0, -17.5); alaSuperiorDer->normal(1.0,0.0,0.0);//Antiguo 2
+			alaSuperiorDer->quad(20,21,22,23);
 
 			//Lateral trasero
-			alaSuperiorDer->quad(0,8,15,7);
-			alaSuperiorDer->quad(7,15,14,6);
-			alaSuperiorDer->quad(6,14,13,5);
-			alaSuperiorDer->quad(5,13,12,4);
-			alaSuperiorDer->quad(4,12,11,3);
+			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 0
+			alaSuperiorDer->position(20, 0, -6.5);alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 3
+			alaSuperiorDer->position(8, 0, -2.5);alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 4
+			alaSuperiorDer->position(7.5, 0, -4);alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 5
+			alaSuperiorDer->position(5, 0, -4);alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 6
+			alaSuperiorDer->position(4.5, 0, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 7
+			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 8
+			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 11
+			alaSuperiorDer->position(8, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 12
+			alaSuperiorDer->position(7.5, -0.5, -4); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 13
+			alaSuperiorDer->position(5, -0.5, -4); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 14
+			alaSuperiorDer->position(4.5, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 15
+			alaSuperiorDer->quad(24,30,35,29);
+			alaSuperiorDer->quad(29,35,34,28);
+			alaSuperiorDer->quad(28,34,33,27);
+			alaSuperiorDer->quad(27,33,32,26);
+			alaSuperiorDer->quad(26,32,31,25);
 
 		alaSuperiorDer->end();
 
@@ -626,32 +643,44 @@ public:
 			alaSuperiorIzq->position(-5, -0.5, -4); alaSuperiorIzq->normal(0.0,-1.0,0.0);
 			alaSuperiorIzq->position(-4.5, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
 
-			/*alaSuperiorIzq->triangle(9,15,8);
-			alaSuperiorIzq->triangle(9,10,14);
-			alaSuperiorIzq->quad(10,11,12,13);
-			alaSuperiorIzq->triangle(10,13,14);
-			alaSuperiorIzq->triangle(14,15,9);*/
 			alaSuperiorIzq->triangle(8,15,9);
 			alaSuperiorIzq->triangle(14,10,9);
 			alaSuperiorIzq->quad(13,12,11,10);
 			alaSuperiorIzq->triangle(14,13,10);
 			alaSuperiorIzq->triangle(9,15,14);
 
-			//Lateral izquierdo
-			alaSuperiorIzq->quad(8,0,1,9);
-
 			//Lateral derecho
-			alaSuperiorIzq->quad(3,11,10,2);
+			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); //Antiguo 8
+			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); //Antiguo 0
+			alaSuperiorIzq->position(-4, 0, -17.5);alaSuperiorIzq->normal(-1.0,0.0,0.0); //Antiguo 1
+			alaSuperiorIzq->position(-4, -0.5, -17.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); //Antiguo 9
+			alaSuperiorIzq->quad(19,18,17,16);
 
-			//Lateral frontal
-			alaSuperiorIzq->quad(2,10,9,1);
+			//Lateral izquierdo
+			alaSuperiorIzq->position(-20, 0, -6.5); alaSuperiorIzq->normal(1.0,0.0,0.0); //Antiguo 3
+			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(1.0,0.0,0.0); //Antiguo 11
+			alaSuperiorIzq->position(-20, -0.5, -17.5); alaSuperiorIzq->normal(1.0,0.0,0.0); //Antiguo 10
+			alaSuperiorIzq->position(-20, 0, -17.5); alaSuperiorIzq->normal(1.0,0.0,0.0);//Antiguo 2
+			alaSuperiorIzq->quad(23,22,21,20);
 
 			//Lateral trasero
-			alaSuperiorIzq->quad(0,8,15,7);
-			alaSuperiorIzq->quad(7,15,14,6);
-			alaSuperiorIzq->quad(6,14,13,5);
-			alaSuperiorIzq->quad(5,13,12,4);
-			alaSuperiorIzq->quad(4,12,11,3);
+			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 0
+			alaSuperiorIzq->position(-20, 0, -6.5);alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 3
+			alaSuperiorIzq->position(-8, 0, -2.5);alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 4
+			alaSuperiorIzq->position(-7.5, 0, -4);alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 5
+			alaSuperiorIzq->position(-5, 0, -4);alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 6
+			alaSuperiorIzq->position(-4.5, 0, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 7
+			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 8
+			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 11
+			alaSuperiorIzq->position(-8, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 12
+			alaSuperiorIzq->position(-7.5, -0.5, -4); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 13
+			alaSuperiorIzq->position(-5, -0.5, -4); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 14
+			alaSuperiorIzq->position(-4.5, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 15
+			alaSuperiorIzq->quad(29,35,30,24);
+			alaSuperiorIzq->quad(28,34,35,29);
+			alaSuperiorIzq->quad(27,33,34,28);
+			alaSuperiorIzq->quad(26,32,33,27);
+			alaSuperiorIzq->quad(25,31,32,26);
 			
 		alaSuperiorIzq->end();
 
@@ -693,20 +722,37 @@ public:
 
 
 			//Lateral izquierdo
-			alaInferiorDer->quad(8,0,1,9);
+			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(-1.0,0.0,0.0); //Antiguo 8
+			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(-1.0,0.0,0.0); //Antiguo 0
+			alaInferiorDer->position(4, -0.5, -17.5); alaInferiorDer->normal(-1.0,0.0,0.0); //Antiguo 1
+			alaInferiorDer->position(4, -1, -17.5); alaInferiorDer->normal(-1.0,0.0,0.0); //Antiguo 9
+			alaInferiorDer->quad(16,17,18,19);
 
 			//Lateral derecho
-			alaInferiorDer->quad(3,11,10,2);
-
-			//Lateral frontal
-			alaInferiorDer->quad(2,10,9,1);
+			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(1.0,0.0,0.0);  //Antiguo 3
+			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(1.0,0.0,0.0); //Antiguo 11
+			alaInferiorDer->position(20, -1, -17.5); alaInferiorDer->normal(1.0,0.0,0.0); //Antiguo 10
+			alaInferiorDer->position(20, -0.5, -17.5); alaInferiorDer->normal(1.0,0.0,0.0); //Antiguo 2 
+			alaInferiorDer->quad(20,21,22,23);
 
 			//Lateral trasero
-			alaInferiorDer->quad(0,8,15,7);
-			alaInferiorDer->quad(7,15,14,6);
-			alaInferiorDer->quad(6,14,13,5);
-			alaInferiorDer->quad(5,13,12,4);
-			alaInferiorDer->quad(4,12,11,3);
+			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 0
+			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 3
+			alaInferiorDer->position(8, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 4
+			alaInferiorDer->position(7.5, -0.5, -4); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 5
+			alaInferiorDer->position(5, -0.5, -4); alaInferiorDer->normal(0.0,0.0,1.0);  //Antiguo 6
+			alaInferiorDer->position(4.5, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 7
+			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 8
+			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 11
+			alaInferiorDer->position(8, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0);  //Antiguo 12
+			alaInferiorDer->position(7.5, -1, -4); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 13
+			alaInferiorDer->position(5, -1, -4); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 14
+			alaInferiorDer->position(4.5, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 15
+			alaInferiorDer->quad(24,30,35,29);
+			alaInferiorDer->quad(29,35,34,28);
+			alaInferiorDer->quad(28,34,33,27);
+			alaInferiorDer->quad(27,33,32,26);
+			alaInferiorDer->quad(26,32,31,25);
 
 		alaInferiorDer->end();
 
@@ -746,21 +792,38 @@ public:
 			alaInferiorIzq->triangle(14,13,10);
 			alaInferiorIzq->triangle(9,15,14);
 
-			//Lateral izquierdo
-			alaInferiorIzq->quad(8,0,1,9);
-
 			//Lateral derecho
-			alaInferiorIzq->quad(3,11,10,2);
+			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(-1.0,0.0,0.0); //Antiguo 8
+			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(-1.0,0.0,0.0); //Antiguo 0
+			alaInferiorIzq->position(-4, -0.5, -17.5); alaInferiorIzq->normal(-1.0,0.0,0.0); //Antiguo 1
+			alaInferiorIzq->position(-4, -1, -17.5); alaInferiorIzq->normal(-1.0,0.0,0.0); //Antiguo 9
+			alaInferiorIzq->quad(16,17,18,19);
 
-			//Lateral frontal
-			alaInferiorIzq->quad(2,10,9,1);
+			//Lateral izquierdo
+			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(1.0,0.0,0.0);  //Antiguo 3
+			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(1.0,0.0,0.0); //Antiguo 11
+			alaInferiorIzq->position(-20, -1, -17.5); alaInferiorIzq->normal(1.0,0.0,0.0); //Antiguo 10
+			alaInferiorIzq->position(-20, -0.5, -17.5); alaInferiorIzq->normal(1.0,0.0,0.0); //Antiguo 2 
+			alaInferiorIzq->quad(23,22,21,20);
 
 			//Lateral trasero
-			alaInferiorIzq->quad(7,15,8,0);
-			alaInferiorIzq->quad(6,14,15,7);
-			alaInferiorIzq->quad(5,13,14,6);
-			alaInferiorIzq->quad(4,12,13,5);
-			alaInferiorIzq->quad(3,11,12,4);
+			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 0
+			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 3
+			alaInferiorIzq->position(-8, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 4
+			alaInferiorIzq->position(-7.5, -0.5, -4); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 5
+			alaInferiorIzq->position(-5, -0.5, -4); alaInferiorIzq->normal(0.0,0.0,1.0);  //Antiguo 6
+			alaInferiorIzq->position(-4.5, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 7
+			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 8
+			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 11
+			alaInferiorIzq->position(-8, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0);  //Antiguo 12
+			alaInferiorIzq->position(-7.5, -1, -4); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 13
+			alaInferiorIzq->position(-5, -1, -4); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 14
+			alaInferiorIzq->position(-4.5, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 15
+			alaInferiorIzq->quad(29,35,30,24);
+			alaInferiorIzq->quad(28,34,35,29);
+			alaInferiorIzq->quad(27,33,34,28);
+			alaInferiorIzq->quad(26,32,33,27);
+			alaInferiorIzq->quad(25,31,32,26);
 			
 		alaInferiorIzq->end();
 
