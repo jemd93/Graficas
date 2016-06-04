@@ -242,6 +242,7 @@ public:
 
 		// Aplicando las nuevas posiciones a la nave.
 		nodoNave->setPosition(naveX,0,naveZ);
+		_cam->setPosition(0,10,naveZ+30);
 		for (int i = 0; i < 4;i++) {
 			nodosAlas[i]->setPosition(naveX,0,naveZ);
 			nodosMisiles[i]->setPosition(naveX,0,naveZ);
@@ -884,12 +885,24 @@ public:
 			centroNave->triangle(19,18,17);
 
 			//Lateral izquierdo del centro de la nave
-			centroNave->quad(8,9,15,14);
-			centroNave->quad(9,10,16,15);
+			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 8
+			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 9
+			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 10
+			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 14
+			centroNave->position(-4, 0, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 15
+			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 16
+			centroNave->quad(20,21,24,23);
+			centroNave->quad(21,22,25,24);
 
 			//Lateral derecho del centro de la nave
-			centroNave->quad(19,18,12,13);
-			centroNave->quad(11,12,18,17);
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 11
+			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 12
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); // Antiguo 13
+			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 17
+			centroNave->position(4, 0, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 18
+			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 19
+			centroNave->quad(31,30,27,28);
+			centroNave->quad(26,27,30,29);
 
 
 		centroNave->end();
