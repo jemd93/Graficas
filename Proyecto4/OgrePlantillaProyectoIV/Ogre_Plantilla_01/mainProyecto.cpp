@@ -626,11 +626,16 @@ public:
 			alaSuperiorIzq->position(-5, -0.5, -4); alaSuperiorIzq->normal(0.0,-1.0,0.0);
 			alaSuperiorIzq->position(-4.5, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
 
-			alaSuperiorIzq->triangle(9,15,8);
+			/*alaSuperiorIzq->triangle(9,15,8);
 			alaSuperiorIzq->triangle(9,10,14);
 			alaSuperiorIzq->quad(10,11,12,13);
 			alaSuperiorIzq->triangle(10,13,14);
-			alaSuperiorIzq->triangle(14,15,9);
+			alaSuperiorIzq->triangle(14,15,9);*/
+			alaSuperiorIzq->triangle(8,15,9);
+			alaSuperiorIzq->triangle(14,10,9);
+			alaSuperiorIzq->quad(13,12,11,10);
+			alaSuperiorIzq->triangle(14,13,10);
+			alaSuperiorIzq->triangle(9,15,14);
 
 			//Lateral izquierdo
 			alaSuperiorIzq->quad(8,0,1,9);
@@ -751,11 +756,11 @@ public:
 			alaInferiorIzq->quad(2,10,9,1);
 
 			//Lateral trasero
-			alaInferiorIzq->quad(0,8,15,7);
-			alaInferiorIzq->quad(7,15,14,6);
-			alaInferiorIzq->quad(6,14,13,5);
-			alaInferiorIzq->quad(5,13,12,4);
-			alaInferiorIzq->quad(4,12,11,3);
+			alaInferiorIzq->quad(7,15,8,0);
+			alaInferiorIzq->quad(6,14,15,7);
+			alaInferiorIzq->quad(5,13,14,6);
+			alaInferiorIzq->quad(4,12,13,5);
+			alaInferiorIzq->quad(3,11,12,4);
 			
 		alaInferiorIzq->end();
 
@@ -1042,7 +1047,7 @@ public:
 			nodosAlas[i]->scale(0.5,0.5,0.5);
 
 		for(int i = 0 ; i < 4; i++){
-			agregarMisiles(i,((i==0 || i==1) ? 10 : -10),((i==1 || i==3) ? 0.6 : -1.1));
+			agregarMisiles(i,((i==0 || i==1) ? 10 : -10),((i==1 || i==3) ? 0.5 : -1.2));
 			agregarTurbinas(i,((i==0 || i==1) ? 3 : -3),((i==1 || i==3) ? 0.85 : -1.29));
 		}
 	}
