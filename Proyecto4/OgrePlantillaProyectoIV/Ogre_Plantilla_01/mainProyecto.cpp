@@ -30,6 +30,12 @@ Ogre::SceneNode* nodoNave;
 
 //Nodo para las alas (superiores e inferiores)
 Ogre::SceneNode* nodosAlas[4];
+float anguloAlas = 0.2;
+bool abriendo = false;
+bool cerrando = false;
+bool abiertas = false;
+bool cerradas = true;
+
 
 //Nodos para los misiles de la nave
 Ogre::SceneNode* nodosMisiles[4];
@@ -37,7 +43,7 @@ Ogre::SceneNode* nodosMisiles[4];
 // Posicion de la nave.
 float naveZ = 0.0;
 float naveX = 0.0;
-float anguloNave = 0.0;
+float anguloNave = 0.5;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -47,6 +53,7 @@ private :
 	Ogre::Camera* _cam;
 	
 	Ogre::Timer _timer[4];
+	Ogre::Timer _timerAlas;
 
 public:
 	FrameListenerProy(Ogre::Camera* cam, RenderWindow* win) {
@@ -69,6 +76,8 @@ public:
 			_timer[i].reset();
 		}
 
+		_timerAlas.reset();
+
 	}
 
 	~FrameListenerProy() {
@@ -82,6 +91,49 @@ public:
 		for (int i = 0; i < 4;i++) {
 			nodosAlas[i]->roll(Degree(anguloNave));
 			nodosMisiles[i]->roll(Degree(anguloNave));
+		}
+	}
+
+	void rotarAlas() {
+		if (abriendo) {
+			if (_timerAlas.getMilliseconds() < 1000) {
+				nodosAlas[0]->roll(Degree(-anguloAlas));
+				nodosMisiles[3]->roll(Degree(-anguloAlas));
+
+				nodosAlas[1]->roll(Degree(anguloAlas));
+				nodosMisiles[2]->roll(Degree(anguloAlas));
+
+				nodosAlas[2]->roll(Degree(-anguloAlas));
+				nodosMisiles[0]->roll(Degree(-anguloAlas));
+
+				nodosAlas[3]->roll(Degree(anguloAlas));
+				nodosMisiles[1]->roll(Degree(anguloAlas));
+			}
+			else {
+				abriendo = false;
+				abiertas = true;
+				_timerAlas.reset();
+			}
+		}
+		else if (cerrando) {
+			if (_timerAlas.getMilliseconds() < 1000) {
+				nodosAlas[0]->roll(Degree(anguloAlas));
+				nodosMisiles[3]->roll(Degree(anguloAlas));
+
+				nodosAlas[1]->roll(Degree(-anguloAlas));
+				nodosMisiles[2]->roll(Degree(-anguloAlas));
+
+				nodosAlas[2]->roll(Degree(anguloAlas));
+				nodosMisiles[0]->roll(Degree(anguloAlas));
+
+				nodosAlas[3]->roll(Degree(-anguloAlas));
+				nodosMisiles[1]->roll(Degree(-anguloAlas));
+			}
+			else {
+				cerradas = true;
+				cerrando = false;
+				_timerAlas.reset();
+			}
 		}
 	}
 
@@ -124,6 +176,24 @@ public:
 				naveX -= 0.5;
 				anguloNave = 0.5;
 				rotarNave();
+			}
+		}
+		if (_key->isKeyDown(OIS::KC_E)) { // Abrir Alas
+			if (!abriendo && !cerrando) {
+				if (cerradas) {
+					cerradas = false;
+					abriendo = true;
+					_timerAlas.reset();
+				}
+			}
+		}
+		if (_key->isKeyDown(OIS::KC_R)) { // Cerrar Alas
+			if (!abriendo && !cerrando) {
+				if (abiertas) {
+					abiertas = false;
+					cerrando = true;
+					_timerAlas.reset();
+				}
 			}
 		}
 
@@ -177,6 +247,7 @@ public:
 			nodosMisiles[i]->setPosition(naveX,0,naveZ);
 		}
 
+		rotarAlas();
 		return true;
 	}
 };
