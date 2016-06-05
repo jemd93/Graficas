@@ -1,5 +1,7 @@
 #include "Ogre\ExampleApplication.h"
 
+//NOTA: La luz se encuentra pegada encima del centro de la nave 
+
 float laserPos[4] = {0.0,-7.0,-7.0,-7.0};
 float laserAlt[4] = {0.0,36.0,36.0,36.0};
 
@@ -20,10 +22,9 @@ Ogre::SceneNode* nodosLaser[4];
 
 int laserFinal = 2;
 
-// Luz para las torretas
-Ogre::Light* lucesTorr[4];
-Ogre::SceneNode* nodosLuz[4];
-Ogre::SceneNode* nodoEsfera1;
+// Luz para las torretas y nave
+Ogre::Light* luz;
+Ogre::SceneNode* nodoLuz;
 
 //Nodo para la nave
 Ogre::SceneNode* nodoNave;
@@ -56,7 +57,6 @@ private :
 	Ogre::Camera* _cam;
 	
 	Ogre::Timer _timer[4];
-	Ogre::Timer _timerAlas;
 
 public:
 	FrameListenerProy(Ogre::Camera* cam, RenderWindow* win) {
@@ -79,8 +79,6 @@ public:
 			_timer[i].reset();
 		}
 
-		_timerAlas.reset();
-
 	}
 
 	~FrameListenerProy() {
@@ -89,6 +87,9 @@ public:
 		OIS::InputManager::destroyInputSystem(_man);
 	}
 
+	/* 
+		Método para rotar la nave cuando se presionan las teclas A o D
+	*/
 	void rotarNave() {
 		nodoNave->roll(Degree(anguloNave));
 		for (int i = 0; i < 4;i++) {
@@ -97,6 +98,9 @@ public:
 		}
 	}
 
+	/*
+		Método que permite abrir y cerrar las alas según la entrada de teclado.
+	*/
 	void rotarAlas() {
 		if (abriendo) {
 			if (anguloAct < anguloMax) {
@@ -117,7 +121,6 @@ public:
 			else {
 				abriendo = false;
 				abiertas = true;
-				_timerAlas.reset();
 			}
 		}
 		else if (cerrando) {
@@ -139,11 +142,13 @@ public:
 			else {
 				cerradas = true;
 				cerrando = false;
-				_timerAlas.reset();
 			}
 		}
 	}
 
+	/*
+		Método para regresar la posición de las alas al estado inicial del juego.
+	*/
 	void reiniciarAlas(){
 		float anguloR = 11;
 		if (abiertas){
@@ -167,6 +172,9 @@ public:
 		cerradas = true;
 	}
 
+	/*
+		Método que permite regresar la nave a su estado inicial.
+	*/
 	void reiniciar(){
 		laserFinal = 2;
 
@@ -194,7 +202,6 @@ public:
 				laserAlt[i] = 36.0;
 			}
 			_timer[i].reset();
-			_timerAlas.reset();
 		}
 	}
 
@@ -230,7 +237,6 @@ public:
 				if (cerradas) {
 					cerradas = false;
 					abriendo = true;
-					_timerAlas.reset();
 				}
 			}
 		}
@@ -239,7 +245,6 @@ public:
 				if (abiertas) {
 					abiertas = false;
 					cerrando = true;
-					_timerAlas.reset();
 				}
 			}
 		}
@@ -284,6 +289,7 @@ public:
 		// Aplicando las nuevas posiciones a la nave.
 		nodoNave->setPosition(naveX,0,naveZ);
 		_cam->setPosition(0,10,naveZ+40);
+		nodoLuz->setPosition(0,5,naveZ);
 		for (int i = 0; i < 4;i++) {
 			nodosAlas[i]->setPosition(naveX,0,naveZ);
 			nodosMisiles[i]->setPosition(naveX,0,naveZ);
@@ -326,22 +332,19 @@ public:
 
 	}
 
-	void modificarColor(Ogre::Entity* entidad,float r, float g, float b) {
-		Ogre::MaterialPtr m_pMat = entidad->getSubEntity(0)->getMaterial();
-		//m_pMat->getTechnique(0)->getPass(0)->setAmbient(r,g,b);
-		//m_pMat->getTechnique(0)->getPass(0)->setDiffuse(1.0,1.0,1.0,1.0);
-		//entidad->setMaterialName(m_pMat->getName());
-	}
-
+	/*
+		Método para crear las cuatro torretas del juego.
+		Además se incluyen las luces de cada una de ellas.
+	*/
 	void crearTorretas() {
 
-		// TORRETA 1.
+		/*---------------- INICIO TORRETA 1 -------------------------*/
 		Ogre::Entity* entTorreta01 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		nodosTorreta[0] = mSceneMgr->createSceneNode("nodoTorreta1");
 		mSceneMgr->getRootSceneNode()->addChild(nodosTorreta[0]);
 		nodosTorreta[0]->attachObject(entTorreta01);
 		nodosTorreta[0]->setPosition(-22,-5,-227);
-		entTorreta01->setMaterialName("matTorretas01");
+		entTorreta01->setMaterialName("matTorretaSW1");
 
 		// Pipes
 		Ogre::Entity* entPipe01 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -369,7 +372,7 @@ public:
 		nodosCurva[0]->setPosition(0.0,5.0,0.0);
 		entCurva01->setMaterialName("matTorretas01");
 
-		// Canon de la torreta
+		// Cañón de la torreta
 		Ogre::Entity* entCanon01 = mSceneMgr->createEntity("usb_cilindro02.mesh");
 		nodosCanon[0] = mSceneMgr->createSceneNode("nodoCanon1");
 		nodosCanon[0]->attachObject(entCanon01);
@@ -386,36 +389,16 @@ public:
 		nodosLaser[0]->attachObject(entLaser01);
 		nodosCanon[0]->addChild(nodosLaser[0]);
 		entLaser01->setMaterialName("matLaser01");
-
-		// Luz
-		//lucesTorr[0] = mSceneMgr->createLight("Luz1");
-		//lucesTorr[0]->setType(Ogre::Light::LT_POINT);
-		//lucesTorr[0]->setDiffuseColour(1.0,1.0,1.0);
-		//lucesTorr[0]->setPosition(0,0,0);
-		//
-		//nodosLuz[0] = mSceneMgr->createSceneNode("nodoLuz1");
-		//nodosLuz[0]->attachObject(lucesTorr[0]);
-		//nodosTorreta[0]->addChild(nodosLuz[0]);
-		//nodosLuz[0]->setPosition(0,0,10);
-
-		//Ogre::Entity* entEsferaPrueba = mSceneMgr->createEntity("EsferaLuz1",Ogre::SceneManager::PT_SPHERE);
-		//nodoEsfera1 = mSceneMgr->createSceneNode("nodoEsferaLuz1");
-		//mSceneMgr->getRootSceneNode()->addChild(nodoEsfera1);
-		//nodoEsfera1->attachObject(entEsferaPrueba);
-		//entEsferaPrueba->setCastShadows(false);
-		//nodoEsfera1->addChild(nodosLuz[0]);
-		//nodoEsfera1->setScale(0.03,0.03,0.03);
-		//nodoEsfera1->setPosition(30,30,0);
+		/*------------------------ FIN TORRETA 1 ---------------------------*/
 
 
-
-		// TORRETA 2.
+		/*---------------- INICIO TORRETA 2 -------------------------*/
 		Ogre::Entity* entTorreta02 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		nodosTorreta[1] = mSceneMgr->createSceneNode("nodoTorreta2");
 		mSceneMgr->getRootSceneNode()->addChild(nodosTorreta[1]);
 		nodosTorreta[1]->attachObject(entTorreta02);
 		nodosTorreta[1]->setPosition(-22.5,-5,-638);
-		entTorreta02->setMaterialName("matTorretas01");
+		entTorreta02->setMaterialName("matTorretaSW1");
 		
 		// Pipes
 		Ogre::Entity* entPipe03 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -460,15 +443,15 @@ public:
 		nodosLaser[1]->attachObject(entLaser02);
 		nodosCanon[1]->addChild(nodosLaser[1]);
 		entLaser02->setMaterialName("matLaser01");
+		/*------------------------ FIN TORRETA 2 ---------------------------*/
 
-
-		// TORRETA 3.
+		/*------------------------ INICIO TORRETA 3 ---------------------------*/
 		Ogre::Entity* entTorreta03 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		nodosTorreta[2] = mSceneMgr->createSceneNode("nodoTorreta3");
 		mSceneMgr->getRootSceneNode()->addChild(nodosTorreta[2]);
 		nodosTorreta[2]->attachObject(entTorreta03);
 		nodosTorreta[2]->setPosition(22.5,-5,-407.5);
-		entTorreta03->setMaterialName("matTorretas01");
+		entTorreta03->setMaterialName("matTorretaSW1");
 
 		// Pipes
 		Ogre::Entity* entPipe05 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -513,14 +496,15 @@ public:
 		nodosLaser[2]->attachObject(entLaser03);
 		nodosCanon[2]->addChild(nodosLaser[2]);
 		entLaser03->setMaterialName("matLaser01");
+		/*------------------------ FIN TORRETA 3 ---------------------------*/
 
-		// TORRETA 4.
+		/*------------------------ INICIO TORRETA 4 ---------------------------*/
 		Ogre::Entity* entTorreta04 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		nodosTorreta[3] = mSceneMgr->createSceneNode("nodoTorreta4");
 		mSceneMgr->getRootSceneNode()->addChild(nodosTorreta[3]);
 		nodosTorreta[3]->attachObject(entTorreta04);
 		nodosTorreta[3]->setPosition(22,-5,-883.5);
-		entTorreta04->setMaterialName("matTorretas01");
+		entTorreta04->setMaterialName("matTorretaSW1");
 
 		// Pipes
 		Ogre::Entity* entPipe07 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -565,8 +549,12 @@ public:
 		nodosLaser[3]->attachObject(entLaser04);
 		nodosCanon[3]->addChild(nodosLaser[3]);
 		entLaser04->setMaterialName("matLaser01");
+		/*------------------------ FIN TORRETA 4 ---------------------------*/
 	}
 
+	/*
+		Método para la creación manual de las cuatro alas de la nave.
+	*/
 	void crearAlas(){
 		ManualObject* alaSuperiorIzq = mSceneMgr->createManualObject("alaSuperiorIzq");
 		ManualObject* alaInferiorIzq = mSceneMgr->createManualObject("alaInferiorIzq");
@@ -872,6 +860,9 @@ public:
 		nodosAlas[1]->attachObject(alaInferiorIzq);
 	}
 
+	/*
+		Método que permite crear con ManualObject la sección central de la nave.
+	*/
 	void crearCentroNave(){
 		ManualObject* centroNave = mSceneMgr->createManualObject("centroNave");
 		nodoNave = mSceneMgr->createSceneNode("nodoNave");
@@ -886,28 +877,28 @@ public:
 		*/
 		centroNave->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba del centro de la nave
-			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,1.0,0.0); centroNave->textureCoord(0,1);
-			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,1.0,0.0); centroNave->textureCoord(0,0);
-			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,1.0,0.0); centroNave->textureCoord(1,0);
-			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,1.0,0.0); centroNave->textureCoord(1,1);
+			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,1.0,0.0);
+			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,1.0,0.0);
+			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,1.0,0.0); 
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,1.0,0.0); 
 			
 			centroNave->quad(0,3,2,1);
 
 			//Parte de abajo del centro de la nave
-			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0); centroNave->textureCoord(0,1);
-			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0); centroNave->textureCoord(0,0);
-			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0); centroNave->textureCoord(1,0);
-			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0); centroNave->textureCoord(1,1);
+			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0); 
+			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0);
+			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0); 
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0); 
 			
 			centroNave->quad(5,6,7,4);
 
 			//Parte trasera del centro de la nave
-			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0.1,1);
-			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0,0.5);
-			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0.1,0);
-			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0.9,0);
-			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0.5);
-			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0.9,1);
+			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); 
+			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0); 
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0);
 			
 			centroNave->triangle(10,9,8);
 			centroNave->quad(8,13,11,10);
@@ -926,22 +917,22 @@ public:
 			centroNave->triangle(19,18,17);
 
 			//Lateral izquierdo del centro de la nave
-			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0); //Antiguo 8
-			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,1); //Antiguo 9
-			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0); //Antiguo 10
-			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,0); //Antiguo 14
-			centroNave->position(-4, 0, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,1); //Antiguo 15
-			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,0); //Antiguo 16
+			centroNave->position(-3, -2.5, 0); centroNave->normal(-0.93,0.37,0.0); //Antiguo 8
+			centroNave->position(-4, 0, 0); centroNave->normal(-0.93,0.37,0.0);  //Antiguo 9
+			centroNave->position(-3, 2.5, 0); centroNave->normal(-0.93,0.37,0.0); //Antiguo 10
+			centroNave->position(-3, -2.5, -13); centroNave->normal(-0.93,0.37,0.0); //Antiguo 14
+			centroNave->position(-4, 0, -13); centroNave->normal(-0.93,0.37,0.0);  //Antiguo 15
+			centroNave->position(-3, 2.5, -13); centroNave->normal(-0.93,0.37,0.0); //Antiguo 16
 			centroNave->quad(20,21,24,23);
 			centroNave->quad(21,22,25,24);
 
 			//Lateral derecho del centro de la nave
-			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0); //Antiguo 11
-			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,1); //Antiguo 12
-			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0); // Antiguo 13
-			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,0); //Antiguo 17
-			centroNave->position(4, 0, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,1); //Antiguo 18
-			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,0); //Antiguo 19
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.93,0.37,0.0); //Antiguo 11
+			centroNave->position(4, 0, 0); centroNave->normal(0.93,0.37,0.0); //Antiguo 12
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.93,0.37,0.0); // Antiguo 13
+			centroNave->position(3, 2.5, -13); centroNave->normal(0.93,0.37,0.0);//Antiguo 17
+			centroNave->position(4, 0, -13); centroNave->normal(0.93,0.37,0.0); //Antiguo 18
+			centroNave->position(3, -2.5, -13); centroNave->normal(0.93,0.37,0.0); //Antiguo 19
 			centroNave->quad(31,30,27,28);
 			centroNave->quad(26,27,30,29);
 
@@ -957,34 +948,34 @@ public:
 		*/
 		centroNave->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			centroNave->position(-3, 2.5, -13); centroNave->textureCoord(0,1);
-			centroNave->position(-2, 1.5, -33); centroNave->textureCoord(0,0);
-			centroNave->position(2, 1.5, -33); centroNave->textureCoord(1,0);
-			centroNave->position(3, 2.5, -13); centroNave->textureCoord(1,1);
+			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,-0.99,0.05);
+			centroNave->position(-2, 1.5, -33); centroNave->normal(0.0,0.99,-0.05);
+			centroNave->position(2, 1.5, -33); centroNave->normal(0.0,0.99,-0.05);
+			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,-0.99,0.05);
 			
 			centroNave->quad(3,2,1,0);
 
 			//Parte de abajo
-			centroNave->position(-3, -2.5, -13); centroNave->textureCoord(0,1);
-			centroNave->position(-2, -1.5, -33); centroNave->textureCoord(0,0);
-			centroNave->position(2, -1.5, -33); centroNave->textureCoord(1,0);
-			centroNave->position(3, -2.5, -13); centroNave->textureCoord(1,1);
+			centroNave->position(-3, -2.5, -13);
+			centroNave->position(-2, -1.5, -33);
+			centroNave->position(2, -1.5, -33); 
+			centroNave->position(3, -2.5, -13); 
 
 			centroNave->quad(4,5,6,7);
 
 			//Punta superior de la nave
-			centroNave->position(-2, 1.5, -33); centroNave->textureCoord(0,1);
-			centroNave->position(-0.5, 0.5, -35); centroNave->textureCoord(0,0);
-			centroNave->position(0.5, 0.5, -35); centroNave->textureCoord(1,0);
-			centroNave->position(2, 1.5, -33); centroNave->textureCoord(1,1);
+			centroNave->position(-2, 1.5, -33);
+			centroNave->position(-0.5, 0.5, -35);
+			centroNave->position(0.5, 0.5, -35); 
+			centroNave->position(2, 1.5, -33); 
 
-			centroNave->quad(11,10,9,+8);
+			centroNave->quad(11,10,9,8);
 
 			//Punta inferior de la nave
-			centroNave->position(-2, -1.5, -33); centroNave->textureCoord(0,1);
-			centroNave->position(-0.5, -0.5, -35); centroNave->textureCoord(0,0);
-			centroNave->position(0.5, -0.5, -35); centroNave->textureCoord(1,0);
-			centroNave->position(2, -1.5, -33); centroNave->textureCoord(1,1);
+			centroNave->position(-2, -1.5, -33); 
+			centroNave->position(-0.5, -0.5, -35); 
+			centroNave->position(0.5, -0.5, -35);
+			centroNave->position(2, -1.5, -33);
 
 			centroNave->quad(12,13,14,15);
 
@@ -995,15 +986,15 @@ public:
 			centroNave->quad(15,14,10,11);
 
 			//Lateral izquierdo de la nave
-			centroNave->position(-4, 0, -13); centroNave->textureCoord(0,0.5);//Medio izquierdo atrás
-			centroNave->position(-2, 0, -33); centroNave->textureCoord(1,0.5); //Medio de la punta
+			centroNave->position(-4, 0, -13); //Medio izquierdo atrás
+			centroNave->position(-2, 0, -33); //Medio de la punta
 
 			centroNave->quad(4,16,17,12);
 			centroNave->quad(0,8,17,16);
 
 			//Lateral derecho de la nave
-			centroNave->position(4, 0, -13); centroNave->textureCoord(0,0.5); //Medio derecho atrás
-			centroNave->position(2, 0, -33); centroNave->textureCoord(1,0.5); //Medio de la punta
+			centroNave->position(4, 0, -13); //Medio derecho atrás
+			centroNave->position(2, 0, -33); //Medio de la punta
 
 			centroNave->quad(7,15,19,18);
 			centroNave->quad(3,18,19,11);
@@ -1013,6 +1004,10 @@ public:
 		nodoNave->attachObject(centroNave);
 	}
 
+	/*
+		Método para agregar los cuatro misiles que van en cada ala utilizando
+		las primitivas dadas para el proyecto.
+	*/
 	void agregarMisiles(int numMisil, float x, float y){
 		nodosMisiles[numMisil] = mSceneMgr->createSceneNode("nodoMisil"+std::to_string(numMisil));
 
@@ -1091,6 +1086,9 @@ public:
 
 	}
 
+	/*
+		Método para agregar las turbinas utilizando las primitivas dadas para el proyecto.
+	*/
 	void agregarTurbinas(int numTurbina, float x, float y){
 		Ogre::SceneNode* nodoTurbina;
 		Ogre::Entity* entTurbina = mSceneMgr->createEntity("usb_cilindro.mesh");
@@ -1156,6 +1154,9 @@ public:
 		nodoCurvo2->pitch(Degree(90));
 	}
 
+	/*
+		Creación de la nave completa.
+	*/
 	void crearNave(){
 		crearCentroNave();
 		crearAlas();
@@ -1173,13 +1174,15 @@ public:
 
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0, 1.0, 1.0));
 		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-		
 
-		/*Ogre::Entity* ent01 = mSceneMgr->createEntity("MyEntity1","ejes01.mesh");*/
-		Ogre::SceneNode* node01 = mSceneMgr->createSceneNode("Node01");
-		mSceneMgr->getRootSceneNode()->addChild(node01);
-		/*node01->attachObject(ent01);*/
-		
+		luz = mSceneMgr->createLight("Luz1");
+		luz->setType(Ogre::Light::LT_POINT);
+		luz->setDiffuseColour(1.0,1.0,1.0);
+		luz->setPosition(0,0,0);
+		nodoLuz = mSceneMgr->createSceneNode("nodoLuz1");
+		nodoLuz->attachObject(luz);
+		nodoLuz->setPosition(0,5,0);
+		mSceneMgr->getRootSceneNode()->addChild(nodoLuz);
 
 		Ogre::Entity* entEscena01 = mSceneMgr->createEntity("ogre_base01.mesh");
 		mSceneMgr->getRootSceneNode()->attachObject(entEscena01);
@@ -1198,7 +1201,7 @@ public:
 
 		Ogre::Entity* entEscena06 = mSceneMgr->createEntity("ogre_torretas01.mesh");
 		mSceneMgr->getRootSceneNode()->attachObject(entEscena06);
-		
+
 		crearTorretas();
 		crearNave();
 
