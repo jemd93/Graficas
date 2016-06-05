@@ -44,6 +44,9 @@ Ogre::SceneNode* nodosMisiles[4];
 float naveZ = 0.0;
 float naveX = 0.0;
 float anguloNave = 0.5;
+float anguloMax = 28;
+float anguloAct = 0.0;
+float anguloNActual = 0.0;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -96,7 +99,7 @@ public:
 
 	void rotarAlas() {
 		if (abriendo) {
-			if (_timerAlas.getMilliseconds() < 1000) {
+			if (anguloAct < anguloMax) {
 				nodosAlas[0]->roll(Degree(-anguloAlas));
 				nodosMisiles[3]->roll(Degree(-anguloAlas));
 
@@ -108,6 +111,8 @@ public:
 
 				nodosAlas[3]->roll(Degree(anguloAlas));
 				nodosMisiles[1]->roll(Degree(anguloAlas));
+
+				anguloAct += 0.5;
 			}
 			else {
 				abriendo = false;
@@ -116,7 +121,7 @@ public:
 			}
 		}
 		else if (cerrando) {
-			if (_timerAlas.getMilliseconds() < 1000) {
+			if (anguloAct > 0.0) {
 				nodosAlas[0]->roll(Degree(anguloAlas));
 				nodosMisiles[3]->roll(Degree(anguloAlas));
 
@@ -128,6 +133,8 @@ public:
 
 				nodosAlas[3]->roll(Degree(-anguloAlas));
 				nodosMisiles[1]->roll(Degree(-anguloAlas));
+
+				anguloAct -= 0.5;
 			}
 			else {
 				cerradas = true;
@@ -137,44 +144,84 @@ public:
 		}
 	}
 
+	void reiniciarAlas(){
+		float anguloR = 11;
+		if (abiertas){
+			nodosAlas[0]->roll(Degree(anguloR));
+			nodosMisiles[3]->roll(Degree(anguloR));
+
+			nodosAlas[1]->roll(Degree(-anguloR));
+			nodosMisiles[2]->roll(Degree(-anguloR));
+
+			nodosAlas[2]->roll(Degree(anguloR));
+			nodosMisiles[0]->roll(Degree(anguloR));
+
+			nodosAlas[3]->roll(Degree(-anguloR));
+			nodosMisiles[1]->roll(Degree(-anguloR));
+		}
+
+		anguloAct = 0.0;
+		abriendo = false;
+		cerrando = false;
+		abiertas = false;
+		cerradas = true;
+	}
+
+	void reiniciar(){
+		laserFinal = 2;
+
+		nodoNave->roll(Degree(anguloNActual));
+		for (int i = 0; i < 4; i++){
+			nodosAlas[i]->roll(Degree(anguloNActual));
+			nodosMisiles[i]->roll(Degree(anguloNActual));
+		}
+		
+		anguloNActual = 0.0;
+
+		reiniciarAlas();
+
+		naveZ = 0.0;
+		naveX = 0.0;
+		anguloNave = 0.5;
+
+		for (int i = 0; i < 4; i++){
+			if (i == 0){
+				laserPos[i] = 0.0;
+				laserAlt[i] = 0.0;
+			}
+			else {
+				laserPos[i] = -7.0;
+				laserAlt[i] = 36.0;
+			}
+			_timer[i].reset();
+			_timerAlas.reset();
+		}
+	}
+
 	bool frameStarted(const Ogre::FrameEvent &evt) {
 		_key->capture();
-		_mouse->capture();
-
-		float movSpeed = 10.0f;
-
-		Ogre::Vector3 tmov(0,0,0);
-		Ogre::Vector3 tcam(0,0,0);
 
 		if (_key->isKeyDown(OIS::KC_ESCAPE) || _key->isKeyDown(OIS::KC_Q))
 			return false;
 
 		if (_key->isKeyDown(OIS::KC_W)){
-			tcam+=Ogre::Vector3(0,0,-10);
-		}
-		if (_key->isKeyDown(OIS::KC_S)){
-			tcam+=Ogre::Vector3(0,0,10);
+			naveZ -= 1;
+			if (naveZ <= -1280)
+				reiniciar();
 		}
 		if (_key->isKeyDown(OIS::KC_A)){
-			tcam+=Ogre::Vector3(-10,0,0);
-		}
-		if (_key->isKeyDown(OIS::KC_D)){
-			tcam+=Ogre::Vector3(10,0,0);
-		}
-		if (_key->isKeyDown(OIS::KC_UP)){
-			naveZ -= 1;
-		}
-		if (_key->isKeyDown(OIS::KC_RIGHT)){
-			if (naveX+0.5 < 24) {
-				naveX += 0.5;
-				anguloNave = -0.5;
+			if (naveX - 0.5 > -24) { 
+				anguloNActual -= 0.5;
+				naveX -= 0.5;
+				anguloNave = 0.5;
 				rotarNave();
 			}
 		}
-		if (_key->isKeyDown(OIS::KC_LEFT)){
-			if (naveX - 0.5 > -24) { 
-				naveX -= 0.5;
-				anguloNave = 0.5;
+		if (_key->isKeyDown(OIS::KC_D)){
+			if (naveX+0.5 < 24) {
+				anguloNActual += 0.5;
+				naveX += 0.5;
+				anguloNave = -0.5;
 				rotarNave();
 			}
 		}
@@ -196,12 +243,6 @@ public:
 				}
 			}
 		}
-
-		float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame* -1;
-		float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame* -1;
-		_cam->yaw(Ogre::Radian(rotX));
-		_cam->pitch(Ogre::Radian(rotY));
-		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
 
 		if (naveZ <= -150) {
 			if (laserPos[2] == -7.0) {
@@ -242,7 +283,7 @@ public:
 
 		// Aplicando las nuevas posiciones a la nave.
 		nodoNave->setPosition(naveX,0,naveZ);
-		_cam->setPosition(0,10,naveZ+30);
+		_cam->setPosition(0,10,naveZ+40);
 		for (int i = 0; i < 4;i++) {
 			nodosAlas[i]->setPosition(naveX,0,naveZ);
 			nodosMisiles[i]->setPosition(naveX,0,naveZ);
@@ -547,14 +588,14 @@ public:
 		//Ala derecha
 		alaSuperiorDer->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(0,1);
-			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(0,0);
-			alaSuperiorDer->position(20, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0);// alaSuperiorDer->textureCoord(1,0);
-			alaSuperiorDer->position(20, 0, -6.5);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,1);
-			alaSuperiorDer->position(8, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,1);
-			alaSuperiorDer->position(7.5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(1,0);
-			alaSuperiorDer->position(5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(0,0);
-			alaSuperiorDer->position(4.5, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0); //alaSuperiorDer->textureCoord(0,1);
+			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,1.0,0.0); alaSuperiorDer->textureCoord(0,1);
+			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0); alaSuperiorDer->textureCoord(0,0);
+			alaSuperiorDer->position(20, 0, -17.5);alaSuperiorDer->normal(0.0,1.0,0.0); alaSuperiorDer->textureCoord(1,0);
+			alaSuperiorDer->position(20, 0, -6.5);alaSuperiorDer->normal(0.0,1.0,0.0); alaSuperiorDer->textureCoord(1,0.6);
+			alaSuperiorDer->position(8, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0); alaSuperiorDer->textureCoord(0.4,1);
+			alaSuperiorDer->position(7.5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0); alaSuperiorDer->textureCoord(0.3,1);
+			alaSuperiorDer->position(5, 0, -4);alaSuperiorDer->normal(0.0,1.0,0.0); alaSuperiorDer->textureCoord(0.2,1);
+			alaSuperiorDer->position(4.5, 0, -2.5);alaSuperiorDer->normal(0.0,1.0,0.0); alaSuperiorDer->textureCoord(0.1,1);
 
 
 			alaSuperiorDer->triangle(0,7,1);
@@ -564,14 +605,14 @@ public:
 			alaSuperiorDer->triangle(1,7,6);
 
 			//Parte de abajo
-			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
-			alaSuperiorDer->position(4, -0.5, -17.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
-			alaSuperiorDer->position(20, -0.5, -17.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
-			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
-			alaSuperiorDer->position(8, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
-			alaSuperiorDer->position(7.5, -0.5, -4); alaSuperiorDer->normal(0.0,-1.0,0.0);
-			alaSuperiorDer->position(5, -0.5, -4); alaSuperiorDer->normal(0.0,-1.0,0.0);
-			alaSuperiorDer->position(4.5, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0);
+			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0); alaSuperiorDer->textureCoord(0,1);
+			alaSuperiorDer->position(4, -0.5, -17.5); alaSuperiorDer->normal(0.0,-1.0,0.0); alaSuperiorDer->textureCoord(0,0);
+			alaSuperiorDer->position(20, -0.5, -17.5); alaSuperiorDer->normal(0.0,-1.0,0.0); alaSuperiorDer->textureCoord(1,0);
+			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(0.0,-1.0,0.0); alaSuperiorDer->textureCoord(1,0.6);
+			alaSuperiorDer->position(8, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0); alaSuperiorDer->textureCoord(0.4,1);
+			alaSuperiorDer->position(7.5, -0.5, -4); alaSuperiorDer->normal(0.0,-1.0,0.0); alaSuperiorDer->textureCoord(0.3,1);
+			alaSuperiorDer->position(5, -0.5, -4); alaSuperiorDer->normal(0.0,-1.0,0.0); alaSuperiorDer->textureCoord(0.2,1);
+			alaSuperiorDer->position(4.5, -0.5, -2.5); alaSuperiorDer->normal(0.0,-1.0,0.0); alaSuperiorDer->textureCoord(0.1,1);
 			
 			alaSuperiorDer->triangle(8,15,9);
 			alaSuperiorDer->triangle(14,10,9);
@@ -580,32 +621,32 @@ public:
 			alaSuperiorDer->triangle(9,15,14);
 
 			//Lateral izquierdo
-			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(-1.0,0.0,0.0); //Antiguo 8
-			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(-1.0,0.0,0.0); //Antiguo 0
-			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(-1.0,0.0,0.0); //Antiguo 1
-			alaSuperiorDer->position(4, -0.5, -17.5); alaSuperiorDer->normal(-1.0,0.0,0.0); //Antiguo 9
+			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(-1.0,0.0,0.0); alaSuperiorDer->textureCoord(1,1); //Antiguo 8
+			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(-1.0,0.0,0.0); alaSuperiorDer->textureCoord(1,0); //Antiguo 0
+			alaSuperiorDer->position(4, 0, -17.5);alaSuperiorDer->normal(-1.0,0.0,0.0); alaSuperiorDer->textureCoord(0,0); //Antiguo 1
+			alaSuperiorDer->position(4, -0.5, -17.5); alaSuperiorDer->normal(-1.0,0.0,0.0); alaSuperiorDer->textureCoord(0,1); //Antiguo 9
 			alaSuperiorDer->quad(16,17,18,19);
 
 			//Lateral derecho
-			alaSuperiorDer->position(20, 0, -6.5); alaSuperiorDer->normal(1.0,0.0,0.0); //Antiguo 3
-			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(1.0,0.0,0.0); //Antiguo 11
-			alaSuperiorDer->position(20, -0.5, -17.5); alaSuperiorDer->normal(1.0,0.0,0.0); //Antiguo 10
-			alaSuperiorDer->position(20, 0, -17.5); alaSuperiorDer->normal(1.0,0.0,0.0);//Antiguo 2
+			alaSuperiorDer->position(20, 0, -6.5); alaSuperiorDer->normal(1.0,0.0,0.0); alaSuperiorDer->textureCoord(1,1); //Antiguo 3
+			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(1.0,0.0,0.0); alaSuperiorDer->textureCoord(1,0); //Antiguo 11
+			alaSuperiorDer->position(20, -0.5, -17.5); alaSuperiorDer->normal(1.0,0.0,0.0); alaSuperiorDer->textureCoord(0,0); //Antiguo 10
+			alaSuperiorDer->position(20, 0, -17.5); alaSuperiorDer->normal(1.0,0.0,0.0); alaSuperiorDer->textureCoord(0,1); //Antiguo 2
 			alaSuperiorDer->quad(20,21,22,23);
 
 			//Lateral trasero
-			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 0
-			alaSuperiorDer->position(20, 0, -6.5);alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 3
-			alaSuperiorDer->position(8, 0, -2.5);alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 4
-			alaSuperiorDer->position(7.5, 0, -4);alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 5
-			alaSuperiorDer->position(5, 0, -4);alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 6
-			alaSuperiorDer->position(4.5, 0, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 7
-			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 8
-			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 11
-			alaSuperiorDer->position(8, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 12
-			alaSuperiorDer->position(7.5, -0.5, -4); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 13
-			alaSuperiorDer->position(5, -0.5, -4); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 14
-			alaSuperiorDer->position(4.5, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); //Antiguo 15
+			alaSuperiorDer->position(4, 0, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0,0); //Antiguo 0
+			alaSuperiorDer->position(20, 0, -6.5);alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(1,0); //Antiguo 3
+			alaSuperiorDer->position(8, 0, -2.5);alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0.4,0);//Antiguo 4
+			alaSuperiorDer->position(7.5, 0, -4);alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0.3,0);//Antiguo 5
+			alaSuperiorDer->position(5, 0, -4);alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0.2,0);//Antiguo 6
+			alaSuperiorDer->position(4.5, 0, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0.1,0);//Antiguo 7
+			alaSuperiorDer->position(4, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0,1); //Antiguo 8
+			alaSuperiorDer->position(20, -0.5, -6.5); alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(1,1);//Antiguo 11
+			alaSuperiorDer->position(8, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0.4,1);//Antiguo 12
+			alaSuperiorDer->position(7.5, -0.5, -4); alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0.3,1);//Antiguo 13
+			alaSuperiorDer->position(5, -0.5, -4); alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0.2,1);//Antiguo 14
+			alaSuperiorDer->position(4.5, -0.5, -2.5); alaSuperiorDer->normal(0.0,0.0,1.0); alaSuperiorDer->textureCoord(0.1,1);//Antiguo 15
 			alaSuperiorDer->quad(24,30,35,29);
 			alaSuperiorDer->quad(29,35,34,28);
 			alaSuperiorDer->quad(28,34,33,27);
@@ -619,14 +660,14 @@ public:
 		//Ala izquierda
 		alaSuperiorIzq->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
-			alaSuperiorIzq->position(-4, 0, -17.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
-			alaSuperiorIzq->position(-20, 0, -17.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
-			alaSuperiorIzq->position(-20, 0, -6.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
-			alaSuperiorIzq->position(-8, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
-			alaSuperiorIzq->position(-7.5, 0, -4); alaSuperiorIzq->normal(0.0,1.0,0.0);
-			alaSuperiorIzq->position(-5, 0, -4); alaSuperiorIzq->normal(0.0,1.0,0.0);
-			alaSuperiorIzq->position(-4.5, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0);
+			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0); alaSuperiorIzq->textureCoord(1,1);
+			alaSuperiorIzq->position(-4, 0, -17.5); alaSuperiorIzq->normal(0.0,1.0,0.0); alaSuperiorIzq->textureCoord(1,0);
+			alaSuperiorIzq->position(-20, 0, -17.5); alaSuperiorIzq->normal(0.0,1.0,0.0); alaSuperiorIzq->textureCoord(0,0);
+			alaSuperiorIzq->position(-20, 0, -6.5); alaSuperiorIzq->normal(0.0,1.0,0.0); alaSuperiorIzq->textureCoord(0,0.6);
+			alaSuperiorIzq->position(-8, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0); alaSuperiorIzq->textureCoord(0.6,1);
+			alaSuperiorIzq->position(-7.5, 0, -4); alaSuperiorIzq->normal(0.0,1.0,0.0); alaSuperiorIzq->textureCoord(0.7,1);
+			alaSuperiorIzq->position(-5, 0, -4); alaSuperiorIzq->normal(0.0,1.0,0.0); alaSuperiorIzq->textureCoord(0.8,1);
+			alaSuperiorIzq->position(-4.5, 0, -2.5); alaSuperiorIzq->normal(0.0,1.0,0.0); alaSuperiorIzq->textureCoord(0.9,1);
 
 			alaSuperiorIzq->triangle(1,7,0);
 			alaSuperiorIzq->triangle(1,2,6);
@@ -635,14 +676,14 @@ public:
 			alaSuperiorIzq->triangle(6,7,1);
 			
 			//Parte de abajo
-			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
-			alaSuperiorIzq->position(-4, -0.5, -17.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
-			alaSuperiorIzq->position(-20, -0.5, -17.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
-			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
-			alaSuperiorIzq->position(-8, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
-			alaSuperiorIzq->position(-7.5, -0.5, -4); alaSuperiorIzq->normal(0.0,-1.0,0.0);
-			alaSuperiorIzq->position(-5, -0.5, -4); alaSuperiorIzq->normal(0.0,-1.0,0.0);
-			alaSuperiorIzq->position(-4.5, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0);
+			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0); alaSuperiorIzq->textureCoord(1,1);
+			alaSuperiorIzq->position(-4, -0.5, -17.5); alaSuperiorIzq->normal(0.0,-1.0,0.0); alaSuperiorIzq->textureCoord(1,0);
+			alaSuperiorIzq->position(-20, -0.5, -17.5); alaSuperiorIzq->normal(0.0,-1.0,0.0); alaSuperiorIzq->textureCoord(0,0);
+			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(0.0,-1.0,0.0); alaSuperiorIzq->textureCoord(0,0.6);
+			alaSuperiorIzq->position(-8, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0); alaSuperiorIzq->textureCoord(0.6,1);
+			alaSuperiorIzq->position(-7.5, -0.5, -4); alaSuperiorIzq->normal(0.0,-1.0,0.0); alaSuperiorIzq->textureCoord(0.7,1);
+			alaSuperiorIzq->position(-5, -0.5, -4); alaSuperiorIzq->normal(0.0,-1.0,0.0); alaSuperiorIzq->textureCoord(0.8,1);
+			alaSuperiorIzq->position(-4.5, -0.5, -2.5); alaSuperiorIzq->normal(0.0,-1.0,0.0); alaSuperiorIzq->textureCoord(0.9,1);
 
 			alaSuperiorIzq->triangle(8,15,9);
 			alaSuperiorIzq->triangle(14,10,9);
@@ -651,32 +692,32 @@ public:
 			alaSuperiorIzq->triangle(9,15,14);
 
 			//Lateral derecho
-			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); //Antiguo 8
-			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); //Antiguo 0
-			alaSuperiorIzq->position(-4, 0, -17.5);alaSuperiorIzq->normal(-1.0,0.0,0.0); //Antiguo 1
-			alaSuperiorIzq->position(-4, -0.5, -17.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); //Antiguo 9
+			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); alaSuperiorIzq->textureCoord(0,1);//Antiguo 8
+			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); alaSuperiorIzq->textureCoord(0,0);//Antiguo 0
+			alaSuperiorIzq->position(-4, 0, -17.5);alaSuperiorIzq->normal(-1.0,0.0,0.0); alaSuperiorIzq->textureCoord(1,0);//Antiguo 1
+			alaSuperiorIzq->position(-4, -0.5, -17.5); alaSuperiorIzq->normal(-1.0,0.0,0.0); alaSuperiorIzq->textureCoord(1,1); //Antiguo 9
 			alaSuperiorIzq->quad(19,18,17,16);
 
 			//Lateral izquierdo
-			alaSuperiorIzq->position(-20, 0, -6.5); alaSuperiorIzq->normal(1.0,0.0,0.0); //Antiguo 3
-			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(1.0,0.0,0.0); //Antiguo 11
-			alaSuperiorIzq->position(-20, -0.5, -17.5); alaSuperiorIzq->normal(1.0,0.0,0.0); //Antiguo 10
-			alaSuperiorIzq->position(-20, 0, -17.5); alaSuperiorIzq->normal(1.0,0.0,0.0);//Antiguo 2
+			alaSuperiorIzq->position(-20, 0, -6.5); alaSuperiorIzq->normal(1.0,0.0,0.0); alaSuperiorIzq->textureCoord(1,1);//Antiguo 3
+			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(1.0,0.0,0.0); alaSuperiorIzq->textureCoord(1,0);//Antiguo 11
+			alaSuperiorIzq->position(-20, -0.5, -17.5); alaSuperiorIzq->normal(1.0,0.0,0.0); alaSuperiorIzq->textureCoord(0,0);//Antiguo 10
+			alaSuperiorIzq->position(-20, 0, -17.5); alaSuperiorIzq->normal(1.0,0.0,0.0);alaSuperiorIzq->textureCoord(0,1);//Antiguo 2
 			alaSuperiorIzq->quad(23,22,21,20);
 
 			//Lateral trasero
-			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 0
-			alaSuperiorIzq->position(-20, 0, -6.5);alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 3
-			alaSuperiorIzq->position(-8, 0, -2.5);alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 4
-			alaSuperiorIzq->position(-7.5, 0, -4);alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 5
-			alaSuperiorIzq->position(-5, 0, -4);alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 6
-			alaSuperiorIzq->position(-4.5, 0, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 7
-			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 8
-			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 11
-			alaSuperiorIzq->position(-8, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 12
-			alaSuperiorIzq->position(-7.5, -0.5, -4); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 13
-			alaSuperiorIzq->position(-5, -0.5, -4); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 14
-			alaSuperiorIzq->position(-4.5, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); //Antiguo 15
+			alaSuperiorIzq->position(-4, 0, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0,0);//Antiguo 0
+			alaSuperiorIzq->position(-20, 0, -6.5);alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(1,0);//Antiguo 3
+			alaSuperiorIzq->position(-8, 0, -2.5);alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0.4,0);//Antiguo 4
+			alaSuperiorIzq->position(-7.5, 0, -4);alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0.3,0);//Antiguo 5
+			alaSuperiorIzq->position(-5, 0, -4);alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0.2,0);//Antiguo 6
+			alaSuperiorIzq->position(-4.5, 0, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0.1,0);//Antiguo 7
+			alaSuperiorIzq->position(-4, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0,1);//Antiguo 8
+			alaSuperiorIzq->position(-20, -0.5, -6.5); alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(1,1);//Antiguo 11
+			alaSuperiorIzq->position(-8, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0.4,1);//Antiguo 12
+			alaSuperiorIzq->position(-7.5, -0.5, -4); alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0.3,1);//Antiguo 13
+			alaSuperiorIzq->position(-5, -0.5, -4); alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0.2,1);//Antiguo 14
+			alaSuperiorIzq->position(-4.5, -0.5, -2.5); alaSuperiorIzq->normal(0.0,0.0,1.0); alaSuperiorIzq->textureCoord(0.1,1);//Antiguo 15
 			alaSuperiorIzq->quad(29,35,30,24);
 			alaSuperiorIzq->quad(28,34,35,29);
 			alaSuperiorIzq->quad(27,33,34,28);
@@ -690,14 +731,14 @@ public:
 		//Ala derecha
 		alaInferiorDer->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0);
-			alaInferiorDer->position(4, -0.5, -17.5); alaInferiorDer->normal(0.0,1.0,0.0); 
-			alaInferiorDer->position(20, -0.5, -17.5); alaInferiorDer->normal(0.0,1.0,0.0); 
-			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(0.0,1.0,0.0); 
-			alaInferiorDer->position(8, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0); 
-			alaInferiorDer->position(7.5, -0.5, -4); alaInferiorDer->normal(0.0,1.0,0.0); 
-			alaInferiorDer->position(5, -0.5, -4); alaInferiorDer->normal(0.0,1.0,0.0); 
-			alaInferiorDer->position(4.5, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0); 
+			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0); alaInferiorDer->textureCoord(0,1);
+			alaInferiorDer->position(4, -0.5, -17.5); alaInferiorDer->normal(0.0,1.0,0.0); alaInferiorDer->textureCoord(0,0); 
+			alaInferiorDer->position(20, -0.5, -17.5); alaInferiorDer->normal(0.0,1.0,0.0); alaInferiorDer->textureCoord(1,0);
+			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(0.0,1.0,0.0); alaInferiorDer->textureCoord(1,0.6);
+			alaInferiorDer->position(8, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0); alaInferiorDer->textureCoord(0.4,1);
+			alaInferiorDer->position(7.5, -0.5, -4); alaInferiorDer->normal(0.0,1.0,0.0); alaInferiorDer->textureCoord(0.3,1);
+			alaInferiorDer->position(5, -0.5, -4); alaInferiorDer->normal(0.0,1.0,0.0); alaInferiorDer->textureCoord(0.2,1);
+			alaInferiorDer->position(4.5, -0.5, -2.5); alaInferiorDer->normal(0.0,1.0,0.0); alaInferiorDer->textureCoord(0.1,1);
 
 			alaInferiorDer->triangle(0,7,1);
 			alaInferiorDer->triangle(6,2,1);
@@ -706,14 +747,14 @@ public:
 			alaInferiorDer->triangle(1,7,6);
 			
 			//Parte de abajo
-			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
-			alaInferiorDer->position(4, -1, -17.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
-			alaInferiorDer->position(20, -1, -17.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
-			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
-			alaInferiorDer->position(8, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
-			alaInferiorDer->position(7.5, -1, -4); alaInferiorDer->normal(0.0,-1.0,0.0); 
-			alaInferiorDer->position(5, -1, -4); alaInferiorDer->normal(0.0,-1.0,0.0); 
-			alaInferiorDer->position(4.5, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); 
+			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); alaInferiorDer->textureCoord(0,1);
+			alaInferiorDer->position(4, -1, -17.5); alaInferiorDer->normal(0.0,-1.0,0.0); alaInferiorDer->textureCoord(0,0); 
+			alaInferiorDer->position(20, -1, -17.5); alaInferiorDer->normal(0.0,-1.0,0.0); alaInferiorDer->textureCoord(1,0);
+			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(0.0,-1.0,0.0); alaInferiorDer->textureCoord(1,0.6);
+			alaInferiorDer->position(8, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); alaInferiorDer->textureCoord(0.4,1);
+			alaInferiorDer->position(7.5, -1, -4); alaInferiorDer->normal(0.0,-1.0,0.0); alaInferiorDer->textureCoord(0.3,1);
+			alaInferiorDer->position(5, -1, -4); alaInferiorDer->normal(0.0,-1.0,0.0); alaInferiorDer->textureCoord(0.2,1);
+			alaInferiorDer->position(4.5, -1, -2.5); alaInferiorDer->normal(0.0,-1.0,0.0); alaInferiorDer->textureCoord(0.1,1);
 
 			alaInferiorDer->triangle(9,15,8);
 			alaInferiorDer->triangle(9,10,14);
@@ -723,32 +764,32 @@ public:
 
 
 			//Lateral izquierdo
-			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(-1.0,0.0,0.0); //Antiguo 8
-			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(-1.0,0.0,0.0); //Antiguo 0
-			alaInferiorDer->position(4, -0.5, -17.5); alaInferiorDer->normal(-1.0,0.0,0.0); //Antiguo 1
-			alaInferiorDer->position(4, -1, -17.5); alaInferiorDer->normal(-1.0,0.0,0.0); //Antiguo 9
+			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(-1.0,0.0,0.0); alaInferiorDer->textureCoord(1,1);//Antiguo 8
+			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(-1.0,0.0,0.0);alaInferiorDer->textureCoord(1,0); //Antiguo 0
+			alaInferiorDer->position(4, -0.5, -17.5); alaInferiorDer->normal(-1.0,0.0,0.0); alaInferiorDer->textureCoord(0,0); //Antiguo 1
+			alaInferiorDer->position(4, -1, -17.5); alaInferiorDer->normal(-1.0,0.0,0.0); alaInferiorDer->textureCoord(0,1);//Antiguo 9
 			alaInferiorDer->quad(16,17,18,19);
 
 			//Lateral derecho
-			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(1.0,0.0,0.0);  //Antiguo 3
-			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(1.0,0.0,0.0); //Antiguo 11
-			alaInferiorDer->position(20, -1, -17.5); alaInferiorDer->normal(1.0,0.0,0.0); //Antiguo 10
-			alaInferiorDer->position(20, -0.5, -17.5); alaInferiorDer->normal(1.0,0.0,0.0); //Antiguo 2 
+			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(1.0,0.0,0.0); alaInferiorDer->textureCoord(1,1); //Antiguo 3
+			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(1.0,0.0,0.0); alaInferiorDer->textureCoord(1,0);//Antiguo 11
+			alaInferiorDer->position(20, -1, -17.5); alaInferiorDer->normal(1.0,0.0,0.0); alaInferiorDer->textureCoord(0,0);//Antiguo 10
+			alaInferiorDer->position(20, -0.5, -17.5); alaInferiorDer->normal(1.0,0.0,0.0); alaInferiorDer->textureCoord(0,1);//Antiguo 2 
 			alaInferiorDer->quad(20,21,22,23);
 
 			//Lateral trasero
-			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 0
-			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 3
-			alaInferiorDer->position(8, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 4
-			alaInferiorDer->position(7.5, -0.5, -4); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 5
-			alaInferiorDer->position(5, -0.5, -4); alaInferiorDer->normal(0.0,0.0,1.0);  //Antiguo 6
-			alaInferiorDer->position(4.5, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 7
-			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 8
-			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 11
-			alaInferiorDer->position(8, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0);  //Antiguo 12
-			alaInferiorDer->position(7.5, -1, -4); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 13
-			alaInferiorDer->position(5, -1, -4); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 14
-			alaInferiorDer->position(4.5, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); //Antiguo 15
+			alaInferiorDer->position(4, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0,0); //Antiguo 0
+			alaInferiorDer->position(20, -0.5, -6.5); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(1,0); //Antiguo 3
+			alaInferiorDer->position(8, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0.4,0); //Antiguo 4
+			alaInferiorDer->position(7.5, -0.5, -4); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0.3,0);//Antiguo 5
+			alaInferiorDer->position(5, -0.5, -4); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0.2,0); //Antiguo 6
+			alaInferiorDer->position(4.5, -0.5, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0.1,0);//Antiguo 7
+			alaInferiorDer->position(4, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0,1);//Antiguo 8
+			alaInferiorDer->position(20, -1, -6.5); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(1,1);//Antiguo 11
+			alaInferiorDer->position(8, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0);  alaInferiorDer->textureCoord(0.4,1);//Antiguo 12
+			alaInferiorDer->position(7.5, -1, -4); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0.3,1);//Antiguo 13
+			alaInferiorDer->position(5, -1, -4); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0.2,1);//Antiguo 14
+			alaInferiorDer->position(4.5, -1, -2.5); alaInferiorDer->normal(0.0,0.0,1.0); alaInferiorDer->textureCoord(0.1,1);//Antiguo 15
 			alaInferiorDer->quad(24,30,35,29);
 			alaInferiorDer->quad(29,35,34,28);
 			alaInferiorDer->quad(28,34,33,27);
@@ -762,14 +803,14 @@ public:
 		//Ala izquierda
 		alaInferiorIzq->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
-			alaInferiorIzq->position(-4, -0.5, -17.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
-			alaInferiorIzq->position(-20, -0.5, -17.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
-			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
-			alaInferiorIzq->position(-8, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
-			alaInferiorIzq->position(-7.5, -0.5, -4); alaInferiorIzq->normal(0.0,1.0,0.0); 
-			alaInferiorIzq->position(-5, -0.5, -4); alaInferiorIzq->normal(0.0,1.0,0.0); 
-			alaInferiorIzq->position(-4.5, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); 
+			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); alaInferiorIzq->textureCoord(1,1); 
+			alaInferiorIzq->position(-4, -0.5, -17.5); alaInferiorIzq->normal(0.0,1.0,0.0); alaInferiorIzq->textureCoord(1,0); 
+			alaInferiorIzq->position(-20, -0.5, -17.5); alaInferiorIzq->normal(0.0,1.0,0.0); alaInferiorIzq->textureCoord(0,0);
+			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(0.0,1.0,0.0); alaInferiorIzq->textureCoord(0,0.6);
+			alaInferiorIzq->position(-8, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); alaInferiorIzq->textureCoord(0.6,1);
+			alaInferiorIzq->position(-7.5, -0.5, -4); alaInferiorIzq->normal(0.0,1.0,0.0); alaInferiorIzq->textureCoord(0.7,1);
+			alaInferiorIzq->position(-5, -0.5, -4); alaInferiorIzq->normal(0.0,1.0,0.0); alaInferiorIzq->textureCoord(0.8,1);
+			alaInferiorIzq->position(-4.5, -0.5, -2.5); alaInferiorIzq->normal(0.0,1.0,0.0); alaInferiorIzq->textureCoord(0.9,1);
 
 			alaInferiorIzq->triangle(1,7,0);
 			alaInferiorIzq->triangle(1,2,6);
@@ -778,14 +819,14 @@ public:
 			alaInferiorIzq->triangle(6,7,1);
 
 			//Parte de abajo
-			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
-			alaInferiorIzq->position(-4, -1, -17.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
-			alaInferiorIzq->position(-20, -1, -17.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
-			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
-			alaInferiorIzq->position(-8, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
-			alaInferiorIzq->position(-7.5, -1, -4); alaInferiorIzq->normal(0.0,-1.0,0.0); 
-			alaInferiorIzq->position(-5, -1, -4); alaInferiorIzq->normal(0.0,-1.0,0.0); 
-			alaInferiorIzq->position(-4.5, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); 
+			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); alaInferiorIzq->textureCoord(1,1);
+			alaInferiorIzq->position(-4, -1, -17.5); alaInferiorIzq->normal(0.0,-1.0,0.0); alaInferiorIzq->textureCoord(1,0);
+			alaInferiorIzq->position(-20, -1, -17.5); alaInferiorIzq->normal(0.0,-1.0,0.0); alaInferiorIzq->textureCoord(0,0);
+			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(0.0,-1.0,0.0); alaInferiorIzq->textureCoord(0,0.6);
+			alaInferiorIzq->position(-8, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); alaInferiorIzq->textureCoord(0.6,1);
+			alaInferiorIzq->position(-7.5, -1, -4); alaInferiorIzq->normal(0.0,-1.0,0.0); alaInferiorIzq->textureCoord(0.7,1);
+			alaInferiorIzq->position(-5, -1, -4); alaInferiorIzq->normal(0.0,-1.0,0.0); alaInferiorIzq->textureCoord(0.8,1);
+			alaInferiorIzq->position(-4.5, -1, -2.5); alaInferiorIzq->normal(0.0,-1.0,0.0); alaInferiorIzq->textureCoord(0.9,1);
 
 			alaInferiorIzq->triangle(15,9,8);
 			alaInferiorIzq->triangle(14,10,9);
@@ -794,32 +835,32 @@ public:
 			alaInferiorIzq->triangle(9,15,14);
 
 			//Lateral derecho
-			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(-1.0,0.0,0.0); //Antiguo 8
-			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(-1.0,0.0,0.0); //Antiguo 0
-			alaInferiorIzq->position(-4, -0.5, -17.5); alaInferiorIzq->normal(-1.0,0.0,0.0); //Antiguo 1
-			alaInferiorIzq->position(-4, -1, -17.5); alaInferiorIzq->normal(-1.0,0.0,0.0); //Antiguo 9
+			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(-1.0,0.0,0.0); alaInferiorIzq->textureCoord(0,1); //Antiguo 8
+			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(-1.0,0.0,0.0); alaInferiorIzq->textureCoord(0,0);//Antiguo 0
+			alaInferiorIzq->position(-4, -0.5, -17.5); alaInferiorIzq->normal(-1.0,0.0,0.0); alaInferiorIzq->textureCoord(1,0);//Antiguo 1
+			alaInferiorIzq->position(-4, -1, -17.5); alaInferiorIzq->normal(-1.0,0.0,0.0); alaInferiorIzq->textureCoord(1,1);//Antiguo 9
 			alaInferiorIzq->quad(16,17,18,19);
 
 			//Lateral izquierdo
-			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(1.0,0.0,0.0);  //Antiguo 3
-			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(1.0,0.0,0.0); //Antiguo 11
-			alaInferiorIzq->position(-20, -1, -17.5); alaInferiorIzq->normal(1.0,0.0,0.0); //Antiguo 10
-			alaInferiorIzq->position(-20, -0.5, -17.5); alaInferiorIzq->normal(1.0,0.0,0.0); //Antiguo 2 
+			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(1.0,0.0,0.0); alaInferiorIzq->textureCoord(1,1); //Antiguo 3
+			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(1.0,0.0,0.0); alaInferiorIzq->textureCoord(1,0);//Antiguo 11
+			alaInferiorIzq->position(-20, -1, -17.5); alaInferiorIzq->normal(1.0,0.0,0.0); alaInferiorIzq->textureCoord(0,0);//Antiguo 10
+			alaInferiorIzq->position(-20, -0.5, -17.5); alaInferiorIzq->normal(1.0,0.0,0.0); alaInferiorIzq->textureCoord(0,1);//Antiguo 2 
 			alaInferiorIzq->quad(23,22,21,20);
 
 			//Lateral trasero
-			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 0
-			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 3
-			alaInferiorIzq->position(-8, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 4
-			alaInferiorIzq->position(-7.5, -0.5, -4); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 5
-			alaInferiorIzq->position(-5, -0.5, -4); alaInferiorIzq->normal(0.0,0.0,1.0);  //Antiguo 6
-			alaInferiorIzq->position(-4.5, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 7
-			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 8
-			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 11
-			alaInferiorIzq->position(-8, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0);  //Antiguo 12
-			alaInferiorIzq->position(-7.5, -1, -4); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 13
-			alaInferiorIzq->position(-5, -1, -4); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 14
-			alaInferiorIzq->position(-4.5, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); //Antiguo 15
+			alaInferiorIzq->position(-4, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0,0); //Antiguo 0
+			alaInferiorIzq->position(-20, -0.5, -6.5); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(1,0); //Antiguo 3
+			alaInferiorIzq->position(-8, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0.4,0);//Antiguo 4
+			alaInferiorIzq->position(-7.5, -0.5, -4); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0.3,0); //Antiguo 5
+			alaInferiorIzq->position(-5, -0.5, -4); alaInferiorIzq->normal(0.0,0.0,1.0);  alaInferiorIzq->textureCoord(0.2,0);//Antiguo 6
+			alaInferiorIzq->position(-4.5, -0.5, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0.1,0);//Antiguo 7
+			alaInferiorIzq->position(-4, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0,1);//Antiguo 8
+			alaInferiorIzq->position(-20, -1, -6.5); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(1,1);//Antiguo 11
+			alaInferiorIzq->position(-8, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0.4,1); //Antiguo 12
+			alaInferiorIzq->position(-7.5, -1, -4); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0.3,1);//Antiguo 13
+			alaInferiorIzq->position(-5, -1, -4); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0.2,1);//Antiguo 14
+			alaInferiorIzq->position(-4.5, -1, -2.5); alaInferiorIzq->normal(0.0,0.0,1.0); alaInferiorIzq->textureCoord(0.1,1);//Antiguo 15
 			alaInferiorIzq->quad(29,35,30,24);
 			alaInferiorIzq->quad(28,34,35,29);
 			alaInferiorIzq->quad(27,33,34,28);
@@ -845,28 +886,28 @@ public:
 		*/
 		centroNave->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba del centro de la nave
-			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,1.0,0.0);
-			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,1.0,0.0);
-			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,1.0,0.0);
-			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,1.0,0.0);
+			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,1.0,0.0); centroNave->textureCoord(0,1);
+			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,1.0,0.0); centroNave->textureCoord(0,0);
+			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,1.0,0.0); centroNave->textureCoord(1,0);
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,1.0,0.0); centroNave->textureCoord(1,1);
 			
 			centroNave->quad(0,3,2,1);
 
 			//Parte de abajo del centro de la nave
-			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0);
-			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0);
-			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0);
-			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0);
+			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0); centroNave->textureCoord(0,1);
+			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0); centroNave->textureCoord(0,0);
+			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,-1.0,0.0); centroNave->textureCoord(1,0);
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,-1.0,0.0); centroNave->textureCoord(1,1);
 			
 			centroNave->quad(5,6,7,4);
 
 			//Parte trasera del centro de la nave
-			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0);
-			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0);
-			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0);
-			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0);
-			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0);
-			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0);
+			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0.1,1);
+			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0,0.5);
+			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0.1,0);
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0.9,0);
+			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0.5);
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(0.9,1);
 			
 			centroNave->triangle(10,9,8);
 			centroNave->quad(8,13,11,10);
@@ -885,22 +926,22 @@ public:
 			centroNave->triangle(19,18,17);
 
 			//Lateral izquierdo del centro de la nave
-			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 8
-			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 9
-			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 10
-			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 14
-			centroNave->position(-4, 0, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 15
-			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 16
+			centroNave->position(-3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0); //Antiguo 8
+			centroNave->position(-4, 0, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,1); //Antiguo 9
+			centroNave->position(-3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0); //Antiguo 10
+			centroNave->position(-3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,0); //Antiguo 14
+			centroNave->position(-4, 0, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,1); //Antiguo 15
+			centroNave->position(-3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,0); //Antiguo 16
 			centroNave->quad(20,21,24,23);
 			centroNave->quad(21,22,25,24);
 
 			//Lateral derecho del centro de la nave
-			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 11
-			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0); //Antiguo 12
-			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); // Antiguo 13
-			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 17
-			centroNave->position(4, 0, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 18
-			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0); //Antiguo 19
+			centroNave->position(3, 2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0); //Antiguo 11
+			centroNave->position(4, 0, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,1); //Antiguo 12
+			centroNave->position(3, -2.5, 0); centroNave->normal(0.0,0.0,1.0); centroNave->textureCoord(1,0); // Antiguo 13
+			centroNave->position(3, 2.5, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,0); //Antiguo 17
+			centroNave->position(4, 0, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,1); //Antiguo 18
+			centroNave->position(3, -2.5, -13); centroNave->normal(0.0,0.0,-1.0); centroNave->textureCoord(0,0); //Antiguo 19
 			centroNave->quad(31,30,27,28);
 			centroNave->quad(26,27,30,29);
 
@@ -916,34 +957,34 @@ public:
 		*/
 		centroNave->begin("matNaveSW3", RenderOperation::OT_TRIANGLE_LIST);
 			//Parte de arriba
-			centroNave->position(-3, 2.5, -13);
-			centroNave->position(-2, 1.5, -33);
-			centroNave->position(2, 1.5, -33);
-			centroNave->position(3, 2.5, -13);
+			centroNave->position(-3, 2.5, -13); centroNave->textureCoord(0,1);
+			centroNave->position(-2, 1.5, -33); centroNave->textureCoord(0,0);
+			centroNave->position(2, 1.5, -33); centroNave->textureCoord(1,0);
+			centroNave->position(3, 2.5, -13); centroNave->textureCoord(1,1);
 			
 			centroNave->quad(3,2,1,0);
 
 			//Parte de abajo
-			centroNave->position(-3, -2.5, -13);
-			centroNave->position(-2, -1.5, -33);
-			centroNave->position(2, -1.5, -33);
-			centroNave->position(3, -2.5, -13);
+			centroNave->position(-3, -2.5, -13); centroNave->textureCoord(0,1);
+			centroNave->position(-2, -1.5, -33); centroNave->textureCoord(0,0);
+			centroNave->position(2, -1.5, -33); centroNave->textureCoord(1,0);
+			centroNave->position(3, -2.5, -13); centroNave->textureCoord(1,1);
 
 			centroNave->quad(4,5,6,7);
 
 			//Punta superior de la nave
-			centroNave->position(-2, 1.5, -33);
-			centroNave->position(-0.5, 0.5, -35);
-			centroNave->position(0.5, 0.5, -35);
-			centroNave->position(2, 1.5, -33);
+			centroNave->position(-2, 1.5, -33); centroNave->textureCoord(0,1);
+			centroNave->position(-0.5, 0.5, -35); centroNave->textureCoord(0,0);
+			centroNave->position(0.5, 0.5, -35); centroNave->textureCoord(1,0);
+			centroNave->position(2, 1.5, -33); centroNave->textureCoord(1,1);
 
 			centroNave->quad(11,10,9,+8);
 
 			//Punta inferior de la nave
-			centroNave->position(-2, -1.5, -33);
-			centroNave->position(-0.5, -0.5, -35);
-			centroNave->position(0.5, -0.5, -35);
-			centroNave->position(2, -1.5, -33);
+			centroNave->position(-2, -1.5, -33); centroNave->textureCoord(0,1);
+			centroNave->position(-0.5, -0.5, -35); centroNave->textureCoord(0,0);
+			centroNave->position(0.5, -0.5, -35); centroNave->textureCoord(1,0);
+			centroNave->position(2, -1.5, -33); centroNave->textureCoord(1,1);
 
 			centroNave->quad(12,13,14,15);
 
@@ -954,15 +995,15 @@ public:
 			centroNave->quad(15,14,10,11);
 
 			//Lateral izquierdo de la nave
-			centroNave->position(-4, 0, -13); //Medio izquierdo atrás
-			centroNave->position(-2, 0, -33); //Medio de la punta
+			centroNave->position(-4, 0, -13); centroNave->textureCoord(0,0.5);//Medio izquierdo atrás
+			centroNave->position(-2, 0, -33); centroNave->textureCoord(1,0.5); //Medio de la punta
 
 			centroNave->quad(4,16,17,12);
 			centroNave->quad(0,8,17,16);
 
 			//Lateral derecho de la nave
-			centroNave->position(4, 0, -13); //Medio derecho atrás
-			centroNave->position(2, 0, -33); //Medio de la punta
+			centroNave->position(4, 0, -13); centroNave->textureCoord(0,0.5); //Medio derecho atrás
+			centroNave->position(2, 0, -33); centroNave->textureCoord(1,0.5); //Medio de la punta
 
 			centroNave->quad(7,15,19,18);
 			centroNave->quad(3,18,19,11);

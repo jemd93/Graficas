@@ -49,12 +49,13 @@ material matNaveSW3
 	{
 		pass
 		{
+			lighting on
 			ambient 0 0 0 1
 			diffuse 0 0 0 1
 			
 			texture_unit
 			{
-				texture metal_gray1.jpg
+				texture metal_metal2.jpg
 				colour_op_ex add src_texture src_current
 				colour_op_multipass_fallback one one
 			}
