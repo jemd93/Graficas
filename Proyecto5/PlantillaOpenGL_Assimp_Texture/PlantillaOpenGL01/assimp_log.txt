@@ -1,0 +1,10 @@
+Info,  T7256: Load plane.obj
+Info,  T7256: Found a matching importer for this file format
+Info,  T7256: Import root directory is '.\'
+Info,  T7256: Entering post processing pipeline
+Info,  T7256: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T7256: Points: 0, Lines: 0, Triangles: 1, Polygons: 0 (Meshes, X = removed)
+Info,  T7256: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T7256: JoinVerticesProcess finished | Verts in: 6400 out: 1681 | ~73.7%
+Info,  T7256: Cache relevant are 1 meshes (3200 faces). Average output ACMR is 0.729688
+Info,  T7256: Leaving post processing pipeline
