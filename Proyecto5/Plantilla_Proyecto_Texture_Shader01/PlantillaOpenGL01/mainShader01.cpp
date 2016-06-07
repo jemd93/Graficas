@@ -33,8 +33,22 @@ cwc::glShader *shader;
 static GLuint texflat;
 unsigned char* imageflat = NULL;
 
+// Centro
+static GLuint texcent;
+unsigned char* imagecent = NULL;
+
+// Derecha
+static GLuint texder;
+unsigned char* imageder = NULL;
+
+// Izquierda
+static GLuint texizq;
+unsigned char* imageizq = NULL;
+
 int iheight, iwidth;
 
+float mixLuces;
+float mixI;
 
 void ejesCoordenada() {
 	
@@ -114,10 +128,49 @@ void init(){
    imageflat = glmReadPPM("baked_flat.ppm", &iwidth, &iheight);
    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageflat);
 
+   // Luz central del conejo
+   glGenTextures(1, &texcent);
+   glBindTexture(GL_TEXTURE_2D, texcent);
+
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+   imagecent = glmReadPPM("baked_keyrabbit.ppm", &iwidth, &iheight);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imagecent);
+
+   // Luz derecha.
+   glGenTextures(1, &texder);
+   glBindTexture(GL_TEXTURE_2D, texder);
+
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+   imageder = glmReadPPM("baked_fill01.ppm", &iwidth, &iheight);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageder);
+
+   // Luz izquierda.
+   glGenTextures(1, &texizq);
+   glBindTexture(GL_TEXTURE_2D, texizq);
+
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+   imageizq = glmReadPPM("baked_fill02.ppm", &iwidth, &iheight);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageizq);
+
 
    shader = SM.loadfromFile("texture.vert","texture.frag"); // load (and compile, link) from file
   		  if (shader==0) 
 			  std::cout << "Error Loading, compiling or linking shader\n";
+	 
+	 mixI = 0.9;
+	 mixLuces = 0.5;
 }
 
 
@@ -210,8 +263,12 @@ void render(){
 
 	if (shader) shader->begin();
 
-	
+	shader->setUniform1f("_mixI",mixI);
 	shader->setTexture("stexflat", texflat,0);
+	shader->setTexture("stexcent", texcent,1);
+	shader->setTexture("stexder", texflat,2);
+	shader->setTexture("stexizq", texcent,3);
+
 
 
 
