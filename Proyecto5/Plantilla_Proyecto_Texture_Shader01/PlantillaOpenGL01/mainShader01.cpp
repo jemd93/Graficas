@@ -263,7 +263,7 @@ void render(){
 
 	if (shader) shader->begin();
 
-	shader->setUniform1f("_mixI",mixI);
+	//shader->setUniform1f("_mixI",mixI);
 	shader->setTexture("stexflat", texflat,0);
 	shader->setTexture("stexcent", texcent,1);
 	shader->setTexture("stexder", texflat,2);
