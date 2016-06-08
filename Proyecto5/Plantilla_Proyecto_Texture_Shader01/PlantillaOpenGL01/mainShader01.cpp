@@ -47,8 +47,17 @@ unsigned char* imageizq = NULL;
 
 int iheight, iwidth;
 
-float mixLuces;
-float mixI;
+// Intensidad de las luces.
+float intensidadAmb;
+float intensidadCent;
+float intensidadDer;
+float intensidadIzq;
+
+// Color de las luces.
+GLfloat colorAmb[4];
+GLfloat colorCent[4];
+GLfloat colorDer[4];
+GLfloat colorIzq[4];
 
 void ejesCoordenada() {
 	
@@ -141,18 +150,6 @@ void init(){
    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imagecent);
 
    // Luz derecha.
-   glGenTextures(1, &texder);
-   glBindTexture(GL_TEXTURE_2D, texder);
-
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-   imageder = glmReadPPM("baked_fill01.ppm", &iwidth, &iheight);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageder);
-
-   // Luz izquierda.
    glGenTextures(1, &texizq);
    glBindTexture(GL_TEXTURE_2D, texizq);
 
@@ -161,24 +158,151 @@ void init(){
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-   imageizq = glmReadPPM("baked_fill02.ppm", &iwidth, &iheight);
+   imageizq = glmReadPPM("baked_fill01.ppm", &iwidth, &iheight);
    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageizq);
+
+   // Luz izquierda.
+   glGenTextures(1, &texder);
+   glBindTexture(GL_TEXTURE_2D, texder);
+
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+   imageder = glmReadPPM("baked_fill02.ppm", &iwidth, &iheight);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageder);
 
 
    shader = SM.loadfromFile("texture.vert","texture.frag"); // load (and compile, link) from file
   		  if (shader==0) 
 			  std::cout << "Error Loading, compiling or linking shader\n";
 	 
-	 mixI = 0.9;
-	 mixLuces = 0.5;
+	 intensidadAmb = 1.0;
+	 intensidadCent = 1.0;
+	 intensidadDer = 0.0;
+	 intensidadIzq = 0.0;
+
+	 for (int i = 0;i < 4;i++) {
+		 colorAmb[i] = 1.0;
+		 colorCent[i] = 1.0;
+		 colorDer[i] = 1.0;
+		 colorIzq[i] = 1.0;
+	 }
 }
 
 
 
 void Keyboard(unsigned char key, int x, int y)
 {
-
-
+  // Intensidad de luces
+  if (key == '1') {
+	  if (intensidadAmb + 0.05 < 1.0) 
+		intensidadAmb += 0.05;
+  }
+  if (key == '2') {
+	  if (intensidadAmb - 0.05 > 0.0) 
+		intensidadAmb -= 0.05;
+  }
+  if (key == 'z' || key == 'Z') {
+	  if (intensidadCent + 0.05 < 1.0) 
+		intensidadCent += 0.05;
+  }
+  if (key == 'x' || key == 'X') {
+	  if (intensidadCent - 0.05 > 0.0) 
+		intensidadCent -= 0.05;
+  }
+  if (key == 'q' || key == 'Q') {
+	  if (intensidadDer + 0.05 < 1.0) 
+		intensidadDer += 0.05;
+  }
+  if (key == 'w' || key == 'W') {
+	  if (intensidadDer - 0.05 > 0.0) 
+		intensidadDer -= 0.05;
+  }
+  if (key == 'a' || key == 'A') {
+	  if (intensidadIzq + 0.05 < 1.0) 
+		intensidadIzq += 0.05;
+  }
+  if (key == 's' || key == 'S') {
+	  if (intensidadIzq - 0.05 > 0.0) 
+		intensidadIzq -= 0.05;
+  }
+  // Color de la Luz Central
+  if (key == 'c' || key == 'C') {
+	  if (colorCent[0] + 0.05 < 1.0) 
+		colorCent[0] += 0.05;
+  }
+  if (key == 'v' || key == 'V') {
+	  if (colorCent[1] + 0.05 < 1.0) 
+		colorCent[1] += 0.05;
+  }
+  if (key == 'b' || key == 'B') {
+	  if (colorCent[2] + 0.05 < 1.0) 
+		colorCent[2] += 0.05;
+  }
+  if (key == 'n' || key == 'N') {
+	  if (colorCent[0] - 0.05 > 0.0) 
+		colorCent[0] -= 0.05;
+  }
+  if (key == 'm' || key == 'M') {
+	  if (colorCent[1] - 0.05 > 0.0) 
+		colorCent[1] -= 0.05;
+  }
+  if (key == ',') {
+	  if (colorCent[2] - 0.05 > 0.0) 
+		colorCent[2] -= 0.05;
+  }
+  // Color de la Luz Derecha
+  if (key == 'e' || key == 'E') {
+	  if (colorDer[0] + 0.05 < 1.0) 
+		colorDer[0] += 0.05;
+  }
+  if (key == 'r' || key == 'R') {
+	  if (colorDer[1] + 0.05 < 1.0) 
+		colorDer[1] += 0.05;
+  }
+  if (key == 't' || key == 'T') {
+	  if (colorDer[2] + 0.05 < 1.0) 
+		colorDer[2] += 0.05;
+  }
+  if (key == 'y' || key == 'Y') {
+	  if (colorDer[0] - 0.05 > 0.0) 
+		colorDer[0] -= 0.05;
+  }
+  if (key == 'u' || key == 'U') {
+	  if (colorDer[1] - 0.05 > 0.0) 
+		colorDer[1] -= 0.05;
+  }
+  if (key == 'i' || key == 'I') {
+	  if (colorDer[2] - 0.05 > 0.0) 
+		colorDer[2] -= 0.05;
+  }	
+  // Color de la Luz Izquierda
+  if (key == 'd' || key == 'D') {
+	  if (colorIzq[0] + 0.05 < 1.0) 
+		colorIzq[0] += 0.05;
+  }
+  if (key == 'f' || key == 'F') {
+	  if (colorIzq[1] + 0.05 < 1.0) 
+		colorIzq[1] += 0.05;
+  }
+  if (key == 'g' || key == 'G') {
+	  if (colorIzq[2] + 0.05 < 1.0) 
+		colorIzq[2] += 0.05;
+  }
+  if (key == 'h' || key == 'H') {
+	  if (colorIzq[0] - 0.05 > 0.0) 
+		colorIzq[0] -= 0.05;
+  }
+  if (key == 'j' || key == 'J') {
+	  if (colorIzq[1] - 0.05 > 0.0) 
+		colorIzq[1] -= 0.05;
+  }
+  if (key == 'k' || key == 'K') {
+	  if (colorIzq[2] - 0.05 > 0.0) 
+		colorIzq[2] -= 0.05;
+  }	
   switch (key)
   {
 	default:
@@ -263,11 +387,20 @@ void render(){
 
 	if (shader) shader->begin();
 
-	//shader->setUniform1f("_mixI",mixI);
+	shader->setUniform1f("_intensidadAmb",intensidadAmb);
+	shader->setUniform1f("_intensidadCent",intensidadCent);
+	shader->setUniform1f("_intensidadDer",intensidadDer);
+	shader->setUniform1f("_intensidadIzq",intensidadIzq);
+
+	shader->setUniform4f("_colorAmb",colorAmb[0],colorAmb[1],colorAmb[2],colorAmb[3]);
+	shader->setUniform4f("_colorCent",colorCent[0],colorCent[1],colorCent[2],colorCent[3]);
+	shader->setUniform4f("_colorDer",colorDer[0],colorDer[1],colorDer[2],colorDer[3]);
+	shader->setUniform4f("_colorIzq",colorIzq[0],colorIzq[1],colorIzq[2],colorIzq[3]);
+
 	shader->setTexture("stexflat", texflat,0);
 	shader->setTexture("stexcent", texcent,1);
-	shader->setTexture("stexder", texflat,2);
-	shader->setTexture("stexizq", texcent,3);
+	shader->setTexture("stexder", texder,2);
+	shader->setTexture("stexizq", texizq,3);
 
 
 

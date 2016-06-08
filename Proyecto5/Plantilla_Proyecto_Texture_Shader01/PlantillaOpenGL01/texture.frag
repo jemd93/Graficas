@@ -3,12 +3,23 @@
 #define texel_size_x 1.0 / textureWidth
 #define texel_size_y 1.0 / textureHeight
 
+// Texturas
 uniform sampler2D stexflat;
 uniform sampler2D stexcent;
 uniform sampler2D stexder;
 uniform sampler2D stexizq;
-//uniform float _mixI;
-//uniform float _mixLuces;
+
+// Intensidad de las luces
+uniform float _intensidadAmb;
+uniform float _intensidadCent;
+uniform float _intensidadDer;
+uniform float _intensidadIzq;
+
+// Color de las luces
+uniform vec4 _colorAmb;
+uniform vec4 _colorCent;
+uniform vec4 _colorDer;
+uniform vec4 _colorIzq;
 
 vec4 texture2D_bilinear( sampler2D tex, vec2 uv )
 {
@@ -31,17 +42,14 @@ vec4 texture2D_bilinear( sampler2D tex, vec2 uv )
 void main(void) {
 
 	vec4 cFinal;
-	vec4 cFinal01;
-	vec4 cFinal02;
-	vec4 cFinal03;
+	vec4 Amb;
+	vec4 Cent;
+	vec4 Der;
+	vec4 Izq;
 	vec4 cT01;
 	vec4 cT02;
 	vec4 cT03;
 	vec4 cT04;
-
-	vec4 t1;
-	vec4 t2;
-	vec4 t3;
 
 	cT01 = texture2D(stexflat,gl_TexCoord[0].st);
 	cT02 = texture2D(stexcent,gl_TexCoord[0].st);
@@ -49,12 +57,16 @@ void main(void) {
 	cT03 = texture2D(stexder,gl_TexCoord[0].st);
 	cT04 = texture2D(stexizq,gl_TexCoord[0].st);
 
-	// Blendea la luz der y luz izq.
-	cFinal01 =  mix(cT04,cT03, max(0.5,0.0)); // Los valores de los mix en max(valor,0.0) ese valor va en una variable. Estoy probando nada mas.
-	// Blendea el blend anterior con la luz del medio.
-	cFinal02 =  mix(cFinal01, cT02,max(1.0,0.0));  // El valor es entre 0 y 1. Por lo que entiendo es cuanto de cada textura es usado.
-												   // 0.5 es 50/50 
-	// Blendea el blend anterior con el paisaje.
-	cFinal = mix(cFinal02,cT01,cFinal02.xyzw);
+	//mixAmb = mix(cT01,vec4(1),_intensidadAmb);
+	//mixCent = mix(cT02,vec4(1),_intensidadCent);
+	//mixDer = mix(cT03,vec4(1),_intensidadDer);
+	//mixIzq = mix(cT04,vec4(1),_intensidadIzq);
+
+	Amb = cT01 * _intensidadAmb*_colorAmb;
+	Cent = cT02*_intensidadCent*_colorCent;
+	Der = cT03*_intensidadDer*_colorDer;
+	Izq = cT04*_intensidadIzq*_colorIzq;
+
+	cFinal = Amb * (Cent + Der + Izq);
 	gl_FragColor = cFinal;
 }
