@@ -69,7 +69,7 @@ void main(void) {
 	}
 
 	if (_pisoCambiado == 1){
-		Piso = mix(cT01,cT05*_colorPiso,0.5);
+		Piso = mix(cT01,_colorPiso,cT05);
 	} else {
 		Piso = cT01;
 	}
