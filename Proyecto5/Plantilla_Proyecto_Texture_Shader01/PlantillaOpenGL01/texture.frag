@@ -8,6 +8,7 @@ uniform sampler2D stexflat;
 uniform sampler2D stexcent;
 uniform sampler2D stexder;
 uniform sampler2D stexizq;
+uniform sampler2D stexpiso;
 
 // Intensidad de las luces
 uniform float _intensidadAmb;
@@ -15,11 +16,17 @@ uniform float _intensidadCent;
 uniform float _intensidadDer;
 uniform float _intensidadIzq;
 
+// Color del piso
+uniform vec4 _colorPiso;
+
 // Color de las luces
 uniform vec4 _colorAmb;
 uniform vec4 _colorCent;
 uniform vec4 _colorDer;
 uniform vec4 _colorIzq;
+
+// Filtro bilineal
+uniform int _filtActivo;
 
 vec4 texture2D_bilinear( sampler2D tex, vec2 uv )
 {
@@ -42,27 +49,26 @@ vec4 texture2D_bilinear( sampler2D tex, vec2 uv )
 void main(void) {
 
 	vec4 cFinal;
-	vec4 Amb;
-	vec4 Cent;
-	vec4 Der;
-	vec4 Izq;
-	vec4 cT01;
-	vec4 cT02;
-	vec4 cT03;
-	vec4 cT04;
+	vec4 Amb, Cent, Der, Izq, Piso;
+	vec4 cT01, cT02, cT03, cT04, cT05;
 
-	cT01 = texture2D(stexflat,gl_TexCoord[0].st);
-	cT02 = texture2D(stexcent,gl_TexCoord[0].st);
+	if (_filtActivo == 0){
+		cT01 = texture2D(stexflat,gl_TexCoord[0].st);
+		cT02 = texture2D(stexcent,gl_TexCoord[0].st);
+		cT03 = texture2D(stexder,gl_TexCoord[0].st);
+		cT04 = texture2D(stexizq,gl_TexCoord[0].st);
+		cT05 = texture2D(stexpiso,gl_TexCoord[0].st);
 
-	cT03 = texture2D(stexder,gl_TexCoord[0].st);
-	cT04 = texture2D(stexizq,gl_TexCoord[0].st);
+	} else {
+		cT01 = texture2D_bilinear(stexflat,gl_TexCoord[0].st);
+		cT02 = texture2D(stexcent,gl_TexCoord[0].st);
+		cT03 = texture2D(stexder,gl_TexCoord[0].st);
+		cT04 = texture2D(stexizq,gl_TexCoord[0].st);
+		cT05 = texture2D(stexpiso,gl_TexCoord[0].st);
+	}
 
-	//mixAmb = mix(cT01,vec4(1),_intensidadAmb);
-	//mixCent = mix(cT02,vec4(1),_intensidadCent);
-	//mixDer = mix(cT03,vec4(1),_intensidadDer);
-	//mixIzq = mix(cT04,vec4(1),_intensidadIzq);
-
-	Amb = cT01 * _intensidadAmb*_colorAmb;
+	Piso = mix(cT01,cT05*_colorPiso,0.5);
+	Amb =  Piso*_intensidadAmb*_colorAmb;
 	Cent = cT02*_intensidadCent*_colorCent;
 	Der = cT03*_intensidadDer*_colorDer;
 	Izq = cT04*_intensidadIzq*_colorIzq;

@@ -45,6 +45,10 @@ unsigned char* imageder = NULL;
 static GLuint texizq;
 unsigned char* imageizq = NULL;
 
+//Piso
+static GLuint texpiso;
+unsigned char* imagepiso = NULL;
+
 int iheight, iwidth;
 
 // Intensidad de las luces.
@@ -58,6 +62,12 @@ GLfloat colorAmb[4];
 GLfloat colorCent[4];
 GLfloat colorDer[4];
 GLfloat colorIzq[4];
+
+//Color del piso
+GLfloat colorPiso[4];
+
+//Filtro bilineal
+GLint filtActivo = 0;
 
 void ejesCoordenada() {
 	
@@ -173,6 +183,18 @@ void init(){
    imageder = glmReadPPM("baked_fill02.ppm", &iwidth, &iheight);
    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imageder);
 
+   // Textura del piso
+   glGenTextures(1, &texpiso);
+   glBindTexture(GL_TEXTURE_2D, texpiso);
+
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+   imagepiso = glmReadPPM("baked_checker.ppm", &iwidth, &iheight);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imagepiso);
+
 
    shader = SM.loadfromFile("texture.vert","texture.frag"); // load (and compile, link) from file
   		  if (shader==0) 
@@ -188,10 +210,9 @@ void init(){
 		 colorCent[i] = 1.0;
 		 colorDer[i] = 1.0;
 		 colorIzq[i] = 1.0;
+		 colorPiso[i] = 1.0;
 	 }
 }
-
-
 
 void Keyboard(unsigned char key, int x, int y)
 {
@@ -203,6 +224,26 @@ void Keyboard(unsigned char key, int x, int y)
   if (key == '2') {
 	  if (intensidadAmb - 0.05 > 0.0) 
 		intensidadAmb -= 0.05;
+  }
+  if (key == '3'){
+	  colorPiso[0] = 0.5;
+	  colorPiso[1] = 0.0;
+	  colorPiso[2] = 1.0;
+  }
+  if (key == '4'){
+	  colorPiso[0] = 0.5;
+	  colorPiso[1] = 1.0;
+	  colorPiso[2] = 1.0;
+  }
+  if (key == '5'){
+	  colorPiso[0] = 1.0;
+	  colorPiso[1] = 0.0;
+	  colorPiso[2] = 0.5;
+  }
+  if (key == '6'){
+	  colorPiso[0] = 0.5;
+	  colorPiso[1] = 1.0;
+	  colorPiso[2] = 0.2;
   }
   if (key == 'z' || key == 'Z') {
 	  if (intensidadCent + 0.05 < 1.0) 
@@ -303,10 +344,11 @@ void Keyboard(unsigned char key, int x, int y)
 	  if (colorIzq[2] - 0.05 > 0.0) 
 		colorIzq[2] -= 0.05;
   }	
-  switch (key)
-  {
-	default:
-		break;
+  if (key == 'o' || key == 'O'){
+	filtActivo = true;
+  }
+  if (key == 'p' || key == 'P'){
+	filtActivo = false;
   }
 
   glutPostRedisplay();
@@ -387,6 +429,8 @@ void render(){
 
 	if (shader) shader->begin();
 
+	shader->setUniform1i("_filtActivo",filtActivo);
+
 	shader->setUniform1f("_intensidadAmb",intensidadAmb);
 	shader->setUniform1f("_intensidadCent",intensidadCent);
 	shader->setUniform1f("_intensidadDer",intensidadDer);
@@ -396,13 +440,13 @@ void render(){
 	shader->setUniform4f("_colorCent",colorCent[0],colorCent[1],colorCent[2],colorCent[3]);
 	shader->setUniform4f("_colorDer",colorDer[0],colorDer[1],colorDer[2],colorDer[3]);
 	shader->setUniform4f("_colorIzq",colorIzq[0],colorIzq[1],colorIzq[2],colorIzq[3]);
+	shader->setUniform4f("_colorPiso",colorPiso[0],colorPiso[1],colorPiso[2],colorPiso[3]);
 
 	shader->setTexture("stexflat", texflat,0);
 	shader->setTexture("stexcent", texcent,1);
 	shader->setTexture("stexder", texder,2);
 	shader->setTexture("stexizq", texizq,3);
-
-
+	shader->setTexture("stexpiso",texpiso,4);
 
 
 	// Codigo para el mesh	
@@ -421,20 +465,9 @@ void render(){
 	}
 	glCallList(scene_list);
 	
-	glPopMatrix();
-	
-	
-	/*
-	glPushMatrix();
-	glLoadIdentity();	
-	glTranslatef(1.1, 0.5, -3.0);
-	glutSolidSphere(0.2f,30,30);
-	glPopMatrix();*/
-	 
+	glPopMatrix(); 
 
 	if (shader) shader->end();
-
-	
 
 	
 	glDisable(GL_BLEND);
