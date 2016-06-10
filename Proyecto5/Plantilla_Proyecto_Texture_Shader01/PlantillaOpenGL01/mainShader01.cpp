@@ -159,6 +159,7 @@ void init(){
 
    imagecent = glmReadPPM("baked_keyrabbit.ppm", &iwidth, &iheight);
    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iwidth, iheight, 0, GL_RGB, GL_UNSIGNED_BYTE, imagecent);
+   
 
    // Luz derecha.
    glGenTextures(1, &texizq);
@@ -251,26 +252,23 @@ void Keyboard(unsigned char key, int x, int y)
 	  pisoCambiado = 1;
   }
   if (key == 'z' || key == 'Z') {
-	  if (intensidadCent + 0.05 < 1.0) 
-		intensidadCent += 0.05;
+	intensidadCent += 0.05;
   }
   if (key == 'x' || key == 'X') {
 	  if (intensidadCent - 0.05 > 0.0) 
 		intensidadCent -= 0.05;
   }
-  if (key == 'q' || key == 'Q') {
-	  if (intensidadDer + 0.05 < 1.0) 
-		intensidadDer += 0.05;
+  if (key == 'a' || key == 'A') {
+	intensidadDer += 0.05;
   }
-  if (key == 'w' || key == 'W') {
+  if (key == 's' || key == 'S') {
 	  if (intensidadDer - 0.05 > 0.0) 
 		intensidadDer -= 0.05;
   }
-  if (key == 'a' || key == 'A') {
-	  if (intensidadIzq + 0.05 < 1.0) 
-		intensidadIzq += 0.05;
+  if (key == 'q' || key == 'Q') {
+	intensidadIzq += 0.05;
   }
-  if (key == 's' || key == 'S') {
+  if (key == 'w' || key == 'W') {
 	  if (intensidadIzq - 0.05 > 0.0) 
 		intensidadIzq -= 0.05;
   }
@@ -301,53 +299,53 @@ void Keyboard(unsigned char key, int x, int y)
   }
   // Color de la Luz Derecha
   if (key == 'e' || key == 'E') {
-	  if (colorDer[0] + 0.05 < 1.0) 
-		colorDer[0] += 0.05;
+	  if (colorIzq[0] + 0.05 < 1.0) 
+		colorIzq[0] += 0.05;
   }
   if (key == 'r' || key == 'R') {
-	  if (colorDer[1] + 0.05 < 1.0) 
-		colorDer[1] += 0.05;
+	  if (colorIzq[1] + 0.05 < 1.0) 
+		colorIzq[1] += 0.05;
   }
   if (key == 't' || key == 'T') {
-	  if (colorDer[2] + 0.05 < 1.0) 
-		colorDer[2] += 0.05;
+	  if (colorIzq[2] + 0.05 < 1.0) 
+		colorIzq[2] += 0.05;
   }
   if (key == 'y' || key == 'Y') {
-	  if (colorDer[0] - 0.05 > 0.0) 
-		colorDer[0] -= 0.05;
+	  if (colorIzq[0] - 0.05 > 0.0) 
+		colorIzq[0] -= 0.05;
   }
   if (key == 'u' || key == 'U') {
-	  if (colorDer[1] - 0.05 > 0.0) 
-		colorDer[1] -= 0.05;
+	  if (colorIzq[1] - 0.05 > 0.0) 
+		colorIzq[1] -= 0.05;
   }
   if (key == 'i' || key == 'I') {
-	  if (colorDer[2] - 0.05 > 0.0) 
+	  if (colorIzq[2] - 0.05 > 0.0) 
 		colorDer[2] -= 0.05;
   }	
   // Color de la Luz Izquierda
   if (key == 'd' || key == 'D') {
-	  if (colorIzq[0] + 0.05 < 1.0) 
-		colorIzq[0] += 0.05;
+	  if (colorDer[0] + 0.05 < 1.0) 
+		colorDer[0] += 0.05;
   }
   if (key == 'f' || key == 'F') {
-	  if (colorIzq[1] + 0.05 < 1.0) 
-		colorIzq[1] += 0.05;
+	  if (colorDer[1] + 0.05 < 1.0) 
+		colorDer[1] += 0.05;
   }
   if (key == 'g' || key == 'G') {
-	  if (colorIzq[2] + 0.05 < 1.0) 
-		colorIzq[2] += 0.05;
+	  if (colorDer[2] + 0.05 < 1.0) 
+		colorDer[2] += 0.05;
   }
   if (key == 'h' || key == 'H') {
-	  if (colorIzq[0] - 0.05 > 0.0) 
-		colorIzq[0] -= 0.05;
+	  if (colorDer[0] - 0.05 > 0.0) 
+		colorDer[0] -= 0.05;
   }
   if (key == 'j' || key == 'J') {
-	  if (colorIzq[1] - 0.05 > 0.0) 
-		colorIzq[1] -= 0.05;
+	  if (colorDer[1] - 0.05 > 0.0) 
+		colorDer[1] -= 0.05;
   }
   if (key == 'k' || key == 'K') {
-	  if (colorIzq[2] - 0.05 > 0.0) 
-		colorIzq[2] -= 0.05;
+	  if (colorDer[2] - 0.05 > 0.0) 
+		colorDer[2] -= 0.05;
   }	
   if (key == 'o' || key == 'O'){
 	filtActivo = true;

@@ -1,5 +1,5 @@
-#define textureWidth 600.0
-#define textureHeight 800.0	
+#define textureWidth 2048
+#define textureHeight 2048
 #define texel_size_x 1.0 / textureWidth
 #define texel_size_y 1.0 / textureHeight
 
@@ -62,10 +62,10 @@ void main(void) {
 
 	} else {
 		cT01 = texture2D_bilinear(stexflat,gl_TexCoord[0].st);
-		cT02 = texture2D(stexcent,gl_TexCoord[0].st);
-		cT03 = texture2D(stexder,gl_TexCoord[0].st);
-		cT04 = texture2D(stexizq,gl_TexCoord[0].st);
-		cT05 = texture2D(stexpiso,gl_TexCoord[0].st);
+		cT02 = texture2D_bilinear(stexcent,gl_TexCoord[0].st);
+		cT03 = texture2D_bilinear(stexder,gl_TexCoord[0].st);
+		cT04 = texture2D_bilinear(stexizq,gl_TexCoord[0].st);
+		cT05 = texture2D_bilinear(stexpiso,gl_TexCoord[0].st);
 	}
 
 	if (_pisoCambiado == 1){
