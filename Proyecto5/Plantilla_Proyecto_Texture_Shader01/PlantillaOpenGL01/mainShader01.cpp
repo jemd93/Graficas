@@ -220,8 +220,7 @@ void Keyboard(unsigned char key, int x, int y)
 {
   // Intensidad de luces
   if (key == '1') {
-	  if (intensidadAmb + 0.05 < 1.0) 
-		intensidadAmb += 0.05;
+	intensidadAmb += 0.05;
   }
   if (key == '2') {
 	  if (intensidadAmb - 0.05 > 0.0) 
