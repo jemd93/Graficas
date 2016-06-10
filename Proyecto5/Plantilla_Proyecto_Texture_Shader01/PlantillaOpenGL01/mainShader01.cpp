@@ -65,6 +65,7 @@ GLfloat colorIzq[4];
 
 //Color del piso
 GLfloat colorPiso[4];
+GLint pisoCambiado = 0;
 
 //Filtro bilineal
 GLint filtActivo = 0;
@@ -229,21 +230,25 @@ void Keyboard(unsigned char key, int x, int y)
 	  colorPiso[0] = 0.5;
 	  colorPiso[1] = 0.0;
 	  colorPiso[2] = 1.0;
+	  pisoCambiado = 1;
   }
   if (key == '4'){
 	  colorPiso[0] = 0.5;
 	  colorPiso[1] = 1.0;
 	  colorPiso[2] = 1.0;
+	  pisoCambiado = 1;
   }
   if (key == '5'){
 	  colorPiso[0] = 1.0;
 	  colorPiso[1] = 0.0;
 	  colorPiso[2] = 0.5;
+	  pisoCambiado = 1;
   }
   if (key == '6'){
 	  colorPiso[0] = 0.5;
 	  colorPiso[1] = 1.0;
 	  colorPiso[2] = 0.2;
+	  pisoCambiado = 1;
   }
   if (key == 'z' || key == 'Z') {
 	  if (intensidadCent + 0.05 < 1.0) 
@@ -430,6 +435,7 @@ void render(){
 	if (shader) shader->begin();
 
 	shader->setUniform1i("_filtActivo",filtActivo);
+	shader->setUniform1i("_pisoCambiado",pisoCambiado);
 
 	shader->setUniform1f("_intensidadAmb",intensidadAmb);
 	shader->setUniform1f("_intensidadCent",intensidadCent);

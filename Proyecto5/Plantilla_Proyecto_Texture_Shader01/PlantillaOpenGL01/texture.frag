@@ -18,6 +18,7 @@ uniform float _intensidadIzq;
 
 // Color del piso
 uniform vec4 _colorPiso;
+uniform int _pisoCambiado;
 
 // Color de las luces
 uniform vec4 _colorAmb;
@@ -67,7 +68,11 @@ void main(void) {
 		cT05 = texture2D(stexpiso,gl_TexCoord[0].st);
 	}
 
-	Piso = mix(cT01,cT05*_colorPiso,0.5);
+	if (_pisoCambiado == 1){
+		Piso = mix(cT01,cT05*_colorPiso,0.5);
+	} else {
+		Piso = cT01;
+	}
 	Amb =  Piso*_intensidadAmb*_colorAmb;
 	Cent = cT02*_intensidadCent*_colorCent;
 	Der = cT03*_intensidadDer*_colorDer;
