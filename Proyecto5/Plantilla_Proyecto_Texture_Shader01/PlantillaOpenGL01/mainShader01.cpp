@@ -320,7 +320,7 @@ void Keyboard(unsigned char key, int x, int y)
   }
   if (key == 'i' || key == 'I') {
 	  if (colorIzq[2] - 0.05 > 0.0) 
-		colorDer[2] -= 0.05;
+		colorIzq[2] -= 0.05;
   }	
   // Color de la Luz Izquierda
   if (key == 'd' || key == 'D') {
