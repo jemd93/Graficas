@@ -1,3 +1,10 @@
+uniform float _xc;
+uniform float _yc;
+uniform float _sz;
+uniform float _huefreq;
+uniform float _escape;
+uniform float _maxiter;
+
 vec4 HSVtoRGB( float h, float s, float v ){
    int i;
    float f, p, q, t;
@@ -55,10 +62,37 @@ vec4 HSVtoRGB( float h, float s, float v ){
    
 }
 
+vec4 mandel(float xc,float yc,float sz,float escape,float maxiter, float huefreq) {
+	float xmin,ymin,x,y,a,b,n,aa,bb,twoab,h;
+	vec4 Cmandel;
 
+	xmin = xc-0.5*sz;
+	ymin = yc-0.5*sz;
+	x = xmin+sz*gl_TexCoord[0].s;
+	y = ymin+sz*gl_TexCoord[0].t;
+
+	n = 0;
+	a = x;
+	b = y;
+
+	while (n < maxiter) {
+		aa = a*a;
+		bb = b*b;
+		twoab = 2*a*b;
+		if ((aa+bb) > escape) {
+			break;
+		}
+		n = n+1;
+		a = aa-bb+x;
+		b = twoab+y;
+	}
+
+	h = 0.5*(1+sin(huefreq*n/maxiter));
+	Cmandel =  HSVtoRGB(h,1,1);
+	return Cmandel;
+}
 
 void main(void) {
-
-
-	gl_FragColor = HSVtoRGB(0.5,1.0,1.0);
+	//gl_FragColor = HSVtoRGB(0.5,1.0,1.0);
+	gl_FragColor = mandel(_xc,_yc,_sz,_escape,_maxiter,_huefreq);
 }

@@ -34,6 +34,13 @@ float freq = 1.0;
 float calctype = 1.0;
 float f = 1.0;
 
+//Variables para el Mandelbrot Fractal
+float xc = 0.5;
+float yc = 0.5;
+float sz = 4;
+float huefreq = 1;
+float escape = 256;
+float maxiter = 20;
 
 void ejesCoordenada() {
 	
@@ -113,6 +120,12 @@ void cargar_shader(int idx) {
 	// Plano Derecho Mandel
 	if (idx == 0){	
 			if (shader01) shader01->begin();
+			shader01->setUniform1f("_xc",xc);
+		    shader01->setUniform1f("_yc",yc);
+		    shader01->setUniform1f("_sz",sz);
+		    shader01->setUniform1f("_huefreq",huefreq);
+		    shader01->setUniform1f("_escape",escape);
+			shader01->setUniform1f("_maxiter",maxiter);
 			//Colocar aqui los parametros Uniform
 
 	}
@@ -231,6 +244,43 @@ void Keyboard(unsigned char key, int x, int y)
 		freq = 0.55;
 		calctype = 2;
 		f = 1;
+	}
+	// Mandelbrot Fractal
+	if (key == 'y' || key == 'Y') {
+		xc += 0.05;
+	}
+	if (key == 'u' || key == 'U') {
+		xc -= 0.05;
+	}
+	if (key == 'h' || key == 'H') {
+		yc += 0.05;
+	}
+	if (key == 'j' || key == 'J') {
+		yc -= 0.05;
+	}
+	if (key == 'n' || key == 'N') {
+		sz += 0.001;
+	}
+	if (key == 'm' || key == 'M') {
+		sz -= 0.001;
+	}
+	if (key == 'i' || key == 'I') {
+		huefreq += 0.05;
+	}
+	if (key == 'o' || key == 'O') {
+		huefreq -= 0.05;
+	}
+	if (key == 'f' || key == 'F') {
+		escape += 12;
+	}
+	if (key == 'g' || key == 'G') {
+		escape -= 12;
+	}
+	if (key == 'v' || key == 'V') {
+		maxiter += 12;
+	}
+	if (key == 'b' || key == 'B') {
+		maxiter -= 12;
 	}
 
   glutPostRedisplay();
@@ -447,7 +497,7 @@ int main (int argc, char** argv) {
 
 	glutReshapeFunc(changeViewport);
 	glutDisplayFunc(render);
-	glutKeyboardFunc (Keyboard);
+	glutKeyboardFunc(Keyboard);
 	
 	glutMainLoop();
 	return 0;
