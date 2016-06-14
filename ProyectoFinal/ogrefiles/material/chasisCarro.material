@@ -1,0 +1,14 @@
+material shCarro01
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.519233 0.669 0.278304 1
+			specular 0.5 0.5 0.5 1 25.6
+		}
+
+	}
+
+}
