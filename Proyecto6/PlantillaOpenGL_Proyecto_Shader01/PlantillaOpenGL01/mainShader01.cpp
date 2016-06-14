@@ -209,6 +209,12 @@ void Keyboard(unsigned char key, int x, int y)
 		freq = 0.75;
 		calctype = 1;
 		f = 1;
+		xc = 0.5;
+		yc = 0.5;
+		huefreq = 1;
+		sz = 4;
+		escape = 256;
+		maxiter = 20;
 	}
 	else if (key == '2'){
 		R = 13;
@@ -216,6 +222,12 @@ void Keyboard(unsigned char key, int x, int y)
 		freq = 0.8;
 		calctype = 1;
 		f = 0.5;
+		xc = 0.5;
+		yc = 0.5;
+		huefreq = 1;
+		sz = 4;
+		escape = 256;
+		maxiter = 20;
 	}
 	else if (key == '3'){
 		R = 2;
@@ -223,6 +235,12 @@ void Keyboard(unsigned char key, int x, int y)
 		freq = 0.25;
 		calctype = 0;
 		f = 1;
+		xc = 0.5;
+		yc = 0.5;
+		huefreq = 1;
+		sz = 4;
+		escape = 256;
+		maxiter = 20;
 	}
 	else if (key == '4'){
 		R = 11;
@@ -230,6 +248,12 @@ void Keyboard(unsigned char key, int x, int y)
 		freq = 0.55;
 		calctype = 2;
 		f = 1;
+		xc = 0.5;
+		yc = 0.5;
+		huefreq = 1;
+		sz = 4;
+		escape = 256;
+		maxiter = 20;
 	}
 	else if (key == '5'){
 		R = 11;
@@ -237,6 +261,12 @@ void Keyboard(unsigned char key, int x, int y)
 		freq = 0.55;
 		calctype = 2;
 		f = 1;
+		xc = 0.39;
+		yc = 0.25;
+		huefreq = 0.36;
+		sz = 0.05;
+		escape = 512;
+		maxiter = 120;
 	}
 	else if (key == '6'){
 		R = 11;
@@ -244,6 +274,12 @@ void Keyboard(unsigned char key, int x, int y)
 		freq = 0.55;
 		calctype = 2;
 		f = 1;
+		xc = 0.39;
+		yc = 0.27;
+		huefreq = 2.4;
+		sz = 0.01;
+		escape = 512;
+		maxiter = 256;
 	}
 	// Mandelbrot Fractal
 	if (key == 'y' || key == 'Y') {
@@ -389,7 +425,16 @@ void render(){
 	printf("_freq: %f\n",freq);
 	printf("_calctype: %f\n",calctype);
 	printf("_f: %f\n",f);
-	printf("--------------------------\n");
+	printf("--------------------------\n\n");
+	printf("Mandel Parametros\n");
+	printf("==========================\n");
+	printf("_xc: %f\n",xc);
+	printf("_yc: %f\n",yc);
+	printf("_huefreq: %f\n",huefreq);
+	printf("_sz: %f\n",sz);
+	printf("_escape: %f\n",escape);
+	printf("_maxiter: %f\n",maxiter);
+	printf("--------------------------\n\n");
 
 	
 	glDisable(GL_BLEND);
