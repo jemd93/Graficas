@@ -31,7 +31,7 @@ cwc::glShader *shader02;
 float R = 10.0;
 float hoff = 0.0;
 float freq = 1.0;
-float calctype = 0.0;
+float calctype = 1.0;
 float f = 1.0;
 
 
@@ -120,11 +120,11 @@ void cargar_shader(int idx) {
 	// Plano Izquierdo SpiroField
 	if (idx == 1){		
 		   if (shader02) shader02->begin();
-		   shader02->setUniform1f("R",R);
-		   shader02->setUniform1f("hoff",hoff);
-		   shader02->setUniform1f("freq",freq);
-		   shader02->setUniform1f("calctype",calctype);
-		   shader02->setUniform1f("f",f);
+		   shader02->setUniform1f("_R",R);
+		   shader02->setUniform1f("_hoff",hoff);
+		   shader02->setUniform1f("_freq",freq);
+		   shader02->setUniform1f("_calctype",calctype);
+		   shader02->setUniform1f("_f",f);
 		   //Colocar aqui los parametros Uniform
 	}
 
@@ -189,6 +189,48 @@ void Keyboard(unsigned char key, int x, int y)
 		f -= 0.05;
 		if (f < 0)
 			f = 0.05;
+	} 
+	else if (key == '1'){
+		R = 6.5;
+		hoff = 1.9;
+		freq = 0.75;
+		calctype = 1;
+		f = 1;
+	}
+	else if (key == '2'){
+		R = 13;
+		hoff = 1.05;
+		freq = 0.8;
+		calctype = 1;
+		f = 0.5;
+	}
+	else if (key == '3'){
+		R = 2;
+		hoff = 0;
+		freq = 0.25;
+		calctype = 0;
+		f = 1;
+	}
+	else if (key == '4'){
+		R = 11;
+		hoff = 0.8;
+		freq = 0.55;
+		calctype = 2;
+		f = 1;
+	}
+	else if (key == '5'){
+		R = 11;
+		hoff = 0.8;
+		freq = 0.55;
+		calctype = 2;
+		f = 1;
+	}
+	else if (key == '6'){
+		R = 11;
+		hoff = 0.8;
+		freq = 0.55;
+		calctype = 2;
+		f = 1;
 	}
 
   glutPostRedisplay();
@@ -289,8 +331,15 @@ void render(){
 	
 	glPopMatrix();
 	
-	
-	
+	system("cls");
+	printf("Spirofield Parametros\n");
+	printf("==========================\n");
+	printf("_R: %f\n",R);
+	printf("_hoff: %f\n",hoff);
+	printf("_freq: %f\n",freq);
+	printf("_calctype: %f\n",calctype);
+	printf("_f: %f\n",f);
+	printf("--------------------------\n");
 
 	
 	glDisable(GL_BLEND);

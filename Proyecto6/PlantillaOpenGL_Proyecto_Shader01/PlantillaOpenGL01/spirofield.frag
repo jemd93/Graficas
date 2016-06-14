@@ -1,8 +1,8 @@
-uniform float R;
-uniform float hoff;
-uniform float freq;
-uniform float calctype;
-uniform float f;
+uniform float _R;
+uniform float _hoff;
+uniform float _freq;
+uniform float _calctype;
+uniform float _f;
 
 vec4 HSVtoRGB( float h, float s, float v ){
    int i;
@@ -146,7 +146,7 @@ vec4 spirofield(float R, float rv, float b, float hoff, float freq, float calcty
 
 void main(void) {
 	float rv = 5.0;
-	float b = 2.5;
-	gl_FragColor = spirofield(R, rv, b, hoff, freq, calctype, f);
+	float b = 5.0;
+	gl_FragColor = spirofield(_R, rv, b, _hoff, _freq, _calctype, _f);
 	//gl_FragColor = HSVtoRGB(0.0,1.0,1.0);
 }
