@@ -1,3 +1,9 @@
+uniform float R;
+uniform float hoff;
+uniform float freq;
+uniform float calctype;
+uniform float f;
+
 vec4 HSVtoRGB( float h, float s, float v ){
    int i;
    float f, p, q, t;
@@ -55,10 +61,92 @@ vec4 HSVtoRGB( float h, float s, float v ){
    
 }
 
+float LCM (float R, float rv){
+	float i = 0;
+	float cm = 1.0;
 
+	if (mod(R,rv)==0){
+		cm = 1.0;
+	} else {
+		i = 1;
+		while(mod(R*i,rv)!=0){
+			i = i + 1;
+		}
+		cm = i;
+	}
+	return cm;
+}
+
+float calcspiro(float R, float rv, float b, float a){
+	float rho;
+	rho = (sqrt((R-rv)*(R-rv) + b*b + 2*(R-rv)*b*cos((1+R/rv)*a)));
+	return rho;
+}
+
+vec4 spirofield(float R, float rv, float b, float hoff, float freq, float calctype, float f){
+	float i, theta, rho, nrev, a, rsp, ss, tt;
+	float mindist, deltad, maxdist;
+	float avdist = 0;
+	vec4 Ch, Cg;
+	vec4 Ci;
+
+	ss = 0.5;
+	tt = 0.5;
+	theta = atan(tt,ss);
+	theta += 3.1415;
+	rho = 2*sqrt(ss*ss + tt*tt);
+	if ((rho > ((R-rv+b)/R)) || (rho < ((R-rv-b)/R))){
+		Ci = vec4(0.25,0.25,0.25,1.0);
+	} else {
+		nrev = LCM(R,rv);
+		if (0 == calctype){
+			maxdist = -2;
+
+			for (int i = 0; i < nrev; i++){
+				a = theta + i*2*3.1415;
+				rsp = calcspiro(R,rv,b,a)/R;
+				deltad = abs(rsp-rho);
+				if (deltad > maxdist){
+					maxdist = deltad;
+				}
+			}
+			maxdist = maxdist*nrev*freq;
+			maxdist = mod((maxdist+hoff),1.0);
+			Ch = HSVtoRGB(maxdist,1,1);
+			Cg = vec4(maxdist,maxdist,maxdist,1.0);
+		} else if (1 == calctype){
+			mindist = 2;
+			for (int i = 0; i < nrev; i++){
+				a = theta + i*2*3.1415;
+				rsp = calcspiro(R,rv,b,a)/R;
+				deltad = abs(rsp - rho);
+				if (deltad < mindist){
+					mindist = deltad;
+				}
+			}
+			mindist = mindist * nrev * freq;
+			mindist = mod((mindist + hoff), 1.0);
+			Ch = HSVtoRGB(mindist,1,1);
+			Cg = vec4(mindist,mindist,mindist,1.0);
+		} else{
+			for (int i = 0; i < nrev ; i++){
+				a = theta + i*2*3.1415;
+				rsp = calcspiro(R,rv,b,a)/R;
+				avdist = avdist + abs(rsp - rho);
+			}
+			avdist = avdist * freq;
+			avdist = mod((avdist + hoff), 1.0);
+			Ch = HSVtoRGB(avdist,1,1);
+			Cg = vec4(avdist, avdist, avdist, 1.0);
+		}
+		Ci = mix(Cg, Ch, f);
+		return Ci;
+	}
+}
 
 void main(void) {
-
-
-	gl_FragColor = HSVtoRGB(0.0,1.0,1.0);
+	float rv = 5.0;
+	float b = 2.5;
+	gl_FragColor = spirofield(R, rv, b, hoff, freq, calctype, f);
+	//gl_FragColor = HSVtoRGB(0.0,1.0,1.0);
 }

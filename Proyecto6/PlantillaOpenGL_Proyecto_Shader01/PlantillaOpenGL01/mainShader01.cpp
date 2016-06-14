@@ -1,5 +1,3 @@
-// Cubica
-
 #include <stdlib.h>
 #include <conio.h>
 
@@ -29,6 +27,12 @@ cwc::glShaderManager SM;
 cwc::glShader *shader01;
 cwc::glShader *shader02;
 
+//Variables para el Spirograph Curves
+float R = 10.0;
+float hoff = 0.0;
+float freq = 1.0;
+float calctype = 0.0;
+float f = 1.0;
 
 
 void ejesCoordenada() {
@@ -109,7 +113,6 @@ void cargar_shader(int idx) {
 	// Plano Derecho Mandel
 	if (idx == 0){	
 			if (shader01) shader01->begin();
-
 			//Colocar aqui los parametros Uniform
 
 	}
@@ -117,7 +120,11 @@ void cargar_shader(int idx) {
 	// Plano Izquierdo SpiroField
 	if (idx == 1){		
 		   if (shader02) shader02->begin();
-
+		   shader02->setUniform1f("R",R);
+		   shader02->setUniform1f("hoff",hoff);
+		   shader02->setUniform1f("freq",freq);
+		   shader02->setUniform1f("calctype",calctype);
+		   shader02->setUniform1f("f",f);
 		   //Colocar aqui los parametros Uniform
 	}
 
@@ -142,14 +149,47 @@ void fin_shader(int idx) {
 
 void Keyboard(unsigned char key, int x, int y)
 {
-
-
-  switch (key)
-  {
-	
-	default:
-		break;
-  }
+	if (key == 'q' || key == 'Q'){
+		calctype = 0;
+	}
+	else if (key == 'a' || key == 'A'){
+		calctype = 1;
+	}
+	else if (key == 'z' || key == 'Z'){
+		calctype = 2;
+	}
+	else if (key == 'w' || key == 'W'){
+		R += 1;
+	}
+	else if (key == 'e' || key == 'E'){
+		R -=1;
+		if (R < 0)
+			R = 0.05;
+	}
+	else if (key == 's' || key == 'S'){
+		freq += 0.05;
+	}
+	else if (key == 'd' || key == 'D'){
+		freq -= 0.05;
+		if (freq < 0)
+			freq = 0.05;
+	}
+	else if (key == 'x' || key == 'X'){
+		hoff += 0.1;
+	}
+	else if (key == 'c' || key == 'C'){
+		hoff -= 0.1;
+		if (hoff < 0)
+			hoff = 0.05;
+	}
+	else if (key == 'r' || key == 'R'){
+		f += 0.05;
+	}
+	else if (key == 't' || key == 'T'){
+		f -= 0.05;
+		if (f < 0)
+			f = 0.05;
+	}
 
   glutPostRedisplay();
 }
