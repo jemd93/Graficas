@@ -90,8 +90,8 @@ vec4 spirofield(float R, float rv, float b, float hoff, float freq, float calcty
 	vec4 Ch, Cg;
 	vec4 Ci;
 
-	ss = gl_FragCoord.s - 0.5;
-	tt = gl_FragCoord.t - 0.5;
+	ss = gl_TexCoord[0].s - 0.5;
+	tt = gl_TexCoord[0].t - 0.5;
 	theta = atan(tt,ss);
 	theta += 3.1415;
 	rho = 2*sqrt(ss*ss + tt*tt);
