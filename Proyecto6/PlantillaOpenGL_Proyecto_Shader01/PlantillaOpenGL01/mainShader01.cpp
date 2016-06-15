@@ -319,7 +319,8 @@ void Keyboard(unsigned char key, int x, int y)
 		maxiter -= 12;
 	}
 
-  glutPostRedisplay();
+	scene_list = 0;
+	glutPostRedisplay();
 }
 
 void recursive_render (const aiScene *sc, const aiNode* nd)
@@ -372,7 +373,7 @@ void recursive_render (const aiScene *sc, const aiNode* nd)
 	}
 
 	// draw all children
-	for (n = 0; n < nd->mNumChildren; ++n) {		
+	for (n = 0; n < nd->mNumChildren; ++n) {
 		cargar_shader(n);
 		recursive_render(sc, nd->mChildren[n]);
 		fin_shader(n);
@@ -396,7 +397,6 @@ void render(){
 
 			
 	glPushMatrix();
-
 
 
 	// Codigo para el mesh	
