@@ -176,15 +176,15 @@ void Keyboard(unsigned char key, int x, int y)
 	}
 	else if (key == 'e' || key == 'E'){
 		R -=1;
-		if (R < 0)
-			R = 0.05;
+		if (R <= 0)
+			R = 1;
 	}
 	else if (key == 's' || key == 'S'){
 		freq += 0.05;
 	}
 	else if (key == 'd' || key == 'D'){
 		freq -= 0.05;
-		if (freq < 0)
+		if (freq <= 0)
 			freq = 0.05;
 	}
 	else if (key == 'x' || key == 'X'){
@@ -192,7 +192,7 @@ void Keyboard(unsigned char key, int x, int y)
 	}
 	else if (key == 'c' || key == 'C'){
 		hoff -= 0.1;
-		if (hoff < 0)
+		if (hoff <= 0)
 			hoff = 0.05;
 	}
 	else if (key == 'r' || key == 'R'){
@@ -200,7 +200,7 @@ void Keyboard(unsigned char key, int x, int y)
 	}
 	else if (key == 't' || key == 'T'){
 		f -= 0.05;
-		if (f < 0)
+		if (f <= 0)
 			f = 0.05;
 	} 
 	else if (key == '1'){
@@ -287,36 +287,54 @@ void Keyboard(unsigned char key, int x, int y)
 	}
 	if (key == 'u' || key == 'U') {
 		xc -= 0.05;
+		if (xc <= 0) {
+			xc = 0.05;
+		}
 	}
 	if (key == 'h' || key == 'H') {
 		yc += 0.05;
 	}
 	if (key == 'j' || key == 'J') {
 		yc -= 0.05;
+		if (yc <= 0) {
+			yc = 0.05;
+		}
 	}
 	if (key == 'n' || key == 'N') {
 		sz += 0.001;
 	}
 	if (key == 'm' || key == 'M') {
 		sz -= 0.001;
+		if (sz <= 0) {
+			sz = 0.001;
+		}
 	}
 	if (key == 'i' || key == 'I') {
 		huefreq += 0.05;
 	}
 	if (key == 'o' || key == 'O') {
 		huefreq -= 0.05;
+		if (huefreq <= 0) {
+			huefreq = 0.05;
+		}
 	}
 	if (key == 'f' || key == 'F') {
 		escape += 12;
 	}
 	if (key == 'g' || key == 'G') {
 		escape -= 12;
+		if (escape <= 0) {
+			escape = 12;
+		}
 	}
 	if (key == 'v' || key == 'V') {
 		maxiter += 12;
 	}
 	if (key == 'b' || key == 'B') {
 		maxiter -= 12;
+		if (maxiter <= 0) {
+			maxiter = 12;
+		}
 	}
 
 	scene_list = 0;
