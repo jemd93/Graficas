@@ -1,9 +1,95 @@
 #include "Ogre\ExampleApplication.h"
 
+class FrameListenerProy : public Ogre::FrameListener {
+private :
+	OIS::InputManager* _man;
+	OIS::Keyboard* _key;
+	OIS::Mouse* _mouse;
+	Ogre::Camera* _cam;
+	
+public:
+	FrameListenerProy(Ogre::Camera* cam, RenderWindow* win) {
+		size_t windowHnd = 0;
+		std::stringstream windowHndStr;
+		win->getCustomAttribute("WINDOW",&windowHnd);
+		windowHndStr << windowHnd;
+
+		OIS::ParamList pl;
+		pl.insert(std::make_pair(std::string("WINDOW"),windowHndStr.str()));
+
+		// Eventos
+		_man = OIS::InputManager::createInputSystem(pl);
+		_key = static_cast<OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard,false));
+		_mouse = static_cast<OIS::Mouse*>(_man->createInputObject(OIS::OISMouse,false));
+
+		_cam = cam;
+
+	}
+
+	~FrameListenerProy() {
+		_man->destroyInputObject(_key);
+		_man->destroyInputObject(_mouse);
+		OIS::InputManager::destroyInputSystem(_man);
+	}
+
+	bool frameStarted(const Ogre::FrameEvent &evt) {
+			_key->capture();
+			_mouse->capture();
+
+			float movSpeed = 10.0f;
+
+			Ogre::Vector3 tmov(0,0,0);
+			Ogre::Vector3 tcam(0,0,0);
+
+			if (_key->isKeyDown(OIS::KC_ESCAPE) || _key->isKeyDown(OIS::KC_Q)) {
+				return false;
+			}
+			// Mover camara.
+			if (_key->isKeyDown(OIS::KC_W)) {
+				tcam += Ogre::Vector3(0,0,-10);
+			}
+			if (_key->isKeyDown(OIS::KC_S)) {
+				tcam += Ogre::Vector3(0,0,10);
+			}
+			if (_key->isKeyDown(OIS::KC_A)) {
+				tcam += Ogre::Vector3(-10,0,0);
+			}
+			if (_key->isKeyDown(OIS::KC_D)) {
+				tcam += Ogre::Vector3(10,0,0);
+			}
+
+			// Rotar camara
+			float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
+			float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame * -1;
+			_cam->yaw(Ogre::Radian(rotX));
+			_cam->pitch(Ogre::Radian(rotY));
+			_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
+
+			return true;
+		}
+	};
+
 class Example1 : public ExampleApplication
 {
 
 public:
+
+	Ogre::FrameListener* frameListener;
+
+	Example1() {
+		frameListener = NULL;
+	}
+
+	~Example1() {
+		if (frameListener) {
+			delete frameListener;
+		}
+	}
+
+	void createFrameListener() {
+		frameListener = new FrameListenerProy(mCamera,mWindow);
+		mRoot->addFrameListener(frameListener);
+	}
 
 	void createCamera() {
 
@@ -102,7 +188,6 @@ public:
 	}
 
 };
-
 
 int main (void)
 {
