@@ -1,18 +1,8 @@
 #include "Ogre\ExampleApplication.h"
 #include <string>
+#include "Vehiculo.h"
 
-// Variables de las ruedas
-Ogre::SceneNode* nodosRuedas[4];
-Ogre::SceneNode* nodosYaw[4];
-Ogre::Entity* entRuedas[4];
-float anguloGiroRuedas = 4.0;
-float anguloRoteRuedas = 2.0;
-float anguloActRote = 0.0;
-
-// Variables del chasis
-Ogre::SceneNode* nodoChasis01;
-Ogre::Entity* entChasis01;
-float carroZ = 0.0;
+Vehiculo carro;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -46,21 +36,6 @@ public:
 		OIS::InputManager::destroyInputSystem(_man);
 	}
 
-	void moverCarro(int frente) {
-		nodoChasis01->translate(0, 0, frente*2, Ogre::Node::TS_LOCAL);
-		for (int i = 0; i < 4;i++) {
-			nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
-		}
-	}
-
-	void rotarCarro(int izq) {
-		anguloActRote =  anguloActRote + izq;
-		for (int i = 0; i < 2;i++) {
-			nodosYaw[i]->yaw(izq*Degree(anguloRoteRuedas));
-		}
-
-		nodoChasis01->yaw(izq*Degree(anguloRoteRuedas));
-	}
 
 	bool frameStarted(const Ogre::FrameEvent &evt) {
 			_key->capture();
@@ -88,18 +63,18 @@ public:
 				tcam += Ogre::Vector3(10,0,0);
 			}
 			if (_key->isKeyDown(OIS::KC_UP)) {
-				moverCarro(1);
+				carro.moverCarro(1);
 			}
 			if (_key->isKeyDown(OIS::KC_DOWN)) {
-				moverCarro(-1);
+				carro.moverCarro(-1);
 			}
 			if (_key->isKeyDown(OIS::KC_LEFT)) {
-				if (anguloActRote < 15)
-					rotarCarro(1);
+				if (carro.anguloActRote < 15)
+					carro.rotarCarro(1);
 			}
 			if (_key->isKeyDown(OIS::KC_RIGHT)) {
-				if (anguloActRote > -15)
-					rotarCarro(-1);
+				if (carro.anguloActRote > -15)
+					carro.rotarCarro(-1);
 			}
 
 			// Rotar camara
@@ -160,44 +135,8 @@ public:
 		LuzPuntual02->setDiffuseColour(1.0,1.0,1.0);
 		LuzPuntual02->setDirection(Ogre::Vector3( -1, -1, -1 ));
 		
-		//Chasis
-		nodoChasis01 = mSceneMgr->createSceneNode("Chasis01");
-		mSceneMgr->getRootSceneNode()->addChild(nodoChasis01);
-			
-		entChasis01 = mSceneMgr->createEntity("entChasis01", "chasisCarro.mesh");
-		entChasis01->setMaterialName("shCarro01");
-		nodoChasis01->attachObject(entChasis01);
-
-		//Ruedas
-		for (int i = 0; i < 4; i++) {
-			nodosYaw[i] = mSceneMgr->createSceneNode("ruedaYaw0"+std::to_string(i+1));
-			
-			nodoChasis01->addChild(nodosYaw[i]);
-
-			nodosRuedas[i] = mSceneMgr->createSceneNode("Rueda0"+std::to_string(i+1));
-			nodosYaw[i]->addChild(nodosRuedas[i]);
-
-			entRuedas[i] = mSceneMgr->createEntity("entRueda0"+std::to_string(i+1), "ruedaDetallada.mesh");
-			if (i == 0)
-				nodosYaw[i]->translate(8,3.517,9.5);  // Rueda delantera izquierda
-			else if (i == 1)
-				nodosYaw[i]->translate(-5.77,3.517,9.5); // Rueda delantera derecha
-			else if (i == 2)
-				nodosYaw[i]->translate(8,3.517,-9.462);  // Rueda trasera izquierda
-			else if (i == 3)
-				nodosYaw[i]->translate(-5.77,3.517,-9.462); // Rueda trasera derecha
-
-			entRuedas[i]->setMaterialName("shRueda02");
-			nodosRuedas[i]->attachObject(entRuedas[i]);
-		}
-
-		// Codigo inicial de las ruedas por si a caso.
-		/*Ogre::SceneNode* _nodeRueda01 = mSceneMgr->createSceneNode("Rueda01");
-		mSceneMgr->getRootSceneNode()->addChild(_nodeRueda01);	
-		Ogre::Entity* _entRueda01 = mSceneMgr->createEntity("entRueda01", "ruedaDetallada.mesh");
-		_nodeRueda01->translate(5.77,3.517,-9.462);
-		_entRueda01->setMaterialName("shRueda02");
-		_nodeRueda01->attachObject(_entRueda01);*/
+		// Creando el carro
+		carro = Vehiculo(mSceneMgr);
 
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
