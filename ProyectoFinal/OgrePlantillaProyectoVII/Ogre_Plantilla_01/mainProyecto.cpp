@@ -1,8 +1,12 @@
 #include "Ogre\ExampleApplication.h"
 #include <string>
 #include "Vehiculo.h"
+#include "Moneda.h"
 
 Vehiculo carro;
+Moneda monedas1[10];
+
+int Moneda::newId = 0;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -137,6 +141,15 @@ public:
 		
 		// Creando el carro
 		carro = Vehiculo(mSceneMgr);
+
+		// Creando monedas
+		/*moneda = Moneda(mSceneMgr,0,200);*/
+		for (int i = 0;i < 10;i++) {
+			if (i < 5)
+				monedas1[i] = Moneda(mSceneMgr,-20,250+(20*i));
+			else 
+				monedas1[i] = Moneda(mSceneMgr,20,250+(20*(i-5)));
+		}
 
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
