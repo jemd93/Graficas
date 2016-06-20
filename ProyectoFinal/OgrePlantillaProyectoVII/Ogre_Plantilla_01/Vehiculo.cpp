@@ -75,6 +75,10 @@ void Vehiculo::dibujarAlas(Ogre::SceneManager* mSceneMgr){
 	nodoAlas = mSceneMgr->createSceneNode("nodoAlas");
 	mSceneMgr->getRootSceneNode()->addChild(nodoAlas);
 
+	nodoAlas->setVisible(false);
+	alaIzquierda->setVisible(false);
+	alaDerecha->setVisible(false);
+
 	alaIzquierda->begin("shCarro01", RenderOperation::OT_TRIANGLE_LIST);
 		/* Parte de arriba */
 		alaIzquierda->position(5,9.5,-1); alaIzquierda->normal(0.0,1.0,0.0); //0
