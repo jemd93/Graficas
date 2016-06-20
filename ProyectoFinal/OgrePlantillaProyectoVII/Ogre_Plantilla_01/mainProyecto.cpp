@@ -2,14 +2,16 @@
 #include <string>
 #include "Vehiculo.h"
 #include "Moneda.h"
-#include "Cilindro.h"
+#include "Forma.h"
 
 Vehiculo carro;
-Moneda monedas1[10];
-Cilindro obstaculo1[6];
+Moneda monedas1[5];
+Moneda monedas2[5];
+Moneda monedas3[10];
+Forma obstaculo1[7];
 
 int Moneda::newId = 0;
-int Cilindro::newId = 0;
+int Forma::newId = 0;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -58,16 +60,16 @@ public:
 			}
 			// Mover camara.
 			if (_key->isKeyDown(OIS::KC_W)) {
-				tcam += Ogre::Vector3(0,0,-10);
+				tcam += Ogre::Vector3(0,0,-20);
 			}
 			if (_key->isKeyDown(OIS::KC_S)) {
-				tcam += Ogre::Vector3(0,0,10);
+				tcam += Ogre::Vector3(0,0,20);
 			}
 			if (_key->isKeyDown(OIS::KC_A)) {
-				tcam += Ogre::Vector3(-10,0,0);
+				tcam += Ogre::Vector3(-20,0,0);
 			}
 			if (_key->isKeyDown(OIS::KC_D)) {
-				tcam += Ogre::Vector3(10,0,0);
+				tcam += Ogre::Vector3(20,0,0);
 			}
 			if (_key->isKeyDown(OIS::KC_UP)) {
 				carro.moverCarro(1);
@@ -76,12 +78,10 @@ public:
 				carro.moverCarro(-1);
 			}
 			if (_key->isKeyDown(OIS::KC_LEFT)) {
-				if (carro.anguloActRote < 15)
-					carro.rotarCarro(1);
+				carro.rotarCarro(1);
 			}
 			if (_key->isKeyDown(OIS::KC_RIGHT)) {
-				if (carro.anguloActRote > -15)
-					carro.rotarCarro(-1);
+				carro.rotarCarro(-1);
 			}
 
 			// Rotar camara
@@ -127,11 +127,29 @@ public:
 	}
 
 	void crearObstaculo1() {
-		obstaculo1[0] = Cilindro(mSceneMgr,150,400,30,10);
-		obstaculo1[1] = Cilindro(mSceneMgr,215,560,90,15);
-		obstaculo1[2] = Cilindro(mSceneMgr,-30,900,90,10);
-		obstaculo1[3] = Cilindro(mSceneMgr,65,700,0,10);
-		obstaculo1[4] = Cilindro(mSceneMgr,65,700,90,8);
+		obstaculo1[0] = Forma(mSceneMgr,150,400,30,10,3.0,3.0,"cilindro");
+		obstaculo1[1] = Forma(mSceneMgr,215,560,90,15,3.0,3.0,"cilindro");
+		obstaculo1[2] = Forma(mSceneMgr,-30,900,90,10,3.0,3.0,"cilindro");
+		obstaculo1[3] = Forma(mSceneMgr,65,700,0,10,3.0,3.0,"cilindro");
+		obstaculo1[4] = Forma(mSceneMgr,65,700,90,8,3.0,3.0,"cilindro");
+		obstaculo1[5] = Forma(mSceneMgr,-70,810,0,4.0,10.0,4.0,"cubo");
+	}
+
+	void crearMonedas() {
+		for (int i = 0;i < 5;i++) {
+			monedas1[i] = Moneda(mSceneMgr,0,250+(20*i));
+		}
+
+		for (int i = 0;i < 5;i++) {
+			monedas2[i] = Moneda(mSceneMgr,-150,500+(60*i));
+		}
+
+		for (int i = 0; i < 10;i++) {
+			if (i < 5)
+				monedas3[i] = Moneda(mSceneMgr,-100+(60*i),650);
+			else 
+				monedas3[i] = Moneda(mSceneMgr,150,350+(i*60));
+		}
 	}
 
 	void createScene()
@@ -154,12 +172,7 @@ public:
 		carro = Vehiculo(mSceneMgr);
 
 		// Creando monedas
-		for (int i = 0;i < 10;i++) {
-			if (i < 5)
-				monedas1[i] = Moneda(mSceneMgr,-20,250+(20*i));
-			else 
-				monedas1[i] = Moneda(mSceneMgr,20,250+(20*(i-5)));
-		}
+		crearMonedas();
 
 		// Creando obstaculos
 		crearObstaculo1();

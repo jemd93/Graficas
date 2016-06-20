@@ -6,6 +6,7 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 	anguloGiroRuedas = 4.0;
 	anguloRoteRuedas = 2.0;
 	anguloActRote = 0.0;
+	velocidad = 7.0;
 	if (mSceneMgr != NULL) {
 		//Chasis
 		nodoChasis01 = mSceneMgr->createSceneNode("Chasis01");
@@ -41,7 +42,7 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 }
 
 void Vehiculo::moverCarro(int frente) {
-	nodoChasis01->translate(0, 0, frente*2, Ogre::Node::TS_LOCAL);
+	nodoChasis01->translate(0, 0, frente*velocidad, Ogre::Node::TS_LOCAL);
 	for (int i = 0; i < 4;i++) {
 		nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
 	}
@@ -49,8 +50,19 @@ void Vehiculo::moverCarro(int frente) {
 
 void Vehiculo::rotarCarro(int izq) {
 	anguloActRote =  anguloActRote + izq;
-	for (int i = 0; i < 2;i++) {
-		nodosYaw[i]->yaw(izq*Degree(anguloRoteRuedas));
+	if (izq == 1){
+		if (anguloActRote < 15) {
+			for (int i = 0; i < 2;i++) {
+				nodosYaw[i]->yaw(izq*Degree(anguloRoteRuedas));
+			}
+		}
+	}
+	else {
+		if (anguloActRote > -15) {
+			for (int i = 0; i < 2;i++) {
+				nodosYaw[i]->yaw(izq*Degree(anguloRoteRuedas));
+			}
+		}
 	}
 
 	nodoChasis01->yaw(izq*Degree(anguloRoteRuedas));

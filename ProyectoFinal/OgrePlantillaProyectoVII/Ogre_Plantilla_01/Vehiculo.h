@@ -13,6 +13,7 @@ public:
 	float anguloGiroRuedas;
 	float anguloRoteRuedas;
 	float anguloActRote;
+	float velocidad;
 
 	// Variables del chasis
 	Ogre::SceneNode* nodoChasis01;
