@@ -64,9 +64,28 @@ public:
 			}
 			if (_key->isKeyDown(OIS::KC_UP)) {
 				carro.moverCarro(1);
+				if (carro.estaVolando){
+					carro.nodoAlas->setVisible(true);
+					carro.alaIzquierda->setVisible(true);
+					carro.alaDerecha->setVisible(true);
+				} else {
+					carro.nodoAlas->setVisible(false);
+					carro.alaIzquierda->setVisible(false);
+					carro.alaDerecha->setVisible(false);
+				}
 			}
 			if (_key->isKeyDown(OIS::KC_DOWN)) {
 				carro.moverCarro(-1);
+				if (carro.estaVolando){
+					carro.nodoAlas->setVisible(true);
+					carro.alaIzquierda->setVisible(true);
+					carro.alaDerecha->setVisible(true);
+				} else {
+					carro.nodoAlas->setVisible(false);
+					carro.alaIzquierda->setVisible(false);
+					carro.alaDerecha->setVisible(false);
+				}
+			
 			}
 			if (_key->isKeyDown(OIS::KC_LEFT)) {
 				if (carro.anguloActRote < 15)
@@ -74,7 +93,7 @@ public:
 			}
 			if (_key->isKeyDown(OIS::KC_RIGHT)) {
 				if (carro.anguloActRote > -15)
-					carro.rotarCarro(-1);
+					carro.rotarCarro(-1);		
 			}
 
 			// Rotar camara
@@ -137,7 +156,8 @@ public:
 		
 		// Creando el carro
 		carro = Vehiculo(mSceneMgr);
-
+		carro.dibujarAlas(mSceneMgr);
+		
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
 		mSceneMgr->getRootSceneNode()->addChild(_nodeBPista);
