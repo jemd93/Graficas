@@ -2,11 +2,14 @@
 #include <string>
 #include "Vehiculo.h"
 #include "Moneda.h"
+#include "Cilindro.h"
 
 Vehiculo carro;
 Moneda monedas1[10];
+Cilindro obstaculo1[6];
 
 int Moneda::newId = 0;
+int Cilindro::newId = 0;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -123,6 +126,14 @@ public:
 
 	}
 
+	void crearObstaculo1() {
+		obstaculo1[0] = Cilindro(mSceneMgr,150,400,30,10);
+		obstaculo1[1] = Cilindro(mSceneMgr,215,560,90,15);
+		obstaculo1[2] = Cilindro(mSceneMgr,-30,900,90,10);
+		obstaculo1[3] = Cilindro(mSceneMgr,65,700,0,10);
+		obstaculo1[4] = Cilindro(mSceneMgr,65,700,90,8);
+	}
+
 	void createScene()
 	{
 
@@ -143,13 +154,15 @@ public:
 		carro = Vehiculo(mSceneMgr);
 
 		// Creando monedas
-		/*moneda = Moneda(mSceneMgr,0,200);*/
 		for (int i = 0;i < 10;i++) {
 			if (i < 5)
 				monedas1[i] = Moneda(mSceneMgr,-20,250+(20*i));
 			else 
 				monedas1[i] = Moneda(mSceneMgr,20,250+(20*(i-5)));
 		}
+
+		// Creando obstaculos
+		crearObstaculo1();
 
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
