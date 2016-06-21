@@ -14,10 +14,15 @@ public:
 	float anguloRoteRuedas;
 	float anguloActRote;
 	float velocidad;
+	float maxVel;
 
 	// Variables del chasis
 	Ogre::SceneNode* nodoChasis01;
 	Ogre::Entity* entChasis01;
+
+	// Variables esfera prueba SOLO PARA PRUEBAS. BORRAR ANTES DE ENTREGAR
+	//Ogre::SceneNode* nodoEsfera01;
+	//Ogre::Entity* entEsfera01;
 
 	Vehiculo(Ogre::SceneManager* mSceneMgr = NULL);
 	//~Vehiculo(void);

@@ -1,11 +1,13 @@
 #include "Forma.h"
 
 
-Forma::Forma(Ogre::SceneManager* mSceneMgr,float posX, float posZ,float angulo,float largo,float alto,float ancho,std::string forma): id(newId++) {
+Forma::Forma(Ogre::SceneManager* mSceneMgr,float posX,float posY, float posZ,float aR,float aP,float aY,float largo,float alto,float ancho,std::string forma): id(newId++) {
 	x = posX;
-	y = 4;
+	y = posY;
 	z = posZ;
-	a = angulo;
+	aRoll = aR;
+	aPitch = aP;
+	aYaw = aY;
 	if (mSceneMgr != NULL) {
 		nodoForma = mSceneMgr->createSceneNode("nodo"+forma+std::to_string(id));
 		mSceneMgr->getRootSceneNode()->addChild(nodoForma);
@@ -14,9 +16,10 @@ Forma::Forma(Ogre::SceneManager* mSceneMgr,float posX, float posZ,float angulo,f
 		nodoForma->attachObject(entForma);
 		//entForma->setMaterialName("Forma");
 		nodoForma->setPosition(Ogre::Vector3(x,y,z));
-		nodoForma->pitch(Degree(90));
 		nodoForma->setScale(ancho,largo,alto);
-		nodoForma->roll(Degree(a));
+		nodoForma->pitch(Degree(aPitch));
+		nodoForma->roll(Degree(aRoll));
+		nodoForma->yaw(Degree(aYaw));
 	}
 }
 

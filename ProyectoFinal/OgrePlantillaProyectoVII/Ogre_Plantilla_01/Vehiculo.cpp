@@ -6,7 +6,8 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 	anguloGiroRuedas = 4.0;
 	anguloRoteRuedas = 2.0;
 	anguloActRote = 0.0;
-	velocidad = 7.0;
+	velocidad = 0.0;
+	maxVel = 7.0;
 	if (mSceneMgr != NULL) {
 		//Chasis
 		nodoChasis01 = mSceneMgr->createSceneNode("Chasis01");
@@ -15,6 +16,14 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 		entChasis01 = mSceneMgr->createEntity("entChasis01", "chasisCarro.mesh");
 		entChasis01->setMaterialName("shCarro01");
 		nodoChasis01->attachObject(entChasis01);
+
+		// Esfera SOLO PARA PRUEBAS. BORRAR ANTES DE ENTREGAR
+		//nodoEsfera01 = mSceneMgr->createSceneNode("Esfera01");
+		//nodoChasis01->addChild(nodoEsfera01);
+		//	
+		//entEsfera01 = mSceneMgr->createEntity("entEsfera01", "sphere.mesh");
+		//nodoEsfera01->attachObject(entEsfera01);
+		//nodoEsfera01->setScale(0.15,0.15,0.15);
 
 		//Ruedas
 		for (int i = 0; i < 4; i++) {
@@ -42,6 +51,9 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 }
 
 void Vehiculo::moverCarro(int frente) {
+	//printf("%f,%f,%f\n",nodoChasis01->getPosition().x,nodoChasis01->getPosition().y,nodoChasis01->getPosition().z);
+	if (velocidad < maxVel) 
+		velocidad += 0.07;
 	nodoChasis01->translate(0, 0, frente*velocidad, Ogre::Node::TS_LOCAL);
 	for (int i = 0; i < 4;i++) {
 		nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
@@ -67,6 +79,7 @@ void Vehiculo::rotarCarro(int izq) {
 
 	nodoChasis01->yaw(izq*Degree(anguloRoteRuedas));
 }
+
 //Vehiculo::~Vehiculo(void)
 //{
 //}

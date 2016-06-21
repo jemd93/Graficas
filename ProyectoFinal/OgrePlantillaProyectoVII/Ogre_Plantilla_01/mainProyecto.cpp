@@ -8,7 +8,9 @@ Vehiculo carro;
 Moneda monedas1[5];
 Moneda monedas2[5];
 Moneda monedas3[10];
+Moneda monedas4[11];
 Forma obstaculo1[7];
+Forma obstaculo2[10];
 
 int Moneda::newId = 0;
 int Forma::newId = 0;
@@ -127,12 +129,16 @@ public:
 	}
 
 	void crearObstaculo1() {
-		obstaculo1[0] = Forma(mSceneMgr,150,400,30,10,3.0,3.0,"cilindro");
-		obstaculo1[1] = Forma(mSceneMgr,215,560,90,15,3.0,3.0,"cilindro");
-		obstaculo1[2] = Forma(mSceneMgr,-30,900,90,10,3.0,3.0,"cilindro");
-		obstaculo1[3] = Forma(mSceneMgr,65,700,0,10,3.0,3.0,"cilindro");
-		obstaculo1[4] = Forma(mSceneMgr,65,700,90,8,3.0,3.0,"cilindro");
-		obstaculo1[5] = Forma(mSceneMgr,-70,810,0,4.0,10.0,4.0,"cubo");
+		obstaculo1[0] = Forma(mSceneMgr,150,4,400,30,90,0.0,10,3.0,3.0,"cilindro");
+		obstaculo1[1] = Forma(mSceneMgr,215,4,560,90,90,0.0,15,3.0,3.0,"cilindro");
+		obstaculo1[2] = Forma(mSceneMgr,-30,4,900,90,90,0.0,10,3.0,3.0,"cilindro");
+		obstaculo1[3] = Forma(mSceneMgr,65,4,700,0,90,0.0,10,3.0,3.0,"cilindro");
+		obstaculo1[4] = Forma(mSceneMgr,65,4,700,90,90,0.0,8,3.0,3.0,"cilindro");
+		obstaculo1[5] = Forma(mSceneMgr,-70,40,810,0,90,0.0,4.0,10.0,4.0,"cubo");
+	}
+
+	void crearObstaculo2() {
+		obstaculo2[0] = Forma(mSceneMgr,-70,20,1400,0,90,45,4.0,12.0,4.0,"cubo");
 	}
 
 	void crearMonedas() {
@@ -149,6 +155,10 @@ public:
 				monedas3[i] = Moneda(mSceneMgr,-100+(60*i),650);
 			else 
 				monedas3[i] = Moneda(mSceneMgr,150,350+(i*60));
+		}
+
+		for (int i = 0;i < 11;i++) {
+			monedas4[i] = Moneda(mSceneMgr,150-(30*i),930+(i*30));
 		}
 	}
 
@@ -176,6 +186,7 @@ public:
 
 		// Creando obstaculos
 		crearObstaculo1();
+		crearObstaculo2();
 
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
