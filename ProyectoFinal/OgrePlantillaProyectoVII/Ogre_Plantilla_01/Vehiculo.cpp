@@ -6,6 +6,8 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 	anguloGiroRuedas = 4.0;
 	anguloRoteRuedas = 2.0;
 	anguloActRote = 0.0;
+	velocidad = 0.0;
+	maxVel = 7.0;
 	if (mSceneMgr != NULL) {
 		//Chasis
 		nodoChasis01 = mSceneMgr->createSceneNode("Chasis01");
@@ -14,6 +16,14 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 		entChasis01 = mSceneMgr->createEntity("entChasis01", "chasisCarro.mesh");
 		entChasis01->setMaterialName("shCarro01");
 		nodoChasis01->attachObject(entChasis01);
+
+		// Esfera SOLO PARA PRUEBAS. BORRAR ANTES DE ENTREGAR
+		//nodoEsfera01 = mSceneMgr->createSceneNode("Esfera01");
+		//nodoChasis01->addChild(nodoEsfera01);
+		//	
+		//entEsfera01 = mSceneMgr->createEntity("entEsfera01", "sphere.mesh");
+		//nodoEsfera01->attachObject(entEsfera01);
+		//nodoEsfera01->setScale(0.15,0.15,0.15);
 
 		//Ruedas
 		for (int i = 0; i < 4; i++) {
@@ -37,8 +47,6 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 			entRuedas[i]->setMaterialName("shRueda02");
 			nodosRuedas[i]->attachObject(entRuedas[i]);
 
-			for (int i = 0; i < 3; i++)
-				pos[i] = 0;
 			estaVolando = false;
 			activarAnimacion = 0; //No ha empezado a volar
 			
@@ -47,24 +55,36 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 }
 
 void Vehiculo::moverCarro(int frente) {
-	nodoChasis01->translate(0, 0, frente*2, Ogre::Node::TS_LOCAL);
+	//printf("%f,%f,%f\n",nodoChasis01->getPosition().x,nodoChasis01->getPosition().y,nodoChasis01->getPosition().z);
+	if (velocidad < maxVel) 
+		velocidad += 0.07;
+	nodoChasis01->translate(0, 0, frente*velocidad, Ogre::Node::TS_LOCAL);
 	nodoAlas->translate(0, 0, frente*2, Ogre::Node::TS_LOCAL);
 	for (int i = 0; i < 4;i++) {
 		nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
 	}
-	pos[2] += frente*2;
-	printf("Pos: %d\n",pos[2]);
-	if (pos[2] >= 6530){
+	printf("Posz: %f\n",nodoChasis01->getPosition().z);
+	if (nodoChasis01->getPosition().z >= 6530){
 		estaVolando = true;
-		//if (activarAnimacion)
 	} else
 		estaVolando = false;
 }
 
 void Vehiculo::rotarCarro(int izq) {
 	anguloActRote =  anguloActRote + izq;
-	for (int i = 0; i < 2;i++) {
-		nodosYaw[i]->yaw(izq*Degree(anguloRoteRuedas));
+	if (izq == 1){
+		if (anguloActRote < 15) {
+			for (int i = 0; i < 2;i++) {
+				nodosYaw[i]->yaw(izq*Degree(anguloRoteRuedas));
+			}
+		}
+	}
+	else {
+		if (anguloActRote > -15) {
+			for (int i = 0; i < 2;i++) {
+				nodosYaw[i]->yaw(izq*Degree(anguloRoteRuedas));
+			}
+		}
 	}
 
 	nodoChasis01->yaw(izq*Degree(anguloRoteRuedas));
@@ -227,6 +247,7 @@ void Vehiculo::animarVuelo(int frente){
 		//}
 	}
 }
+
 //Vehiculo::~Vehiculo(void)
 //{
 //}

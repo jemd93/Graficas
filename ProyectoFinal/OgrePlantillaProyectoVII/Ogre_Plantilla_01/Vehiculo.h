@@ -13,12 +13,12 @@ public:
 	float anguloGiroRuedas;
 	float anguloRoteRuedas;
 	float anguloActRote;
-	
+	float velocidad;
+	float maxVel;
 
 	// Variables del chasis
 	Ogre::SceneNode* nodoChasis01;
 	Ogre::Entity* entChasis01;
-	int pos[3]; //x,y,z
 
 	//Variables de las alas
 	Ogre::SceneNode* nodoAlas;
@@ -26,6 +26,10 @@ public:
 	ManualObject* alaIzquierda;
 	ManualObject* alaDerecha;
 	int activarAnimacion; // 0 no se ha activado, 1 ya se activó y sigue volando  
+
+	// Variables esfera prueba SOLO PARA PRUEBAS. BORRAR ANTES DE ENTREGAR
+	//Ogre::SceneNode* nodoEsfera01;
+	//Ogre::Entity* entEsfera01;
 
 	Vehiculo(Ogre::SceneManager* mSceneMgr = NULL);
 	//~Vehiculo(void);

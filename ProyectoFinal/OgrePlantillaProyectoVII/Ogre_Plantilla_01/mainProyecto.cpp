@@ -1,8 +1,19 @@
 #include "Ogre\ExampleApplication.h"
 #include <string>
 #include "Vehiculo.h"
+#include "Moneda.h"
+#include "Forma.h"
 
 Vehiculo carro;
+Moneda monedas1[5];
+Moneda monedas2[5];
+Moneda monedas3[10];
+Moneda monedas4[11];
+Forma obstaculo1[7];
+Forma obstaculo2[10];
+
+int Moneda::newId = 0;
+int Forma::newId = 0;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -51,16 +62,16 @@ public:
 			}
 			// Mover camara.
 			if (_key->isKeyDown(OIS::KC_W)) {
-				tcam += Ogre::Vector3(0,0,-10);
+				tcam += Ogre::Vector3(0,0,-20);
 			}
 			if (_key->isKeyDown(OIS::KC_S)) {
-				tcam += Ogre::Vector3(0,0,10);
+				tcam += Ogre::Vector3(0,0,20);
 			}
 			if (_key->isKeyDown(OIS::KC_A)) {
-				tcam += Ogre::Vector3(-10,0,0);
+				tcam += Ogre::Vector3(-20,0,0);
 			}
 			if (_key->isKeyDown(OIS::KC_D)) {
-				tcam += Ogre::Vector3(10,0,0);
+				tcam += Ogre::Vector3(20,0,0);
 			}
 			if (_key->isKeyDown(OIS::KC_UP)) {
 				carro.moverCarro(1);
@@ -76,12 +87,10 @@ public:
 			
 			}
 			if (_key->isKeyDown(OIS::KC_LEFT)) {
-				if (carro.anguloActRote < 15)
-					carro.rotarCarro(1);
+				carro.rotarCarro(1);
 			}
 			if (_key->isKeyDown(OIS::KC_RIGHT)) {
-				if (carro.anguloActRote > -15)
-					carro.rotarCarro(-1);		
+				carro.rotarCarro(-1);
 			}
 
 			// Rotar camara
@@ -126,6 +135,40 @@ public:
 
 	}
 
+	void crearObstaculo1() {
+		obstaculo1[0] = Forma(mSceneMgr,150,4,400,30,90,0.0,10,3.0,3.0,"cilindro");
+		obstaculo1[1] = Forma(mSceneMgr,215,4,560,90,90,0.0,15,3.0,3.0,"cilindro");
+		obstaculo1[2] = Forma(mSceneMgr,-30,4,900,90,90,0.0,10,3.0,3.0,"cilindro");
+		obstaculo1[3] = Forma(mSceneMgr,65,4,700,0,90,0.0,10,3.0,3.0,"cilindro");
+		obstaculo1[4] = Forma(mSceneMgr,65,4,700,90,90,0.0,8,3.0,3.0,"cilindro");
+		obstaculo1[5] = Forma(mSceneMgr,-70,40,810,0,90,0.0,4.0,10.0,4.0,"cubo");
+	}
+
+	void crearObstaculo2() {
+		obstaculo2[0] = Forma(mSceneMgr,-70,20,1400,0,90,45,4.0,12.0,4.0,"cubo");
+	}
+
+	void crearMonedas() {
+		for (int i = 0;i < 5;i++) {
+			monedas1[i] = Moneda(mSceneMgr,0,250+(20*i));
+		}
+
+		for (int i = 0;i < 5;i++) {
+			monedas2[i] = Moneda(mSceneMgr,-150,500+(60*i));
+		}
+
+		for (int i = 0; i < 10;i++) {
+			if (i < 5)
+				monedas3[i] = Moneda(mSceneMgr,-100+(60*i),650);
+			else 
+				monedas3[i] = Moneda(mSceneMgr,150,350+(i*60));
+		}
+
+		for (int i = 0;i < 11;i++) {
+			monedas4[i] = Moneda(mSceneMgr,150-(30*i),930+(i*30));
+		}
+	}
+
 	void createScene()
 	{
 
@@ -145,7 +188,14 @@ public:
 		// Creando el carro
 		carro = Vehiculo(mSceneMgr);
 		carro.dibujarAlas(mSceneMgr);
-		
+
+		// Creando monedas
+		crearMonedas();
+
+		// Creando obstaculos
+		crearObstaculo1();
+		crearObstaculo2();
+
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
 		mSceneMgr->getRootSceneNode()->addChild(_nodeBPista);
