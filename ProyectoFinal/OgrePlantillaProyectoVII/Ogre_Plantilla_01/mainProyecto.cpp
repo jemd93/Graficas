@@ -245,7 +245,9 @@ public:
 		_nodeBFinal->attachObject(_entBanderaF);
 
 
-
+		//mSceneMgr->setSkyBox(true, "skyBoxM1",5000);
+		//mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
+		mSceneMgr->setSkyBox(true, "skyBoxM3",5000);
 
 	}
 
