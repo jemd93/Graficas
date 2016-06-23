@@ -25,11 +25,13 @@ public:
 	bool estaVolando;
 	ManualObject* alaIzquierda;
 	ManualObject* alaDerecha;
+	int activarAnimacion; // 0 no se ha activado, 1 ya se activó y sigue volando  
 
 	Vehiculo(Ogre::SceneManager* mSceneMgr = NULL);
 	//~Vehiculo(void);
 	void Vehiculo::moverCarro(int frente);
 	void Vehiculo::rotarCarro(int izq);
 	void Vehiculo::dibujarAlas(Ogre::SceneManager* mSceneMgr);
+	void Vehiculo::animarVuelo(int frente);
 };
 

@@ -40,6 +40,7 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 			for (int i = 0; i < 3; i++)
 				pos[i] = 0;
 			estaVolando = false;
+			activarAnimacion = 0; //No ha empezado a volar
 			
 		}
 	}
@@ -51,11 +52,12 @@ void Vehiculo::moverCarro(int frente) {
 	for (int i = 0; i < 4;i++) {
 		nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
 	}
-	pos[0] += frente*2;
-	printf("Pos: %d\n",pos[0]);
-	if (pos[0] >= 6530)
+	pos[2] += frente*2;
+	printf("Pos: %d\n",pos[2]);
+	if (pos[2] >= 6530){
 		estaVolando = true;
-	else
+		//if (activarAnimacion)
+	} else
 		estaVolando = false;
 }
 
@@ -192,6 +194,38 @@ void Vehiculo::dibujarAlas(Ogre::SceneManager* mSceneMgr){
 		alaDerecha->quad(24,25,27,26);
 	alaDerecha->end();
 	nodoAlas->attachObject(alaDerecha);
+}
+
+void Vehiculo::animarVuelo(int frente){
+	int posAlas = 0;
+	float j = 10;
+	if (frente == 1){
+		printf("HOLA\n");
+		nodoAlas->setVisible(true);
+		alaIzquierda->setVisible(true);
+		alaDerecha->setVisible(true);
+		/*while (posAlas != 100){
+			nodoAlas->setScale(posAlas/100,posAlas/100,posAlas/100);
+			posAlas += 25;
+		}*/
+		while(j != 90){
+			for (int i = 0; i < 4; i++){
+				nodosYaw[i]->roll(Degree(j));
+			}
+			j = j + 10;
+		}
+		
+		activarAnimacion = 1;
+	} else{
+		nodoAlas->setVisible(false);
+		alaIzquierda->setVisible(false);
+		alaDerecha->setVisible(false);
+		printf("CHAO\n");
+		activarAnimacion = 0;
+		//for (int i = 0; i < 4; i++){
+			//nodosYaw[i]->roll(Degree(-90));
+		//}
+	}
 }
 //Vehiculo::~Vehiculo(void)
 //{

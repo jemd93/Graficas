@@ -64,26 +64,14 @@ public:
 			}
 			if (_key->isKeyDown(OIS::KC_UP)) {
 				carro.moverCarro(1);
-				if (carro.estaVolando){
-					carro.nodoAlas->setVisible(true);
-					carro.alaIzquierda->setVisible(true);
-					carro.alaDerecha->setVisible(true);
-				} else {
-					carro.nodoAlas->setVisible(false);
-					carro.alaIzquierda->setVisible(false);
-					carro.alaDerecha->setVisible(false);
+				if (carro.estaVolando && carro.activarAnimacion==0){
+					carro.animarVuelo(1);
 				}
 			}
 			if (_key->isKeyDown(OIS::KC_DOWN)) {
 				carro.moverCarro(-1);
-				if (carro.estaVolando){
-					carro.nodoAlas->setVisible(true);
-					carro.alaIzquierda->setVisible(true);
-					carro.alaDerecha->setVisible(true);
-				} else {
-					carro.nodoAlas->setVisible(false);
-					carro.alaIzquierda->setVisible(false);
-					carro.alaDerecha->setVisible(false);
+				if (!carro.estaVolando && carro.activarAnimacion==1){
+					carro.animarVuelo(-1);
 				}
 			
 			}
