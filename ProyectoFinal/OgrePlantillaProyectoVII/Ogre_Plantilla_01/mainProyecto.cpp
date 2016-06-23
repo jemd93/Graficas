@@ -99,7 +99,6 @@ public:
 			_cam->yaw(Ogre::Radian(rotX));
 			_cam->pitch(Ogre::Radian(rotY));
 			_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
-
 			return true;
 		}
 	};
@@ -210,6 +209,7 @@ public:
 				
 		Ogre::Entity* _entPObstaculo = mSceneMgr->createEntity("PistaObstaculo", "pisoObstaculo01.mesh");
 		_nodePObstaculo->attachObject(_entPObstaculo);
+		_entPObstaculo->setMaterialName("shObstaculo01");
 
 		//PisoNOObstaculo
 		Ogre::SceneNode* _nodePNObstaculo = mSceneMgr->createSceneNode("PistaNoObstaculo");
@@ -217,6 +217,7 @@ public:
 				
 		Ogre::Entity* _entPNOObstaculo = mSceneMgr->createEntity("PistaNoObstaculo", "pisoNoObstaculo01.mesh");
 		_nodePNObstaculo->attachObject(_entPNOObstaculo);
+		_entPNOObstaculo->setMaterialName("shAreaNoObtaculo01");
 
 
 		//PosterInicioFinal
