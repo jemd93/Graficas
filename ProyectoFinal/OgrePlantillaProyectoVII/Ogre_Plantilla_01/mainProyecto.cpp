@@ -104,6 +104,8 @@ public:
 			_cam->yaw(Ogre::Radian(rotX));
 			_cam->pitch(Ogre::Radian(rotY));
 			_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
+
+			cinturon.animar();
 			return true;
 		}
 	};
@@ -200,7 +202,7 @@ public:
 		crearObstaculo1();
 		crearObstaculo2();
 
-		//cinturon = Asteroide(mSceneMgr);
+		cinturon = Asteroide(mSceneMgr);
 
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
@@ -256,42 +258,7 @@ public:
 		_entBanderaF->setMaterialName("lambert1");
 		_nodeBFinal->attachObject(_entBanderaF);
 
-
-		//mSceneMgr->setSkyBox(true, "skyBoxM1",5000);
 		mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
-		//mSceneMgr->setSkyBox(true, "skyBoxM3",5000);
-
-		//float duration = 4.0;
-		//float step = duration/4.0;
-		//Animation* animation = mSceneMgr->createAnimation("AnimAlas",duration);
-		//animation->setInterpolationMode(Animation::IM_SPLINE);
-		//NodeAnimationTrack* track = animation->createNodeTrack(0,carro.nodoAlas);
-
-		//TransformKeyFrame* key;
-
-		//key = track->createNodeKeyFrame(0.0f);
-		////key->setTranslate(Vector3(-x, -y,z));
-		//key->setScale(Vector3(0.2,0.2,0.2));
- 
-		//key = track->createNodeKeyFrame(step);
-		////key->setTranslate(Vector3( -x, y,z));
-		//key->setScale(Vector3(0.4,0.4,0.4));
- 
-		//key = track->createNodeKeyFrame(2.0*step);
-		////key ->setTranslate(Vector3( x, y, z));
-		//key->setScale(Vector3(0.6,0.6,0.6));
- 
-		//key = track->createNodeKeyFrame(3.0*step);
-		////key->setTranslate(Vector3(x, -y, z));
-		//key->setScale(Vector3(0.8,0.8,0.8));
- 
-		//key = track->createNodeKeyFrame(4.0*step);
-		////key->setTranslate(Vector3(-x, -y,z));
-		//key->setScale(Vector3(1.0,1.0,1.0));
-
-		//alasAnimState = mSceneMgr->createAnimationState("AnimAlas");
-		//alasAnimState->setEnabled(true);
-		//alasAnimState->setLoop(true);
 
 	}
 
