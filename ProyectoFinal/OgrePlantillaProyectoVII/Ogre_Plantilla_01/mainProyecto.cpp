@@ -3,6 +3,7 @@
 #include "Vehiculo.h"
 #include "Moneda.h"
 #include "Forma.h"
+#include "Asteroide.h"
 
 Vehiculo carro;
 Moneda monedas1[5];
@@ -11,9 +12,13 @@ Moneda monedas3[10];
 Moneda monedas4[11];
 Forma obstaculo1[7];
 Forma obstaculo2[10];
+Asteroide cinturon;
 
 int Moneda::newId = 0;
 int Forma::newId = 0;
+
+AnimationState* alasAnimState;
+AnimationState* asteroidAnimState;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -76,7 +81,7 @@ public:
 			if (_key->isKeyDown(OIS::KC_UP)) {
 				carro.moverCarro(1);
 				if (carro.estaVolando && carro.activarAnimacion==0){
-					carro.animarVuelo(1);
+					
 				}
 			}
 			if (_key->isKeyDown(OIS::KC_DOWN)) {
@@ -182,7 +187,7 @@ public:
 		Ogre::Light* LuzPuntual02 = mSceneMgr->createLight("Luz02");
 		LuzPuntual02->setType(Ogre::Light::LT_DIRECTIONAL);
 		LuzPuntual02->setDiffuseColour(1.0,1.0,1.0);
-		LuzPuntual02->setDirection(Ogre::Vector3( -1, -1, -1 ));
+		LuzPuntual02->setDirection(Ogre::Vector3( -1, -1, 1 ));
 		
 		// Creando el carro
 		carro = Vehiculo(mSceneMgr);
@@ -195,11 +200,14 @@ public:
 		crearObstaculo1();
 		crearObstaculo2();
 
+		//cinturon = Asteroide(mSceneMgr);
+
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
 		mSceneMgr->getRootSceneNode()->addChild(_nodeBPista);
 				
 		Ogre::Entity* _entBPista = mSceneMgr->createEntity("BordePista01", "bordePista.mesh");
+		_entBPista->setMaterialName("shParedes01");
 		_nodeBPista->attachObject(_entBPista);
 
 
@@ -225,6 +233,7 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(_nodePoster);
 			
 		Ogre::Entity* _entPoster = mSceneMgr->createEntity("PosterInicioFinal", "posterInicioFinal.mesh");
+		_entPoster->setMaterialName("posterInicioFinal");
 		_nodePoster->attachObject(_entPoster);
 
 				
@@ -233,8 +242,10 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(_nodeBInicial);
 				
 		Ogre::Entity* _entBanderaI = mSceneMgr->createEntity("BanderaInicial", "banderaInicial.mesh");				
-		_entBanderaI->setMaterialName("lambert1");				
+		_entBanderaI->setMaterialName("banderaInicial");				
 		_nodeBInicial->attachObject(_entBanderaI);
+		_nodeBInicial->yaw(Degree(180));
+		_nodeBInicial->translate(-11,0,125);
 
 
 		//BanderaFinal
@@ -247,8 +258,40 @@ public:
 
 
 		//mSceneMgr->setSkyBox(true, "skyBoxM1",5000);
-		//mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
-		mSceneMgr->setSkyBox(true, "skyBoxM3",5000);
+		mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
+		//mSceneMgr->setSkyBox(true, "skyBoxM3",5000);
+
+		//float duration = 4.0;
+		//float step = duration/4.0;
+		//Animation* animation = mSceneMgr->createAnimation("AnimAlas",duration);
+		//animation->setInterpolationMode(Animation::IM_SPLINE);
+		//NodeAnimationTrack* track = animation->createNodeTrack(0,carro.nodoAlas);
+
+		//TransformKeyFrame* key;
+
+		//key = track->createNodeKeyFrame(0.0f);
+		////key->setTranslate(Vector3(-x, -y,z));
+		//key->setScale(Vector3(0.2,0.2,0.2));
+ 
+		//key = track->createNodeKeyFrame(step);
+		////key->setTranslate(Vector3( -x, y,z));
+		//key->setScale(Vector3(0.4,0.4,0.4));
+ 
+		//key = track->createNodeKeyFrame(2.0*step);
+		////key ->setTranslate(Vector3( x, y, z));
+		//key->setScale(Vector3(0.6,0.6,0.6));
+ 
+		//key = track->createNodeKeyFrame(3.0*step);
+		////key->setTranslate(Vector3(x, -y, z));
+		//key->setScale(Vector3(0.8,0.8,0.8));
+ 
+		//key = track->createNodeKeyFrame(4.0*step);
+		////key->setTranslate(Vector3(-x, -y,z));
+		//key->setScale(Vector3(1.0,1.0,1.0));
+
+		//alasAnimState = mSceneMgr->createAnimationState("AnimAlas");
+		//alasAnimState->setEnabled(true);
+		//alasAnimState->setLoop(true);
 
 	}
 
