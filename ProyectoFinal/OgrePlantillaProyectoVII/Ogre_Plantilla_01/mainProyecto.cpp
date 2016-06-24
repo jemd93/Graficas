@@ -9,8 +9,9 @@ Moneda monedas1[5];
 Moneda monedas2[5];
 Moneda monedas3[10];
 Moneda monedas4[11];
+Moneda monedas5[10];
 Forma obstaculo1[7];
-Forma obstaculo2[10];
+Forma obstaculo2[6];
 
 int Moneda::newId = 0;
 int Forma::newId = 0;
@@ -100,6 +101,14 @@ public:
 			_cam->pitch(Ogre::Radian(rotY));
 			_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
 
+			// Animar obstaculo 2 :
+			obstaculo2[0].deslizar(true,-150,30,2);
+			obstaculo2[1].deslizar(true,30,150,2);
+			obstaculo2[2].deslizar(false,1650,1900,2);
+			obstaculo2[3].deslizar(false,1800,2100,2);
+			obstaculo2[4].deslizar(true,-150,30,2);
+			obstaculo2[5].deslizar(true,30,150,2);
+
 			return true;
 		}
 	};
@@ -145,7 +154,12 @@ public:
 	}
 
 	void crearObstaculo2() {
-		obstaculo2[0] = Forma(mSceneMgr,-70,20,1400,0,90,45,4.0,12.0,4.0,"cubo");
+		obstaculo2[0] = Forma(mSceneMgr,-150,20,1400,0,90,90,4.0,12.0,4.0,"cubo");
+		obstaculo2[1] = Forma(mSceneMgr,150,20,1500,0,90,90,4.0,12.0,4.0,"cubo");
+		obstaculo2[2] = Forma(mSceneMgr,100,20,1650,0,0,0,4.0,12.0,4.0,"cubo");
+		obstaculo2[3] = Forma(mSceneMgr,-100,20,1800,0,0,0,4.0,12.0,4.0,"cubo");
+		obstaculo2[4] = Forma(mSceneMgr,-150,20,2200,0,90,90,4.0,12.0,4.0,"cubo");
+		obstaculo2[5] = Forma(mSceneMgr,150,20,2300,0,90,90,4.0,12.0,4.0,"cubo");
 	}
 
 	void crearMonedas() {
@@ -166,6 +180,15 @@ public:
 
 		for (int i = 0;i < 11;i++) {
 			monedas4[i] = Moneda(mSceneMgr,150-(30*i),930+(i*30));
+		}
+
+		for (int i = 0; i < 10;i++) {
+			if (i < 3) 
+				monedas5[i] = Moneda(mSceneMgr,-150,1400 + (i*60));
+			else if ((i >= 3) && (i < 7)) 
+				monedas5[i] = Moneda(mSceneMgr,0,1500 + (i*60));
+			else 
+				monedas5[i] = Moneda(mSceneMgr,150,1800 + (i*60));
 		}
 	}
 
@@ -245,9 +268,9 @@ public:
 		_nodeBFinal->attachObject(_entBanderaF);
 
 
-		//mSceneMgr->setSkyBox(true, "skyBoxM1",5000);
-		//mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
-		mSceneMgr->setSkyBox(true, "skyBoxM3",5000);
+		/*mSceneMgr->setSkyBox(true, "skyBoxM1",5000);*/
+		mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
+		/*mSceneMgr->setSkyBox(true, "skyBoxM3",5000);*/
 
 	}
 
