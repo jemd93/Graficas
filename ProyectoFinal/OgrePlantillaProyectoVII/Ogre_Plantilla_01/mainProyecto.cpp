@@ -76,16 +76,9 @@ public:
 			}
 			if (_key->isKeyDown(OIS::KC_UP)) {
 				carro.moverCarro(1);
-				if (carro.estaVolando && carro.activarAnimacion==0){
-					carro.animarVuelo(1);
-				}
 			}
 			if (_key->isKeyDown(OIS::KC_DOWN)) {
 				carro.moverCarro(-1);
-				if (!carro.estaVolando && carro.activarAnimacion==1){
-					carro.animarVuelo(-1);
-				}
-			
 			}
 			if (_key->isKeyDown(OIS::KC_LEFT)) {
 				carro.rotarCarro(1);
@@ -108,6 +101,13 @@ public:
 			obstaculo2[3].deslizar(false,1800,2100,2);
 			obstaculo2[4].deslizar(true,-150,30,2);
 			obstaculo2[5].deslizar(true,30,150,2);
+
+			if (carro.estaVolando && carro.activarAnimacion==0){
+					carro.animarVuelo(1);
+			}
+			else if (!carro.estaVolando && carro.activarAnimacion==1){
+					carro.animarVuelo(-1);
+			}
 
 			return true;
 		}
@@ -267,10 +267,7 @@ public:
 		_entBanderaF->setMaterialName("lambert1");
 		_nodeBFinal->attachObject(_entBanderaF);
 
-
-		/*mSceneMgr->setSkyBox(true, "skyBoxM1",5000);*/
 		mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
-		/*mSceneMgr->setSkyBox(true, "skyBoxM3",5000);*/
 
 	}
 

@@ -26,6 +26,7 @@ public:
 	ManualObject* alaIzquierda;
 	ManualObject* alaDerecha;
 	int activarAnimacion; // 0 no se ha activado, 1 ya se activó y sigue volando  
+	float escalaAlas;
 
 	// Variables esfera prueba SOLO PARA PRUEBAS. BORRAR ANTES DE ENTREGAR
 	//Ogre::SceneNode* nodoEsfera01;

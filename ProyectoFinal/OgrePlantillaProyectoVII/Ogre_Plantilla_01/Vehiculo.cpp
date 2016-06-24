@@ -49,6 +49,7 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 
 			estaVolando = false;
 			activarAnimacion = 0; //No ha empezado a volar
+			escalaAlas = 0.1;
 			
 		}
 	}
@@ -59,7 +60,7 @@ void Vehiculo::moverCarro(int frente) {
 	if (velocidad < maxVel) 
 		velocidad += 0.07;
 	nodoChasis01->translate(0, 0, frente*velocidad, Ogre::Node::TS_LOCAL);
-	nodoAlas->translate(0, 0, frente*2, Ogre::Node::TS_LOCAL);
+	nodoAlas->translate(0, 0, frente*velocidad, Ogre::Node::TS_LOCAL);
 	for (int i = 0; i < 4;i++) {
 		nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
 	}
@@ -214,37 +215,37 @@ void Vehiculo::dibujarAlas(Ogre::SceneManager* mSceneMgr){
 		alaDerecha->quad(24,25,27,26);
 	alaDerecha->end();
 	nodoAlas->attachObject(alaDerecha);
+
 }
 
 void Vehiculo::animarVuelo(int frente){
-	int posAlas = 0;
-	float j = 10;
 	if (frente == 1){
-		printf("HOLA\n");
 		nodoAlas->setVisible(true);
 		alaIzquierda->setVisible(true);
 		alaDerecha->setVisible(true);
-		/*while (posAlas != 100){
-			nodoAlas->setScale(posAlas/100,posAlas/100,posAlas/100);
-			posAlas += 25;
-		}*/
-		while(j != 90){
-			for (int i = 0; i < 4; i++){
-				nodosYaw[i]->roll(Degree(j));
-			}
-			j = j + 10;
+		nodoAlas->setScale(escalaAlas,escalaAlas,escalaAlas);
+		escalaAlas += 0.05;
+		for (int i = 0; i < 4; i++){
+			nodosYaw[i]->roll(Degree(5));
+		}
+		if (escalaAlas > 1){
+			activarAnimacion = 1;
+			escalaAlas = 1.0;
+		}
+	} else{
+		nodoAlas->setScale(escalaAlas,escalaAlas,escalaAlas);
+		escalaAlas -= 0.05;
+		for (int i = 0; i < 4; i++){
+			nodosYaw[i]->roll(Degree(-5));
+		}
+		if (escalaAlas < 0){
+			nodoAlas->setVisible(false);
+			alaIzquierda->setVisible(false);
+			alaDerecha->setVisible(false);
+			activarAnimacion = 0;
+			escalaAlas = 0.1;
 		}
 		
-		activarAnimacion = 1;
-	} else{
-		nodoAlas->setVisible(false);
-		alaIzquierda->setVisible(false);
-		alaDerecha->setVisible(false);
-		printf("CHAO\n");
-		activarAnimacion = 0;
-		//for (int i = 0; i < 4; i++){
-			//nodosYaw[i]->roll(Degree(-90));
-		//}
 	}
 }
 
