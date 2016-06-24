@@ -1,0 +1,19 @@
+material shObstaculo01
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 1.0 1.0 1.0 1
+
+			texture_unit
+			{
+				texture piso.png
+				scale 0.03 0.03
+			}
+		}
+
+	}
+
+}

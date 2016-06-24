@@ -3,6 +3,7 @@
 #include "Vehiculo.h"
 #include "Moneda.h"
 #include "Forma.h"
+#include "Asteroide.h"
 
 Vehiculo carro;
 Moneda monedas1[5];
@@ -13,8 +14,13 @@ Moneda monedas5[10];
 Forma obstaculo1[7];
 Forma obstaculo2[6];
 
+Asteroide cinturon;
+
 int Moneda::newId = 0;
 int Forma::newId = 0;
+
+AnimationState* alasAnimState;
+AnimationState* asteroidAnimState;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -109,6 +115,7 @@ public:
 					carro.animarVuelo(-1);
 			}
 
+			cinturon.animar();
 			return true;
 		}
 	};
@@ -206,7 +213,7 @@ public:
 		Ogre::Light* LuzPuntual02 = mSceneMgr->createLight("Luz02");
 		LuzPuntual02->setType(Ogre::Light::LT_DIRECTIONAL);
 		LuzPuntual02->setDiffuseColour(1.0,1.0,1.0);
-		LuzPuntual02->setDirection(Ogre::Vector3( -1, -1, -1 ));
+		LuzPuntual02->setDirection(Ogre::Vector3( -1, -1, 1 ));
 		
 		// Creando el carro
 		carro = Vehiculo(mSceneMgr);
@@ -219,11 +226,14 @@ public:
 		crearObstaculo1();
 		crearObstaculo2();
 
+		cinturon = Asteroide(mSceneMgr);
+
 		//BordePista
 		Ogre::SceneNode* _nodeBPista = mSceneMgr->createSceneNode("BordePista");
 		mSceneMgr->getRootSceneNode()->addChild(_nodeBPista);
 				
 		Ogre::Entity* _entBPista = mSceneMgr->createEntity("BordePista01", "bordePista.mesh");
+		_entBPista->setMaterialName("shParedes01");
 		_nodeBPista->attachObject(_entBPista);
 
 
@@ -233,6 +243,7 @@ public:
 				
 		Ogre::Entity* _entPObstaculo = mSceneMgr->createEntity("PistaObstaculo", "pisoObstaculo01.mesh");
 		_nodePObstaculo->attachObject(_entPObstaculo);
+		_entPObstaculo->setMaterialName("shObstaculo01");
 
 		//PisoNOObstaculo
 		Ogre::SceneNode* _nodePNObstaculo = mSceneMgr->createSceneNode("PistaNoObstaculo");
@@ -240,6 +251,7 @@ public:
 				
 		Ogre::Entity* _entPNOObstaculo = mSceneMgr->createEntity("PistaNoObstaculo", "pisoNoObstaculo01.mesh");
 		_nodePNObstaculo->attachObject(_entPNOObstaculo);
+		_entPNOObstaculo->setMaterialName("shAreaNoObtaculo01");
 
 
 		//PosterInicioFinal
@@ -247,6 +259,7 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(_nodePoster);
 			
 		Ogre::Entity* _entPoster = mSceneMgr->createEntity("PosterInicioFinal", "posterInicioFinal.mesh");
+		_entPoster->setMaterialName("posterInicioFinal");
 		_nodePoster->attachObject(_entPoster);
 
 				
@@ -255,8 +268,10 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(_nodeBInicial);
 				
 		Ogre::Entity* _entBanderaI = mSceneMgr->createEntity("BanderaInicial", "banderaInicial.mesh");				
-		_entBanderaI->setMaterialName("lambert1");				
+		_entBanderaI->setMaterialName("banderaInicial");				
 		_nodeBInicial->attachObject(_entBanderaI);
+		_nodeBInicial->yaw(Degree(180));
+		_nodeBInicial->translate(-11,0,125);
 
 
 		//BanderaFinal
