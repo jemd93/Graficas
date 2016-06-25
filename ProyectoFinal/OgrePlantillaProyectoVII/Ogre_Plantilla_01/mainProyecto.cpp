@@ -4,6 +4,7 @@
 #include "Moneda.h"
 #include "Forma.h"
 #include "Asteroide.h"
+#include "TextRenderer.h"
 
 Vehiculo carro;
 Moneda monedas1[5];
@@ -24,6 +25,8 @@ int Forma::newId = 0;
 
 AnimationState* alasAnimState;
 AnimationState* asteroidAnimState;
+
+int puntuacion = 0;
 
 class FrameListenerProy : public Ogre::FrameListener {
 private :
@@ -119,6 +122,13 @@ public:
 			}
 
 			cinturon.animar();
+
+			if (puntuacion < 10){
+				TextRenderer::getSingleton().setText("txtPuntuacion", "Coins: 0"+std::to_string(puntuacion));
+			} else {
+				TextRenderer::getSingleton().setText("txtPuntuacion", "Coins: "+std::to_string(puntuacion));
+			}
+
 			return true;
 		}
 	};
@@ -319,6 +329,8 @@ public:
 
 		mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
 
+		new TextRenderer();
+		TextRenderer::getSingleton().addTextBox("txtPuntuacion", "Coins: 00", 10, 10, 50, 20, Ogre::ColourValue::White);
 	}
 
 };

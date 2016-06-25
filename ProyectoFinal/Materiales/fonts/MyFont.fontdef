@@ -1,0 +1,7 @@
+MyFont
+{
+    type         truetype
+    source       Tr2n.ttf
+    size         50
+    resolution   72
+}
