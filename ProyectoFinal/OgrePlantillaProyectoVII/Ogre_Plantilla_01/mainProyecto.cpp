@@ -11,8 +11,11 @@ Moneda monedas2[5];
 Moneda monedas3[10];
 Moneda monedas4[11];
 Moneda monedas5[10];
+Moneda monedas6[25];
+
 Forma obstaculo1[7];
 Forma obstaculo2[6];
+Forma obstaculo3[13];
 
 Asteroide cinturon;
 
@@ -152,21 +155,37 @@ public:
 	}
 
 	void crearObstaculo1() {
-		obstaculo1[0] = Forma(mSceneMgr,150,4,400,30,90,0.0,10,3.0,3.0,"cilindro");
-		obstaculo1[1] = Forma(mSceneMgr,215,4,560,90,90,0.0,15,3.0,3.0,"cilindro");
-		obstaculo1[2] = Forma(mSceneMgr,-30,4,900,90,90,0.0,10,3.0,3.0,"cilindro");
-		obstaculo1[3] = Forma(mSceneMgr,65,4,700,0,90,0.0,10,3.0,3.0,"cilindro");
-		obstaculo1[4] = Forma(mSceneMgr,65,4,700,90,90,0.0,8,3.0,3.0,"cilindro");
-		obstaculo1[5] = Forma(mSceneMgr,-70,40,810,0,90,0.0,4.0,10.0,4.0,"cubo");
+		obstaculo1[0] = Forma(mSceneMgr,150,4,400,30,90,0.0,10,3.0,3.0,"cilindro01");
+		obstaculo1[1] = Forma(mSceneMgr,215,4,560,90,90,0.0,15,3.0,3.0,"cilindro01");
+		obstaculo1[2] = Forma(mSceneMgr,-30,4,900,90,90,0.0,10,3.0,3.0,"cilindro01");
+		obstaculo1[3] = Forma(mSceneMgr,65,4,700,0,90,0.0,10,3.0,3.0,"cilindro01");
+		obstaculo1[4] = Forma(mSceneMgr,65,4,700,90,90,0.0,8,3.0,3.0,"cilindro01");
+		obstaculo1[5] = Forma(mSceneMgr,-70,40,810,0,90,0.0,4.0,10.0,4.0,"cubo01");
 	}
 
 	void crearObstaculo2() {
-		obstaculo2[0] = Forma(mSceneMgr,-150,20,1400,0,90,90,4.0,12.0,4.0,"cubo");
-		obstaculo2[1] = Forma(mSceneMgr,150,20,1500,0,90,90,4.0,12.0,4.0,"cubo");
-		obstaculo2[2] = Forma(mSceneMgr,100,20,1650,0,0,0,4.0,12.0,4.0,"cubo");
-		obstaculo2[3] = Forma(mSceneMgr,-100,20,1800,0,0,0,4.0,12.0,4.0,"cubo");
-		obstaculo2[4] = Forma(mSceneMgr,-150,20,2200,0,90,90,4.0,12.0,4.0,"cubo");
-		obstaculo2[5] = Forma(mSceneMgr,150,20,2300,0,90,90,4.0,12.0,4.0,"cubo");
+		obstaculo2[0] = Forma(mSceneMgr,-150,20,1400,0,90,90,4.0,12.0,4.0,"cubo01");
+		obstaculo2[1] = Forma(mSceneMgr,150,20,1500,0,90,90,4.0,12.0,4.0,"cubo01");
+		obstaculo2[2] = Forma(mSceneMgr,100,20,1650,0,0,0,4.0,12.0,4.0,"cubo01");
+		obstaculo2[3] = Forma(mSceneMgr,-100,20,1800,0,0,0,4.0,12.0,4.0,"cubo01");
+		obstaculo2[4] = Forma(mSceneMgr,-150,20,2200,0,90,90,4.0,12.0,4.0,"cubo01");
+		obstaculo2[5] = Forma(mSceneMgr,150,20,2300,0,90,90,4.0,12.0,4.0,"cubo01");
+	}
+
+	void crearObstaculo3() {
+		obstaculo3[0] = Forma(mSceneMgr,0,10,5600,0,0,0,2.0,2.0,2.0,"roca02");
+		obstaculo3[1] = Forma(mSceneMgr,-100,10,5650,0,0,0,2.0,2.0,2.0,"roca04");
+		obstaculo3[2] = Forma(mSceneMgr,200,15,5850,0,0,0,1.5,1.5,1.5,"roca01");
+		obstaculo3[3] = Forma(mSceneMgr,50,5,6200,0,0,0,2.0,2.0,2.0,"roca01");
+		obstaculo3[4] = Forma(mSceneMgr,-150,0,5975,0,0,0,1.0,1.0,1.0,"roca03");
+		obstaculo3[5] = Forma(mSceneMgr,-175,0,5950,0,0,0,1.0,1.0,1.0,"roca02");
+		obstaculo3[6] = Forma(mSceneMgr,-200,0,6000,0,0,0,1.0,1.0,1.0,"roca01");
+		obstaculo3[7] = Forma(mSceneMgr,25,0,5900,0,90,0,3.0,3.0,3.0,"roca04");
+		obstaculo3[8] = Forma(mSceneMgr,50,0,6100,0,0,0,1.5,1.5,1.5,"roca03");
+		obstaculo3[9] = Forma(mSceneMgr,65,0,6140,0,30,0,2.0,2.0,2.0,"roca02");
+		obstaculo3[10] = Forma(mSceneMgr,65,5,6020,0,45,90,1.7,1.7,1.7,"roca04");
+		obstaculo3[11] = Forma(mSceneMgr,-100,5,6300,50,0,0,2.0,2.0,2.0,"roca02");
+		obstaculo3[12] = Forma(mSceneMgr,-50,0,6350,0,0,90,2.0,2.0,2.0,"roca03");
 	}
 
 	void crearMonedas() {
@@ -197,6 +216,21 @@ public:
 			else 
 				monedas5[i] = Moneda(mSceneMgr,150,1800 + (i*60));
 		}
+
+		for (int i = 0;i < 25;i++) {
+			if (i < 5)
+				monedas6[i] = Moneda(mSceneMgr,125,5500 + (i*60));
+			else if ((i >= 5) && (i < 8))
+				monedas6[i] = Moneda(mSceneMgr,-175,5500 + ((i-3)*60));
+			else if ((i >= 8) && (i < 13)) 
+				monedas6[i] = Moneda(mSceneMgr,-100,5500 + ((i-2)*60));
+			else if ((i >= 13) && (i < 17))
+				monedas6[i] = Moneda(mSceneMgr,150,5500 + ((i-1)*60));
+			else if ((i >= 17) && (i < 21))
+				monedas6[i] = Moneda(mSceneMgr,-200,5500 + ((i-3)*60));
+			else if ((i >= 21) && (i < 25))
+				monedas6[i] = Moneda(mSceneMgr,-160 + ((i-18)*30),5985 + ((i-5)*15));
+		}
 	}
 
 	void createScene()
@@ -225,6 +259,7 @@ public:
 		// Creando obstaculos
 		crearObstaculo1();
 		crearObstaculo2();
+		crearObstaculo3();
 
 		cinturon = Asteroide(mSceneMgr);
 

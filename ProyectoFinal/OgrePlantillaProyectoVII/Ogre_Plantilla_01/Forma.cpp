@@ -13,7 +13,7 @@ Forma::Forma(Ogre::SceneManager* mSceneMgr,float posX,float posY, float posZ,flo
 		nodoForma = mSceneMgr->createSceneNode("nodo"+forma+std::to_string(id));
 		mSceneMgr->getRootSceneNode()->addChild(nodoForma);
 			
-		entForma = mSceneMgr->createEntity("ent"+forma+std::to_string(id),forma+"01.mesh");
+		entForma = mSceneMgr->createEntity("ent"+forma+std::to_string(id),forma+".mesh");
 		nodoForma->attachObject(entForma);
 		//entForma->setMaterialName("Forma");
 		nodoForma->setPosition(Ogre::Vector3(x,y,z));
