@@ -28,10 +28,6 @@ public:
 	int activarAnimacion; // 0 no se ha activado, 1 ya se activó y sigue volando  
 	float escalaAlas;
 
-	// Variables esfera prueba SOLO PARA PRUEBAS. BORRAR ANTES DE ENTREGAR
-	//Ogre::SceneNode* nodoEsfera01;
-	//Ogre::Entity* entEsfera01;
-
 	Vehiculo(Ogre::SceneManager* mSceneMgr = NULL);
 	//~Vehiculo(void);
 	void Vehiculo::moverCarro(int frente);

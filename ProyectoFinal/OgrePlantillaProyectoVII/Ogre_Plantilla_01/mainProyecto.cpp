@@ -29,6 +29,9 @@ AnimationState* asteroid3AnimState;
 
 int puntuacion = 0;
 
+Ogre::ParticleSystem* partSystem;
+Ogre::ParticleSystem* partSystem2;
+
 class FrameListenerProy : public Ogre::FrameListener {
 private :
 	OIS::InputManager* _man;
@@ -108,13 +111,6 @@ public:
 					carro.volar(-5);
 			}
 
-			// Rotar camara
-			float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
-			float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame * -1;
-			_cam->yaw(Ogre::Radian(rotX));
-			_cam->pitch(Ogre::Radian(rotY));
-			_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
-
 			// Animar obstaculo 2 :
 			obstaculo2[0].deslizar(true,-150,30,2);
 			obstaculo2[1].deslizar(true,30,150,2);
@@ -125,9 +121,13 @@ public:
 
 			if (carro.estaVolando && carro.activarAnimacion==0){
 					carro.animarVuelo(1);
+					partSystem->setEmitting(true);
+					partSystem2->setEmitting(true);
 			}
 			else if (!carro.estaVolando && carro.activarAnimacion==1){
 					carro.animarVuelo(-1);
+					partSystem->setEmitting(false);
+					partSystem2->setEmitting(false);
 			}
 
 			if (puntuacion < 10){
@@ -139,6 +139,14 @@ public:
 			asteroid1AnimState->addTime(evt.timeSinceLastFrame*0.15);
 			asteroid2AnimState->addTime(evt.timeSinceLastFrame*0.2);
 			asteroid3AnimState->addTime(evt.timeSinceLastFrame*0.3);
+
+			if (carro.nodoChasis01->getPosition().z < 5000 && carro.nodoChasis01->getPosition().z > 2900){
+				_cam->setPosition(Ogre::Vector3(carro.nodoChasis01->getPosition().x,30,carro.nodoChasis01->getPosition().z-170));
+			}
+			else {
+				_cam->setPosition(Ogre::Vector3(carro.nodoChasis01->getPosition().x,70,carro.nodoChasis01->getPosition().z-170));
+			}
+			
 
 			return true;
 		}
@@ -252,6 +260,20 @@ public:
 			else if ((i >= 21) && (i < 25))
 				monedas6[i] = Moneda(mSceneMgr,-160 + ((i-18)*30),5985 + ((i-5)*15));
 		}
+	}
+
+	void crearParticulas(){
+		Ogre::ParticleSystem* partSystem1 = mSceneMgr->createParticleSystem("AsteroidPart1","marioPart");
+		Ogre::ParticleSystem* partSystem2 = mSceneMgr->createParticleSystem("AsteroidPart2","marioPart");
+		Ogre::ParticleSystem* partSystem3 = mSceneMgr->createParticleSystem("AsteroidPart3","marioPart");
+		Ogre::ParticleSystem* partSystem4 = mSceneMgr->createParticleSystem("AsteroidPart4","marioPart");
+		Ogre::ParticleSystem* partSystem5 = mSceneMgr->createParticleSystem("AsteroidPart5","marioPart");
+		
+		cinturon.nodoCinturon1[0]->attachObject(partSystem1);
+		cinturon.nodoCinturon1[1]->attachObject(partSystem2);
+		cinturon.nodoCinturon1[2]->attachObject(partSystem3);
+		cinturon.nodoCinturon1[3]->attachObject(partSystem4);
+		cinturon.nodoCinturon1[4]->attachObject(partSystem5);
 	}
 
 	void createScene()
@@ -444,6 +466,16 @@ public:
 		asteroid3AnimState->setEnabled(true);
 		asteroid3AnimState->setLoop(true);
 		/* Fin de la Animación del Cinturón 3 */
+
+		//crearParticulas();
+		partSystem = mSceneMgr->createParticleSystem("AlasPart","marioPart1");
+		carro.nodoAlas->attachObject(partSystem);
+		partSystem->setEmitting(false);
+
+		partSystem2 = mSceneMgr->createParticleSystem("AlasPart2","marioPart2");
+		carro.nodoAlas->attachObject(partSystem2);
+		partSystem2->setEmitting(false);
+		
 	}
 
 };
