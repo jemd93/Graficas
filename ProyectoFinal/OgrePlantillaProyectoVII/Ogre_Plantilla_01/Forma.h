@@ -17,7 +17,7 @@ public:
 	float aYaw;
 	bool adelante;
 
-	Forma(Ogre::SceneManager* mSceneMgr=NULL,float posX=0.0,float posY=0.0,float posZ=0.0,float aR=0.0,float aP=0.0,float aY=0.0,float largo=1.0,float alto=1.0,float ancho=1.0,std::string forma="cilindro");
+	Forma(Ogre::SceneManager* mSceneMgr=NULL,float posX=0.0,float posY=0.0,float posZ=0.0,float aR=0.0,float aP=0.0,float aY=0.0,float largo=1.0,float alto=1.0,float ancho=1.0,std::string forma="cilindro",std::string mat="");
 	void Forma::deslizar(bool horizontal,int min, int max,int vel);
 	/*~Forma(void);*/
 };

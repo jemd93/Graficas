@@ -64,7 +64,6 @@ public:
 		OIS::InputManager::destroyInputSystem(_man);
 	}
 
-
 	bool frameStarted(const Ogre::FrameEvent &evt) {
 			_key->capture();
 			_mouse->capture();
@@ -140,14 +139,20 @@ public:
 			asteroid2AnimState->addTime(evt.timeSinceLastFrame*0.2);
 			asteroid3AnimState->addTime(evt.timeSinceLastFrame*0.3);
 
-			if (carro.nodoChasis01->getPosition().z < 5000 && carro.nodoChasis01->getPosition().z > 2900){
-				_cam->setPosition(Ogre::Vector3(carro.nodoChasis01->getPosition().x,30,carro.nodoChasis01->getPosition().z-170));
+			if (carro.nodoChasis01->getPosition().z < 5100 && carro.nodoChasis01->getPosition().z > 2900){
+				_cam->setPosition(Ogre::Vector3(carro.nodoChasis01->getPosition().x,
+													carro.nodoChasis01->getPosition().y+20,
+													carro.nodoChasis01->getPosition().z-170));
 			}
 			else {
-				_cam->setPosition(Ogre::Vector3(carro.nodoChasis01->getPosition().x,70,carro.nodoChasis01->getPosition().z-170));
+				_cam->setPosition(Ogre::Vector3(carro.nodoChasis01->getPosition().x,
+													carro.nodoChasis01->getPosition().y+50,
+													carro.nodoChasis01->getPosition().z-170));
 			}
-			
-
+			//printf("PosZ: %f\n",carro.nodoChasis01->getPosition().z);
+			if (carro.nodoChasis01->getPosition().z > 10200){
+				//reiniciar();
+			}
 			return true;
 		}
 	};
@@ -202,19 +207,19 @@ public:
 	}
 
 	void crearObstaculo3() {
-		obstaculo3[0] = Forma(mSceneMgr,0,10,5600,0,0,0,2.0,2.0,2.0,"roca02");
-		obstaculo3[1] = Forma(mSceneMgr,-100,10,5650,0,0,0,2.0,2.0,2.0,"roca04");
-		obstaculo3[2] = Forma(mSceneMgr,200,15,5850,0,0,0,1.5,1.5,1.5,"roca01");
-		obstaculo3[3] = Forma(mSceneMgr,50,5,6200,0,0,0,2.0,2.0,2.0,"roca01");
-		obstaculo3[4] = Forma(mSceneMgr,-150,0,5975,0,0,0,1.0,1.0,1.0,"roca03");
-		obstaculo3[5] = Forma(mSceneMgr,-175,0,5950,0,0,0,1.0,1.0,1.0,"roca02");
-		obstaculo3[6] = Forma(mSceneMgr,-200,0,6000,0,0,0,1.0,1.0,1.0,"roca01");
-		obstaculo3[7] = Forma(mSceneMgr,25,0,5900,0,90,0,3.0,3.0,3.0,"roca04");
-		obstaculo3[8] = Forma(mSceneMgr,50,0,6100,0,0,0,1.5,1.5,1.5,"roca03");
-		obstaculo3[9] = Forma(mSceneMgr,65,0,6140,0,30,0,2.0,2.0,2.0,"roca02");
-		obstaculo3[10] = Forma(mSceneMgr,65,5,6020,0,45,90,1.7,1.7,1.7,"roca04");
-		obstaculo3[11] = Forma(mSceneMgr,-100,5,6300,50,0,0,2.0,2.0,2.0,"roca02");
-		obstaculo3[12] = Forma(mSceneMgr,-50,0,6350,0,0,90,2.0,2.0,2.0,"roca03");
+		obstaculo3[0] = Forma(mSceneMgr,0,10,5600,0,0,0,2.0,2.0,2.0,"roca02","rocaMat");
+		obstaculo3[1] = Forma(mSceneMgr,-100,10,5650,0,0,0,2.0,2.0,2.0,"roca04","rocaMat");
+		obstaculo3[2] = Forma(mSceneMgr,200,15,5850,0,0,0,1.5,1.5,1.5,"roca01","rocaMat");
+		obstaculo3[3] = Forma(mSceneMgr,50,5,6200,0,0,0,2.0,2.0,2.0,"roca01","rocaMat");
+		obstaculo3[4] = Forma(mSceneMgr,-150,0,5975,0,0,0,1.0,1.0,1.0,"roca03","rocaMat");
+		obstaculo3[5] = Forma(mSceneMgr,-175,0,5950,0,0,0,1.0,1.0,1.0,"roca02","rocaMat");
+		obstaculo3[6] = Forma(mSceneMgr,-200,0,6000,0,0,0,1.0,1.0,1.0,"roca01","rocaMat");
+		obstaculo3[7] = Forma(mSceneMgr,25,0,5900,0,90,0,3.0,3.0,3.0,"roca04","rocaMat");
+		obstaculo3[8] = Forma(mSceneMgr,50,0,6100,0,0,0,1.5,1.5,1.5,"roca03","rocaMat");
+		obstaculo3[9] = Forma(mSceneMgr,65,0,6140,0,30,0,2.0,2.0,2.0,"roca02","rocaMat");
+		obstaculo3[10] = Forma(mSceneMgr,65,5,6020,0,45,90,1.7,1.7,1.7,"roca04","rocaMat");
+		obstaculo3[11] = Forma(mSceneMgr,-100,5,6300,50,0,0,2.0,2.0,2.0,"roca02","rocaMat");
+		obstaculo3[12] = Forma(mSceneMgr,-50,0,6350,0,0,90,2.0,2.0,2.0,"roca03","rocaMat");
 	}
 
 	void crearMonedas() {
@@ -357,8 +362,10 @@ public:
 		mSceneMgr->getRootSceneNode()->addChild(_nodeBFinal);
 		
 		Ogre::Entity* _entBanderaF = mSceneMgr->createEntity("BanderaFinal", "banderaFinal.mesh");
-		_entBanderaF->setMaterialName("lambert1");
+		_entBanderaF->setMaterialName("banderaFinal");
 		_nodeBFinal->attachObject(_entBanderaF);
+		//_nodeBFinal->yaw(Degree(180));
+		//_nodeBFinal->translate(-11,0,125);
 
 		mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
 
@@ -467,7 +474,6 @@ public:
 		asteroid3AnimState->setLoop(true);
 		/* Fin de la Animación del Cinturón 3 */
 
-		//crearParticulas();
 		partSystem = mSceneMgr->createParticleSystem("AlasPart","marioPart1");
 		carro.nodoAlas->attachObject(partSystem);
 		partSystem->setEmitting(false);

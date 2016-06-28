@@ -1,0 +1,20 @@
+material banderaFinal
+{
+	technique
+	{
+		pass
+		{
+			lighting on
+			ambient 0 0 0 1
+			diffuse 1.0 1.0 1.0 1
+
+			texture_unit
+			{
+				texture banderaFinal.jpg
+
+			}
+		}
+
+	}
+
+}

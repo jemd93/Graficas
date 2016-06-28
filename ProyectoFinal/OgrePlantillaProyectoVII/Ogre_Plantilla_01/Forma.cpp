@@ -1,7 +1,7 @@
 #include "Forma.h"
 
 
-Forma::Forma(Ogre::SceneManager* mSceneMgr,float posX,float posY, float posZ,float aR,float aP,float aY,float largo,float alto,float ancho,std::string forma): id(newId++) {
+Forma::Forma(Ogre::SceneManager* mSceneMgr,float posX,float posY, float posZ,float aR,float aP,float aY,float largo,float alto,float ancho,std::string forma, std::string mat): id(newId++) {
 	x = posX;
 	y = posY;
 	z = posZ;
@@ -15,7 +15,7 @@ Forma::Forma(Ogre::SceneManager* mSceneMgr,float posX,float posY, float posZ,flo
 			
 		entForma = mSceneMgr->createEntity("ent"+forma+std::to_string(id),forma+".mesh");
 		nodoForma->attachObject(entForma);
-		//entForma->setMaterialName("Forma");
+		entForma->setMaterialName(mat);
 		nodoForma->setPosition(Ogre::Vector3(x,y,z));
 		nodoForma->setScale(ancho,largo,alto);
 		nodoForma->pitch(Degree(aPitch));

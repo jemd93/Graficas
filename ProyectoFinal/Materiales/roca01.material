@@ -1,0 +1,20 @@
+material rocaMat
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.5 0.5 0.5 1
+
+			texture_unit
+			{
+				texture moon.jpg
+				scale 0.5 0.5
+
+			}
+		}
+
+	}
+
+}
