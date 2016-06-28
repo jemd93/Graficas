@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include <string>
 #include "Ogre\ExampleApplication.h"
+#include "Moneda.h"
+#include "Forma.h"
 
 class Vehiculo
 {
@@ -33,7 +35,8 @@ public:
 	//Ogre::Entity* entEsfera01;
 
 	Vehiculo(Ogre::SceneManager* mSceneMgr = NULL);
-	//~Vehiculo(void);
+	int Vehiculo::cheqColMon(Moneda mon);
+	void Vehiculo::cheqColObs(Forma form);
 	void Vehiculo::moverCarro(int frente);
 	void Vehiculo::rotarCarro(int izq);
 	void Vehiculo::dibujarAlas(Ogre::SceneManager* mSceneMgr);

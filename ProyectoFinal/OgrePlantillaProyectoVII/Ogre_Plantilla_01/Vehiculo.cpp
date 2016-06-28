@@ -17,6 +17,9 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 		entChasis01->setMaterialName("shCarro01");
 		nodoChasis01->attachObject(entChasis01);
 
+		// QUITAR ANTES DE ENTREGAR, SOLO EL SHOW.
+		nodoChasis01->showBoundingBox(true);
+
 		// Esfera SOLO PARA PRUEBAS. BORRAR ANTES DE ENTREGAR
 		//nodoEsfera01 = mSceneMgr->createSceneNode("Esfera01");
 		//nodoChasis01->addChild(nodoEsfera01);
@@ -55,6 +58,36 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 	}
 }
 
+int Vehiculo::cheqColMon(Moneda mon) {
+	if (nodoChasis01->_getWorldAABB().intersects(mon.nodoMoneda->_getWorldAABB())) {
+		mon.scnMgr->destroyEntity(mon.entMoneda);
+		return 1;
+	}
+	return 0;
+}
+
+void Vehiculo::cheqColObs(Forma form) {
+	AxisAlignedBox aab = nodoChasis01->_getWorldAABB().intersection(form.nodoForma->_getWorldAABB());
+	if(!aab.isNull())
+	{
+		velocidad = 1;
+		Vector3 diff = nodoChasis01->getPosition();
+		Vector3 dir = diff.normalisedCopy();
+		Vector3 p = aab.getMaximum() - aab.getMinimum();
+		Vector3 trans = dir * Math::Abs(p.normalisedCopy().dotProduct(dir)) * p.length() * 0.5;
+		
+		if (nodoChasis01->_getWorldAABB().getMinimum().z < form.nodoForma->_getWorldAABB().getMinimum().z)
+			nodoChasis01->translate(0,0,-trans.z);
+		else 
+			nodoChasis01->translate(0,0,trans.z);
+
+		//if (nodoChasis01->_getWorldAABB().getMinimum().x < form.nodoForma->_getWorldAABB().getMinimum().x)
+		//	nodoChasis01->translate(-trans.x,0,0);
+		//else 
+		//	nodoChasis01->translate(trans.x,0,0);
+	}
+}
+
 void Vehiculo::moverCarro(int frente) {
 	//printf("%f,%f,%f\n",nodoChasis01->getPosition().x,nodoChasis01->getPosition().y,nodoChasis01->getPosition().z);
 	if (velocidad < maxVel) 
@@ -64,7 +97,6 @@ void Vehiculo::moverCarro(int frente) {
 	for (int i = 0; i < 4;i++) {
 		nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
 	}
-	printf("Posz: %f\n",nodoChasis01->getPosition().z);
 	if (nodoChasis01->getPosition().z >= 6530){
 		estaVolando = true;
 	} else

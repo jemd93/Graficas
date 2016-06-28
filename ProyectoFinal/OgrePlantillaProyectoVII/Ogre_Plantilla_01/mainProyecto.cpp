@@ -60,6 +60,34 @@ public:
 		OIS::InputManager::destroyInputSystem(_man);
 	}
 
+	void cheqCols() {
+		// Monedas
+		for (int i = 0;i < 25; i++) {
+			if (i < 5) {
+				puntuacion += carro.cheqColMon(monedas1[i]);
+				puntuacion += carro.cheqColMon(monedas2[i]);
+			}
+			if (i < 6) {
+				carro.cheqColObs(obstaculo1[i]);
+			}
+			if (i < 7) {
+				carro.cheqColObs(obstaculo2[i]);
+			}
+			if (i < 10) {
+				puntuacion += carro.cheqColMon(monedas3[i]);
+				puntuacion += carro.cheqColMon(monedas5[i]);
+			}
+			if (i < 11) {
+				puntuacion += carro.cheqColMon(monedas4[i]);
+			}
+			if (i < 13) {
+				carro.cheqColObs(obstaculo3[i]);
+			}
+			puntuacion += carro.cheqColMon(monedas6[i]);
+		}
+
+		//Obstaculos
+	}
 
 	bool frameStarted(const Ogre::FrameEvent &evt) {
 			_key->capture();
@@ -129,6 +157,9 @@ public:
 				TextRenderer::getSingleton().setText("txtPuntuacion", "Coins: "+std::to_string(puntuacion));
 			}
 
+			// Chequear colisiones
+			cheqCols();
+
 			return true;
 		}
 	};
@@ -165,12 +196,12 @@ public:
 	}
 
 	void crearObstaculo1() {
-		obstaculo1[0] = Forma(mSceneMgr,150,4,400,30,90,0.0,10,3.0,3.0,"cilindro01");
-		obstaculo1[1] = Forma(mSceneMgr,215,4,560,90,90,0.0,15,3.0,3.0,"cilindro01");
-		obstaculo1[2] = Forma(mSceneMgr,-30,4,900,90,90,0.0,10,3.0,3.0,"cilindro01");
-		obstaculo1[3] = Forma(mSceneMgr,65,4,700,0,90,0.0,10,3.0,3.0,"cilindro01");
-		obstaculo1[4] = Forma(mSceneMgr,65,4,700,90,90,0.0,8,3.0,3.0,"cilindro01");
-		obstaculo1[5] = Forma(mSceneMgr,-70,40,810,0,90,0.0,4.0,10.0,4.0,"cubo01");
+		obstaculo1[0] = Forma(mSceneMgr,150,4,480,0,90,0.0,17,3.0,3.0,"cubo01");
+		obstaculo1[1] = Forma(mSceneMgr,75,4,560,90,90,0.0,30,3.0,3.0,"cubo01");
+		obstaculo1[2] = Forma(mSceneMgr,-150,4,900,90,90,0.0,19,3.0,3.0,"cubo01");
+		obstaculo1[3] = Forma(mSceneMgr,71,4,800,0,90,0.0,17,3.0,3.0,"cubo01");
+		obstaculo1[4] = Forma(mSceneMgr,0,4,700,90,90,0.0,17,3.0,3.0,"cubo01");
+		obstaculo1[5] = Forma(mSceneMgr,-70,40,795,0,90,0.0,4.0,10.0,4.0,"cubo01");
 	}
 
 	void crearObstaculo2() {
@@ -209,7 +240,7 @@ public:
 
 		for (int i = 0; i < 10;i++) {
 			if (i < 5)
-				monedas3[i] = Moneda(mSceneMgr,-100+(60*i),650);
+				monedas3[i] = Moneda(mSceneMgr,-100+(60*i),625);
 			else 
 				monedas3[i] = Moneda(mSceneMgr,150,350+(i*60));
 		}
