@@ -117,7 +117,7 @@ public:
 				carro.nodoChasis01->setPosition(-29,0,carro.nodoChasis01->getPosition().z);
 			}
 		}
-		else if ((carro.nodoChasis01->getPosition().z >= 4900) && (carro.nodoChasis01->getPosition().z < 6550)) {
+		else if ((carro.nodoChasis01->getPosition().z >= 4900) && (carro.nodoChasis01->getPosition().z < 15000)) {
 			if (carro.nodoChasis01->getPosition().x > 206) {
 				carro.velocidad = 4.0;
 				carro.nodoChasis01->setPosition(206,0,carro.nodoChasis01->getPosition().z);
