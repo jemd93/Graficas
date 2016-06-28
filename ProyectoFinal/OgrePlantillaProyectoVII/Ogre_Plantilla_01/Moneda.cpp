@@ -5,7 +5,10 @@ Moneda::Moneda(Ogre::SceneManager* mSceneMgr,float posX, float posZ): id(newId++
 	x = posX;
 	y = 4;
 	z = posZ;
-	if (mSceneMgr != NULL) {
+	radio = 4.0;
+	mostrar = true;
+	scnMgr = mSceneMgr;
+	if ((mSceneMgr != NULL)) {
 		nodoMoneda = mSceneMgr->createSceneNode("Moneda"+std::to_string(id));
 		mSceneMgr->getRootSceneNode()->addChild(nodoMoneda);
 			
@@ -14,6 +17,7 @@ Moneda::Moneda(Ogre::SceneManager* mSceneMgr,float posX, float posZ): id(newId++
 		entMoneda->setMaterialName("moneda");
 		nodoMoneda->setPosition(Ogre::Vector3(x,y,z));
 		nodoMoneda->setScale(0.04,0.04,0.04);
+
 	}
 }
 

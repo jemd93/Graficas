@@ -2,6 +2,9 @@
 #include "stdafx.h"
 #include <string>
 #include "Ogre\ExampleApplication.h"
+#include "Moneda.h"
+#include "Forma.h"
+#include "Asteroide.h"
 
 class Vehiculo
 {
@@ -29,7 +32,10 @@ public:
 	float escalaAlas;
 
 	Vehiculo(Ogre::SceneManager* mSceneMgr = NULL);
-	//~Vehiculo(void);
+	
+	int Vehiculo::cheqColMon(Moneda mon);
+	void Vehiculo::cheqColObs(Forma form);
+	void Vehiculo::cheqColAst(SceneNode* ast);
 	void Vehiculo::moverCarro(int frente);
 	void Vehiculo::volar(int pos);
 	void Vehiculo::rotarCarro(int izq);

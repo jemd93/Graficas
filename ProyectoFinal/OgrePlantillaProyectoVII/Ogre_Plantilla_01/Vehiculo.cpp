@@ -4,7 +4,7 @@
 Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 {
 	anguloGiroRuedas = 4.0;
-	anguloRoteRuedas = 2.0;
+	anguloRoteRuedas = 5.0;
 	anguloActRote = 0.0;
 	velocidad = 0.0;
 	maxVel = 15.0;
@@ -16,6 +16,9 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 		entChasis01 = mSceneMgr->createEntity("entChasis01", "chasisCarro.mesh");
 		entChasis01->setMaterialName("shCarro01");
 		nodoChasis01->attachObject(entChasis01);
+
+		// QUITAR ANTES DE ENTREGAR, SOLO EL SHOW.
+		//nodoChasis01->showBoundingBox(true);
 
 		//Ruedas
 		for (int i = 0; i < 4; i++) {
@@ -47,11 +50,61 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 	}
 }
 
+int Vehiculo::cheqColMon(Moneda mon) {
+	if (nodoChasis01->_getWorldAABB().intersects(mon.nodoMoneda->_getWorldAABB())) {
+		mon.scnMgr->destroyEntity(mon.entMoneda);
+		return 1;
+	}
+	return 0;
+}
+
+void Vehiculo::cheqColObs(Forma form) {
+	AxisAlignedBox aab = nodoChasis01->_getWorldAABB().intersection(form.nodoForma->_getWorldAABB());
+	if(!aab.isNull())
+	{
+		velocidad = 1;
+		Vector3 diff = nodoChasis01->getPosition();
+		Vector3 dir = diff.normalisedCopy();
+		Vector3 p = aab.getMaximum() - aab.getMinimum();
+		Vector3 trans = dir * Math::Abs(p.normalisedCopy().dotProduct(dir)) * p.length() * 0.5;
+		
+		if (nodoChasis01->_getWorldAABB().getMinimum().z < form.nodoForma->_getWorldAABB().getMinimum().z)
+			nodoChasis01->translate(0,0,-trans.z);
+		else 
+			nodoChasis01->translate(0,0,trans.z);
+
+		//if (nodoChasis01->_getWorldAABB().getMinimum().x < form.nodoForma->_getWorldAABB().getMinimum().x)
+		//	nodoChasis01->translate(-trans.x,0,0);
+		//else 
+		//	nodoChasis01->translate(trans.x,0,0);
+	}
+}
+
+void Vehiculo::cheqColAst(SceneNode* ast) {
+	AxisAlignedBox aab = nodoChasis01->_getWorldAABB().intersection(ast->_getWorldAABB());
+	if(!aab.isNull())
+	{
+		velocidad = 1;
+		Vector3 diff = nodoChasis01->getPosition();
+		Vector3 dir = diff.normalisedCopy();
+		Vector3 p = aab.getMaximum() - aab.getMinimum();
+		Vector3 trans = dir * Math::Abs(p.normalisedCopy().dotProduct(dir)) * p.length() * 0.5;
+		
+		if (nodoChasis01->_getWorldAABB().getMinimum().z < ast->_getWorldAABB().getMinimum().z)
+			nodoChasis01->translate(0,0,-trans.z);
+		else 
+			nodoChasis01->translate(0,0,trans.z);
+
+		//if (nodoChasis01->_getWorldAABB().getMinimum().x < ast->_getWorldAABB().getMinimum().x)
+		//	nodoChasis01->translate(-trans.x,0,0);
+		//else 
+		//	nodoChasis01->translate(trans.x,0,0);
+	}
+}
 void Vehiculo::moverCarro(int frente) {
 	if (velocidad < maxVel) 
 		velocidad += 1;
 	nodoChasis01->translate(0, 0, frente*velocidad, Ogre::Node::TS_LOCAL);
-	nodoAlas->translate(0, 0, frente*velocidad, Ogre::Node::TS_LOCAL);
 	for (int i = 0; i < 4;i++) {
 		nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
 	}
@@ -64,7 +117,6 @@ void Vehiculo::moverCarro(int frente) {
 void Vehiculo::volar(int pos){
 	if (nodoChasis01->getPosition().y + pos >= 0 && nodoChasis01->getPosition().y + pos <= 190){
 		nodoChasis01->translate(0, pos, 0, Ogre::Node::TS_LOCAL);
-		nodoAlas->translate(0, pos, 0, Ogre::Node::TS_LOCAL);
 	}
 }
 
@@ -92,14 +144,13 @@ void Vehiculo::rotarCarro(int izq) {
 	}
 
 	nodoChasis01->yaw(izq*Degree(anguloRoteRuedas));
-	nodoAlas->yaw(izq*Degree(anguloRoteRuedas));
 }
 
 void Vehiculo::dibujarAlas(Ogre::SceneManager* mSceneMgr){
 	alaIzquierda = mSceneMgr->createManualObject("alaIzquierda");
 	alaDerecha = mSceneMgr->createManualObject("alaDerecha");
 	nodoAlas = mSceneMgr->createSceneNode("nodoAlas");
-	mSceneMgr->getRootSceneNode()->addChild(nodoAlas);
+	nodoChasis01->addChild(nodoAlas);
 
 	nodoAlas->setVisible(false);
 	alaIzquierda->setVisible(false);

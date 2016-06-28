@@ -64,6 +64,87 @@ public:
 		OIS::InputManager::destroyInputSystem(_man);
 	}
 
+	void cheqCols() {
+		// Monedas
+		for (int i = 0;i < 25; i++) {
+			if (i < 5) {
+				puntuacion += carro.cheqColMon(monedas1[i]);
+				puntuacion += carro.cheqColMon(monedas2[i]);
+			}
+			if (i < 6) {
+				carro.cheqColObs(obstaculo1[i]);
+			}
+			if (i < 7) {
+				carro.cheqColObs(obstaculo2[i]);
+			}
+			if (i < 10) {
+				puntuacion += carro.cheqColMon(monedas3[i]);
+				puntuacion += carro.cheqColMon(monedas5[i]);
+			}
+			if (i < 11) {
+				puntuacion += carro.cheqColMon(monedas4[i]);
+			}
+			if (i < 13) {
+				carro.cheqColObs(obstaculo3[i]);
+			}
+			puntuacion += carro.cheqColMon(monedas6[i]);
+		}
+
+		// Paredes
+		if (carro.nodoChasis01->getPosition().z < 400) {
+			if (carro.nodoChasis01->getPosition().x > 125) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(125,0,carro.nodoChasis01->getPosition().z);
+			}
+			else if (carro.nodoChasis01->getPosition().x <= -125) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(-125,0,carro.nodoChasis01->getPosition().z);
+			}
+		}
+		else if ((carro.nodoChasis01->getPosition().z >= 400) && (carro.nodoChasis01->getPosition().z < 2350)) {
+			if (carro.nodoChasis01->getPosition().x > 206) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(206,0,carro.nodoChasis01->getPosition().z);
+			}
+			else if (carro.nodoChasis01->getPosition().x <= -206) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(-206,0,carro.nodoChasis01->getPosition().z);
+			}
+		}
+		//CODIGO DE DIAGONAL1 AQUI
+		else if ((carro.nodoChasis01->getPosition().z >= 2500) && (carro.nodoChasis01->getPosition().z < 4900)) {
+			if (carro.nodoChasis01->getPosition().x > 34) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(29,0,carro.nodoChasis01->getPosition().z);
+			}
+			else if (carro.nodoChasis01->getPosition().x <= -34) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(-29,0,carro.nodoChasis01->getPosition().z);
+			}
+		}
+		//CODIGO DE DIAGONAL2 AQUI
+		else if ((carro.nodoChasis01->getPosition().z >= 4900) && (carro.nodoChasis01->getPosition().z < 15000)) {
+			if (carro.nodoChasis01->getPosition().x > 206) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(206,0,carro.nodoChasis01->getPosition().z);
+			}
+			else if (carro.nodoChasis01->getPosition().x <= -206) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(-206,0,carro.nodoChasis01->getPosition().z);
+			}
+		}
+
+		// Asteroides
+		for (int i = 0; i < 11;i++){
+			if (i < 5)
+				carro.cheqColAst(cinturon.nodoCinturon1[i]);
+			if (i < 8)
+				carro.cheqColAst(cinturon.nodoCinturon2[i]);
+			carro.cheqColAst(cinturon.nodoCinturon3[i]);
+		}
+		
+	}
+
 	bool frameStarted(const Ogre::FrameEvent &evt) {
 			_key->capture();
 			_mouse->capture();
@@ -77,18 +158,6 @@ public:
 				return false;
 			}
 			// Mover camara.
-			if (_key->isKeyDown(OIS::KC_W)) {
-				tcam += Ogre::Vector3(0,0,-20);
-			}
-			if (_key->isKeyDown(OIS::KC_S)) {
-				tcam += Ogre::Vector3(0,0,20);
-			}
-			if (_key->isKeyDown(OIS::KC_A)) {
-				tcam += Ogre::Vector3(-20,0,0);
-			}
-			if (_key->isKeyDown(OIS::KC_D)) {
-				tcam += Ogre::Vector3(20,0,0);
-			}
 			if (_key->isKeyDown(OIS::KC_UP)) {
 				carro.moverCarro(1);
 			}
@@ -101,11 +170,11 @@ public:
 			if (_key->isKeyDown(OIS::KC_RIGHT)) {
 				carro.rotarCarro(-1);
 			}
-			if (_key->isKeyDown(OIS::KC_Z)){
+			if (_key->isKeyDown(OIS::KC_W)){
 				if (carro.estaVolando)
 					carro.volar(5);
 			}
-			if (_key->isKeyDown(OIS::KC_X)){
+			if (_key->isKeyDown(OIS::KC_S)){
 				if (carro.estaVolando)
 					carro.volar(-5);
 			}
@@ -149,10 +218,14 @@ public:
 													carro.nodoChasis01->getPosition().y+50,
 													carro.nodoChasis01->getPosition().z-170));
 			}
-			//printf("PosZ: %f\n",carro.nodoChasis01->getPosition().z);
+	
 			if (carro.nodoChasis01->getPosition().z > 10200){
 				//reiniciar();
 			}
+
+			// Chequear colisiones
+			cheqCols();
+
 			return true;
 		}
 	};
@@ -189,21 +262,21 @@ public:
 	}
 
 	void crearObstaculo1() {
-		obstaculo1[0] = Forma(mSceneMgr,150,4,400,30,90,0.0,10,3.0,3.0,"cilindro01");
-		obstaculo1[1] = Forma(mSceneMgr,215,4,560,90,90,0.0,15,3.0,3.0,"cilindro01");
-		obstaculo1[2] = Forma(mSceneMgr,-30,4,900,90,90,0.0,10,3.0,3.0,"cilindro01");
-		obstaculo1[3] = Forma(mSceneMgr,65,4,700,0,90,0.0,10,3.0,3.0,"cilindro01");
-		obstaculo1[4] = Forma(mSceneMgr,65,4,700,90,90,0.0,8,3.0,3.0,"cilindro01");
-		obstaculo1[5] = Forma(mSceneMgr,-70,40,810,0,90,0.0,4.0,10.0,4.0,"cubo01");
+		obstaculo1[0] = Forma(mSceneMgr,150,4,480,0,90,0.0,17,3.0,3.0,"cubo01","bloques");
+		obstaculo1[1] = Forma(mSceneMgr,75,4,560,90,90,0.0,30,3.0,3.0,"cubo01","bloques");
+		obstaculo1[2] = Forma(mSceneMgr,-150,4,900,90,90,0.0,19,3.0,3.0,"cubo01","bloques");
+		obstaculo1[3] = Forma(mSceneMgr,71,4,800,0,90,0.0,17,3.0,3.0,"cubo01","bloques");
+		obstaculo1[4] = Forma(mSceneMgr,0,4,700,90,90,0.0,17,3.0,3.0,"cubo01","bloques");
+		obstaculo1[5] = Forma(mSceneMgr,-70,40,795,0,90,0.0,4.0,10.0,4.0,"cubo01","bloques");
 	}
 
 	void crearObstaculo2() {
-		obstaculo2[0] = Forma(mSceneMgr,-150,20,1400,0,90,90,4.0,12.0,4.0,"cubo01");
-		obstaculo2[1] = Forma(mSceneMgr,150,20,1500,0,90,90,4.0,12.0,4.0,"cubo01");
-		obstaculo2[2] = Forma(mSceneMgr,100,20,1650,0,0,0,4.0,12.0,4.0,"cubo01");
-		obstaculo2[3] = Forma(mSceneMgr,-100,20,1800,0,0,0,4.0,12.0,4.0,"cubo01");
-		obstaculo2[4] = Forma(mSceneMgr,-150,20,2200,0,90,90,4.0,12.0,4.0,"cubo01");
-		obstaculo2[5] = Forma(mSceneMgr,150,20,2300,0,90,90,4.0,12.0,4.0,"cubo01");
+		obstaculo2[0] = Forma(mSceneMgr,-150,20,1400,0,90,90,4.0,12.0,4.0,"cubo01","bloques");
+		obstaculo2[1] = Forma(mSceneMgr,150,20,1500,0,90,90,4.0,12.0,4.0,"cubo01","bloques");
+		obstaculo2[2] = Forma(mSceneMgr,100,20,1650,0,0,0,4.0,12.0,4.0,"cubo01","bloques");
+		obstaculo2[3] = Forma(mSceneMgr,-100,20,1800,0,0,0,4.0,12.0,4.0,"cubo01","bloques");
+		obstaculo2[4] = Forma(mSceneMgr,-150,20,2200,0,90,90,4.0,12.0,4.0,"cubo01","bloques");
+		obstaculo2[5] = Forma(mSceneMgr,150,20,2300,0,90,90,4.0,12.0,4.0,"cubo01","bloques");
 	}
 
 	void crearObstaculo3() {
@@ -233,7 +306,7 @@ public:
 
 		for (int i = 0; i < 10;i++) {
 			if (i < 5)
-				monedas3[i] = Moneda(mSceneMgr,-100+(60*i),650);
+				monedas3[i] = Moneda(mSceneMgr,-100+(60*i),625);
 			else 
 				monedas3[i] = Moneda(mSceneMgr,150,350+(i*60));
 		}
@@ -481,7 +554,21 @@ public:
 		partSystem2 = mSceneMgr->createParticleSystem("AlasPart2","marioPart2");
 		carro.nodoAlas->attachObject(partSystem2);
 		partSystem2->setEmitting(false);
-		
+	
+		Light *light;                               //create pointer to light object
+		light = mSceneMgr->createLight("Light #1"); //set the pointer to a newly created light
+		light->setType(Light::LT_POINT);            // make this light a point light
+		light->setDiffuseColour(1.0, 1.0, 1.0);      //color the light orange 
+		light->setSpecularColour(1.0, 1.0, 0.0);    //yellow highlights
+		light->setAttenuation(100, 1.0, 0.045, 0.0075);
+		light->setPosition(carro.nodoChasis01->getPosition().x,carro.nodoChasis01->getPosition().y,carro.nodoChasis01->getPosition().z);
+
+		SceneNode* nodoLuz = mSceneMgr->createSceneNode("NodoLuz");
+		nodoLuz->attachObject(light);
+
+		carro.nodoChasis01->addChild(nodoLuz);
+
+	
 	}
 
 };
