@@ -35,6 +35,7 @@ public:
 	Vehiculo(Ogre::SceneManager* mSceneMgr = NULL);
 	//~Vehiculo(void);
 	void Vehiculo::moverCarro(int frente);
+	void Vehiculo::volar(int pos);
 	void Vehiculo::rotarCarro(int izq);
 	void Vehiculo::dibujarAlas(Ogre::SceneManager* mSceneMgr);
 	void Vehiculo::animarVuelo(int frente);

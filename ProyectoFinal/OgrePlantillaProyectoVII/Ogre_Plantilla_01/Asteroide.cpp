@@ -167,7 +167,3 @@ Asteroide::Asteroide(Ogre::SceneManager* mSceneMgr){
 		}
 	}
 }
-
-void Asteroide::animar(){
-
-}

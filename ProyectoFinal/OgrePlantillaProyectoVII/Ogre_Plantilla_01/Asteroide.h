@@ -22,7 +22,6 @@ public:
 	int x,y,z;
 
 	Asteroide(Ogre::SceneManager* mSceneMgr = NULL);
-	void Asteroide::animar();
 
 };
 

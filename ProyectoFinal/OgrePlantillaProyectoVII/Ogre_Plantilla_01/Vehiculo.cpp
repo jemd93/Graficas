@@ -64,11 +64,19 @@ void Vehiculo::moverCarro(int frente) {
 	for (int i = 0; i < 4;i++) {
 		nodosRuedas[i]->pitch(frente*Degree(anguloGiroRuedas));
 	}
-	printf("Posz: %f\n",nodoChasis01->getPosition().z);
+//	printf("Posz: %f\n",nodoChasis01->getPosition().z);
 	if (nodoChasis01->getPosition().z >= 6530){
 		estaVolando = true;
 	} else
 		estaVolando = false;
+}
+
+void Vehiculo::volar(int pos){
+	if (nodoChasis01->getPosition().y >= 0 && nodoChasis01->getPosition().y <= 190){
+		nodoChasis01->translate(0, pos, 0, Ogre::Node::TS_LOCAL);
+		nodoAlas->translate(0, pos, 0, Ogre::Node::TS_LOCAL);
+		printf("PosY: %f\n",nodoChasis01->getPosition().y);
+	}
 }
 
 void Vehiculo::rotarCarro(int izq) {

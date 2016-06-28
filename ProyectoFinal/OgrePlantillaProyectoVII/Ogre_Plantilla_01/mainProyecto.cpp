@@ -23,8 +23,9 @@ Asteroide cinturon;
 int Moneda::newId = 0;
 int Forma::newId = 0;
 
-AnimationState* alasAnimState;
-AnimationState* asteroidAnimState;
+AnimationState* asteroid1AnimState;
+AnimationState* asteroid2AnimState;
+AnimationState* asteroid3AnimState;
 
 int puntuacion = 0;
 
@@ -98,6 +99,14 @@ public:
 			if (_key->isKeyDown(OIS::KC_RIGHT)) {
 				carro.rotarCarro(-1);
 			}
+			if (_key->isKeyDown(OIS::KC_Z)){
+				if (carro.estaVolando)
+					carro.volar(5);
+			}
+			if (_key->isKeyDown(OIS::KC_X)){
+				if (carro.estaVolando)
+					carro.volar(-5);
+			}
 
 			// Rotar camara
 			float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
@@ -121,13 +130,15 @@ public:
 					carro.animarVuelo(-1);
 			}
 
-			cinturon.animar();
-
 			if (puntuacion < 10){
 				TextRenderer::getSingleton().setText("txtPuntuacion", "Coins: 0"+std::to_string(puntuacion));
 			} else {
 				TextRenderer::getSingleton().setText("txtPuntuacion", "Coins: "+std::to_string(puntuacion));
 			}
+
+			asteroid1AnimState->addTime(evt.timeSinceLastFrame*0.15);
+			asteroid2AnimState->addTime(evt.timeSinceLastFrame*0.2);
+			asteroid3AnimState->addTime(evt.timeSinceLastFrame*0.3);
 
 			return true;
 		}
@@ -331,6 +342,108 @@ public:
 
 		new TextRenderer();
 		TextRenderer::getSingleton().addTextBox("txtPuntuacion", "Coins: 00", 10, 10, 50, 20, Ogre::ColourValue::White);
+
+		/* Animación para el primer cinturón de asteroides */
+		Real duration=4.0;
+		Real step=duration/4.0;
+		Animation* animation1 = mSceneMgr->createAnimation("Asteroid1Anim",duration);
+		animation1->setInterpolationMode(Animation::IM_SPLINE);
+		NodeAnimationTrack* track1 = animation1->createNodeTrack(0,cinturon.cinturon1);
+
+		TransformKeyFrame* key1;
+ 
+		key1 = track1->createNodeKeyFrame(0.0f);
+		key1->setTranslate(Vector3(200,0,0));
+		key1->setScale(Vector3(1,1,1));
+ 
+		key1 = track1->createNodeKeyFrame(step);
+		key1->setTranslate(Vector3(200,0,0));
+		key1->setScale(Vector3(1,1,1));
+ 
+		key1 = track1->createNodeKeyFrame(2.0*step);
+		key1->setTranslate(Vector3(-200, 0,0));
+		key1->setScale(Vector3(1,1,1));
+ 
+		key1 = track1->createNodeKeyFrame(3.0*step);
+		key1->setTranslate(Vector3(-200, 0, 0));
+		key1->setScale(Vector3(1,1,1));
+ 
+		key1 = track1->createNodeKeyFrame(4.0*step);
+		key1->setTranslate(Vector3(200,0,0));
+		key1->setScale(Vector3(1,1,1));
+
+		asteroid1AnimState = mSceneMgr->createAnimationState("Asteroid1Anim");
+		asteroid1AnimState->setEnabled(true);
+		asteroid1AnimState->setLoop(true);
+		/* Fin de la Animación del Cinturón 1*/
+
+		/* Animación para el segundo cinturón de asteroides */
+		duration=4.0;
+		step=duration/4.0;
+		Animation* animation2 = mSceneMgr->createAnimation("Asteroid2Anim",duration);
+		animation2->setInterpolationMode(Animation::IM_SPLINE);
+		NodeAnimationTrack* track2 = animation2->createNodeTrack(0,cinturon.cinturon2);
+
+		TransformKeyFrame* key2;
+ 
+		key2 = track2->createNodeKeyFrame(0.0f);
+		key2->setTranslate(Vector3(200,0,0));
+		key2->setScale(Vector3(1,1,1));
+ 
+		key2 = track2->createNodeKeyFrame(step);
+		key2->setTranslate(Vector3(200,0,0));
+		key2->setScale(Vector3(1,1,1));
+ 
+		key2 = track2->createNodeKeyFrame(2.0*step);
+		key2->setTranslate(Vector3(-200, 0,0));
+		key2->setScale(Vector3(1,1,1));
+ 
+		key2 = track2->createNodeKeyFrame(3.0*step);
+		key2->setTranslate(Vector3(-200, 0, 0));
+		key2->setScale(Vector3(1,1,1));
+ 
+		key2 = track2->createNodeKeyFrame(4.0*step);
+		key2->setTranslate(Vector3(200,0,0));
+		key2->setScale(Vector3(1,1,1));
+
+		asteroid2AnimState = mSceneMgr->createAnimationState("Asteroid2Anim");
+		asteroid2AnimState->setEnabled(true);
+		asteroid2AnimState->setLoop(true);
+		/* Fin de la Animación del Cinturón 2 */
+
+		/* Animación para el segundo cinturón de asteroides */
+		duration=4.0;
+		step=duration/4.0;
+		Animation* animation3 = mSceneMgr->createAnimation("Asteroid3Anim",duration);
+		animation3->setInterpolationMode(Animation::IM_SPLINE);
+		NodeAnimationTrack* track3 = animation3->createNodeTrack(0,cinturon.cinturon3);
+
+		TransformKeyFrame* key3;
+ 
+		key3 = track3->createNodeKeyFrame(0.0f);
+		key3->setTranslate(Vector3(200,0,0));
+		key3->setScale(Vector3(1,1,1));
+ 
+		key3 = track3->createNodeKeyFrame(step);
+		key3->setTranslate(Vector3(200,0,0));
+		key3->setScale(Vector3(1,1,1));
+ 
+		key3 = track3->createNodeKeyFrame(2.0*step);
+		key3->setTranslate(Vector3(-200, 0,0));
+		key3->setScale(Vector3(1,1,1));
+ 
+		key3 = track3->createNodeKeyFrame(3.0*step);
+		key3->setTranslate(Vector3(-200, 0, 0));
+		key3->setScale(Vector3(1,1,1));
+ 
+		key3 = track3->createNodeKeyFrame(4.0*step);
+		key3->setTranslate(Vector3(200,0,0));
+		key3->setScale(Vector3(1,1,1));
+
+		asteroid3AnimState = mSceneMgr->createAnimationState("Asteroid3Anim");
+		asteroid3AnimState->setEnabled(true);
+		asteroid3AnimState->setLoop(true);
+		/* Fin de la Animación del Cinturón 3 */
 	}
 
 };
