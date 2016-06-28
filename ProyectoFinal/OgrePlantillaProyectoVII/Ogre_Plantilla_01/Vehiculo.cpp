@@ -17,6 +17,7 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 		entChasis01->setMaterialName("shCarro01");
 		nodoChasis01->attachObject(entChasis01);
 
+		nodoChasis01->setPosition(0,0,5000);
 		// QUITAR ANTES DE ENTREGAR, SOLO EL SHOW.
 		nodoChasis01->showBoundingBox(true);
 

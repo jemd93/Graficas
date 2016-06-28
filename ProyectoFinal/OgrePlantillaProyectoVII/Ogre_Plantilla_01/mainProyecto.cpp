@@ -86,7 +86,50 @@ public:
 			puntuacion += carro.cheqColMon(monedas6[i]);
 		}
 
-		//Obstaculos
+		// Paredes
+		if (carro.nodoChasis01->getPosition().z < 400) {
+			if (carro.nodoChasis01->getPosition().x > 125) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(125,0,carro.nodoChasis01->getPosition().z);
+			}
+			else if (carro.nodoChasis01->getPosition().x <= -125) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(-125,0,carro.nodoChasis01->getPosition().z);
+			}
+		}
+		else if ((carro.nodoChasis01->getPosition().z >= 400) && (carro.nodoChasis01->getPosition().z < 2350)) {
+			if (carro.nodoChasis01->getPosition().x > 206) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(206,0,carro.nodoChasis01->getPosition().z);
+			}
+			else if (carro.nodoChasis01->getPosition().x <= -206) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(-206,0,carro.nodoChasis01->getPosition().z);
+			}
+		}
+		else if ((carro.nodoChasis01->getPosition().z >= 2500) && (carro.nodoChasis01->getPosition().z < 4900)) {
+			if (carro.nodoChasis01->getPosition().x > 34) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(29,0,carro.nodoChasis01->getPosition().z);
+			}
+			else if (carro.nodoChasis01->getPosition().x <= -34) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(-29,0,carro.nodoChasis01->getPosition().z);
+			}
+		}
+		else if ((carro.nodoChasis01->getPosition().z >= 4900) && (carro.nodoChasis01->getPosition().z < 6550)) {
+			if (carro.nodoChasis01->getPosition().x > 206) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(206,0,carro.nodoChasis01->getPosition().z);
+			}
+			else if (carro.nodoChasis01->getPosition().x <= -206) {
+				carro.velocidad = 4.0;
+				carro.nodoChasis01->setPosition(-206,0,carro.nodoChasis01->getPosition().z);
+			}
+		}
+
+
+		
 	}
 
 	bool frameStarted(const Ogre::FrameEvent &evt) {
