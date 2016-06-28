@@ -107,6 +107,7 @@ public:
 				carro.nodoChasis01->setPosition(-206,0,carro.nodoChasis01->getPosition().z);
 			}
 		}
+		//CODIGO DE DIAGONAL1 AQUI
 		else if ((carro.nodoChasis01->getPosition().z >= 2500) && (carro.nodoChasis01->getPosition().z < 4900)) {
 			if (carro.nodoChasis01->getPosition().x > 34) {
 				carro.velocidad = 4.0;
@@ -117,6 +118,7 @@ public:
 				carro.nodoChasis01->setPosition(-29,0,carro.nodoChasis01->getPosition().z);
 			}
 		}
+		//CODIGO DE DIAGONAL2 AQUI
 		else if ((carro.nodoChasis01->getPosition().z >= 4900) && (carro.nodoChasis01->getPosition().z < 15000)) {
 			if (carro.nodoChasis01->getPosition().x > 206) {
 				carro.velocidad = 4.0;
@@ -128,7 +130,14 @@ public:
 			}
 		}
 
-
+		// Asteroides
+		for (int i = 0; i < 11;i++){
+			if (i < 5)
+				carro.cheqColAst(cinturon.nodoCinturon1[i]);
+			if (i < 8)
+				carro.cheqColAst(cinturon.nodoCinturon2[i]);
+			carro.cheqColAst(cinturon.nodoCinturon3[i]);
+		}
 		
 	}
 

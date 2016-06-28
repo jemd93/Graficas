@@ -17,7 +17,6 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 		entChasis01->setMaterialName("shCarro01");
 		nodoChasis01->attachObject(entChasis01);
 
-		nodoChasis01->setPosition(0,0,5000);
 		// QUITAR ANTES DE ENTREGAR, SOLO EL SHOW.
 		nodoChasis01->showBoundingBox(true);
 
@@ -89,6 +88,27 @@ void Vehiculo::cheqColObs(Forma form) {
 	}
 }
 
+void Vehiculo::cheqColAst(SceneNode* ast) {
+	AxisAlignedBox aab = nodoChasis01->_getWorldAABB().intersection(ast->_getWorldAABB());
+	if(!aab.isNull())
+	{
+		velocidad = 1;
+		Vector3 diff = nodoChasis01->getPosition();
+		Vector3 dir = diff.normalisedCopy();
+		Vector3 p = aab.getMaximum() - aab.getMinimum();
+		Vector3 trans = dir * Math::Abs(p.normalisedCopy().dotProduct(dir)) * p.length() * 0.5;
+		
+		if (nodoChasis01->_getWorldAABB().getMinimum().z < ast->_getWorldAABB().getMinimum().z)
+			nodoChasis01->translate(0,0,-trans.z);
+		else 
+			nodoChasis01->translate(0,0,trans.z);
+
+		//if (nodoChasis01->_getWorldAABB().getMinimum().x < ast->_getWorldAABB().getMinimum().x)
+		//	nodoChasis01->translate(-trans.x,0,0);
+		//else 
+		//	nodoChasis01->translate(trans.x,0,0);
+	}
+}
 void Vehiculo::moverCarro(int frente) {
 	//printf("%f,%f,%f\n",nodoChasis01->getPosition().x,nodoChasis01->getPosition().y,nodoChasis01->getPosition().z);
 	if (velocidad < maxVel) 
