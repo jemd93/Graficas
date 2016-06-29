@@ -222,7 +222,7 @@ public:
 			if (carro.nodoChasis01->getPosition().z > 10200){
 				//reiniciar();
 			}
-
+			
 			// Chequear colisiones
 			cheqCols();
 
@@ -437,8 +437,6 @@ public:
 		Ogre::Entity* _entBanderaF = mSceneMgr->createEntity("BanderaFinal", "banderaFinal.mesh");
 		_entBanderaF->setMaterialName("banderaFinal");
 		_nodeBFinal->attachObject(_entBanderaF);
-		//_nodeBFinal->yaw(Degree(180));
-		//_nodeBFinal->translate(-11,0,125);
 
 		mSceneMgr->setSkyBox(true, "skyBoxM2",5000);
 
@@ -560,13 +558,15 @@ public:
 		light->setType(Light::LT_POINT);            // make this light a point light
 		light->setDiffuseColour(1.0, 1.0, 1.0);      //color the light orange 
 		light->setSpecularColour(1.0, 1.0, 0.0);    //yellow highlights
-		light->setAttenuation(100, 1.0, 0.045, 0.0075);
-		light->setPosition(carro.nodoChasis01->getPosition().x,carro.nodoChasis01->getPosition().y,carro.nodoChasis01->getPosition().z);
+		light->setAttenuation(3250, 1.0, 0.0014, 0.000007);
 
-		SceneNode* nodoLuz = mSceneMgr->createSceneNode("NodoLuz");
-		nodoLuz->attachObject(light);
-
-		carro.nodoChasis01->addChild(nodoLuz);
+		Entity* lampara1 = mSceneMgr->createEntity("EntLampara1","usb_formacurva.mesh");
+		SceneNode* nodoLamp1 = mSceneMgr->createSceneNode("NodoLampara1");
+		nodoLamp1->attachObject(lampara1);
+		nodoLamp1->attachObject(light);
+		nodoLamp1->roll(Degree(90));
+		nodoLamp1->setPosition(37,10,3000);
+		mSceneMgr->getRootSceneNode()->addChild(nodoLamp1);
 
 	
 	}
