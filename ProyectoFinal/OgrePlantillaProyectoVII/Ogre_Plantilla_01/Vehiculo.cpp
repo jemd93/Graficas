@@ -17,9 +17,6 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 		entChasis01->setMaterialName("shCarro01");
 		nodoChasis01->attachObject(entChasis01);
 
-		// QUITAR ANTES DE ENTREGAR, SOLO EL SHOW.
-		//nodoChasis01->showBoundingBox(true);
-
 		//Ruedas
 		for (int i = 0; i < 4; i++) {
 			nodosYaw[i] = mSceneMgr->createSceneNode("ruedaYaw0"+std::to_string(i+1));
@@ -52,8 +49,10 @@ Vehiculo::Vehiculo(Ogre::SceneManager* mSceneMgr)
 
 int Vehiculo::cheqColMon(Moneda mon) {
 	if (nodoChasis01->_getWorldAABB().intersects(mon.nodoMoneda->_getWorldAABB())) {
-		mon.scnMgr->destroyEntity(mon.entMoneda);
-		return 1;
+		if (mon.entMoneda->isVisible()) {
+			mon.entMoneda->setVisible(false);
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -73,10 +72,6 @@ void Vehiculo::cheqColObs(Forma form) {
 		else 
 			nodoChasis01->translate(0,0,trans.z);
 
-		//if (nodoChasis01->_getWorldAABB().getMinimum().x < form.nodoForma->_getWorldAABB().getMinimum().x)
-		//	nodoChasis01->translate(-trans.x,0,0);
-		//else 
-		//	nodoChasis01->translate(trans.x,0,0);
 	}
 }
 
@@ -94,11 +89,6 @@ void Vehiculo::cheqColAst(SceneNode* ast) {
 			nodoChasis01->translate(0,0,-trans.z);
 		else 
 			nodoChasis01->translate(0,0,trans.z);
-
-		//if (nodoChasis01->_getWorldAABB().getMinimum().x < ast->_getWorldAABB().getMinimum().x)
-		//	nodoChasis01->translate(-trans.x,0,0);
-		//else 
-		//	nodoChasis01->translate(trans.x,0,0);
 	}
 }
 void Vehiculo::moverCarro(int frente) {
