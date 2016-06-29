@@ -21,7 +21,6 @@ Forma::Forma(Ogre::SceneManager* mSceneMgr,float posX,float posY, float posZ,flo
 		nodoForma->pitch(Degree(aPitch));
 		nodoForma->roll(Degree(aRoll));
 		nodoForma->yaw(Degree(aYaw));
-		
 	}
 }
 

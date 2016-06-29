@@ -1,9 +1,9 @@
 #include "Moneda.h"
 
 
-Moneda::Moneda(Ogre::SceneManager* mSceneMgr,float posX, float posZ): id(newId++) {
+Moneda::Moneda(Ogre::SceneManager* mSceneMgr,float posX, float posY,float posZ): id(newId++) {
 	x = posX;
-	y = 4;
+	y = posY;
 	z = posZ;
 	radio = 4.0;
 	mostrar = true;

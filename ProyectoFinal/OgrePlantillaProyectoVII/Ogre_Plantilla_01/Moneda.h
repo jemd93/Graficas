@@ -18,7 +18,7 @@ public:
 	float radio;
 	bool mostrar;
 
-	Moneda(Ogre::SceneManager* mSceneMgr=NULL,float posX=0.0, float posZ=0.0);
+	Moneda(Ogre::SceneManager* mSceneMgr=NULL,float posX=0.0,float posY=0.0, float posZ=0.0);
 	/*~Moneda(void);*/
 };
 
