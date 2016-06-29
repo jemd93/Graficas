@@ -216,6 +216,11 @@ public:
 				if (carro.estaVolando)
 					carro.volar(-5);
 			}
+			if (_key->isKeyDown(OIS::KC_R)){
+				if (carro.nodoChasis01->getPosition().z > 10200){
+					reiniciar();
+				}
+			}
 
 			// Animar obstaculo 2 :
 			obstaculo2[0].deslizar(true,-150,30,2);
@@ -256,10 +261,7 @@ public:
 													carro.nodoChasis01->getPosition().y+50,
 													carro.nodoChasis01->getPosition().z-170));
 			}
-
-			if (carro.nodoChasis01->getPosition().z > 10200){
-				reiniciar();
-			}
+			
 
 			// Chequear colisiones
 			cheqCols();
@@ -301,7 +303,7 @@ public:
 
 	void crearObstaculo1() {
 		obstaculo1[0] = Forma(mSceneMgr,150,4,440,0,90,0.0,17,3.0,3.0,"cubo01","bloques");
-		obstaculo1[1] = Forma(mSceneMgr,75,4,520,90,90,0.0,30,3.0,3.0,"cubo01","bloques");
+		obstaculo1[1] = Forma(mSceneMgr,75,4,520,90,90,0.0,20,3.0,3.0,"cubo01","bloques");
 		obstaculo1[2] = Forma(mSceneMgr,-150,4,900,90,90,0.0,19,3.0,3.0,"cubo01","bloques");
 		obstaculo1[3] = Forma(mSceneMgr,71,4,800,0,90,0.0,17,3.0,3.0,"cubo01","bloques");
 		obstaculo1[4] = Forma(mSceneMgr,0,4,700,90,90,0.0,17,3.0,3.0,"cubo01","bloques");
